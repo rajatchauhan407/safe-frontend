@@ -3,26 +3,27 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface GlobalHeaderProps {
   title: string;
+  navigation: any; // Add this line
 }
 
-const GlobalHeader: React.FC<GlobalHeaderProps> = ({ title }) => {
+const GlobalHeader: React.FC<GlobalHeaderProps> = ({ title, navigation }) => {
   return (
-    <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>{title}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
+  container: {
     height: 60,
-    backgroundColor: '#3498db',
+    backgroundColor: '#f4511e',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerText: {
-    color: 'white',
-    fontSize: 18,
+  title: {
+    fontSize: 20,
+    color: '#fff',
     fontWeight: 'bold',
   },
 });

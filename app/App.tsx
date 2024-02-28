@@ -6,6 +6,7 @@ import SplashScreen from './components/common/SplashScreen';
 import LoginScreen from './screens/Login';
 import WorkerDashboard from './screens/worker/Dashboard';
 import SupervisorDashboard from './screens/supervisor/Dashboard';
+import GlobalHeader from './components/common/GlobalHeader';
 
 const App: React.FC = () => {
   return (
@@ -19,8 +20,19 @@ const Stack = createStackNavigator();
 
 const AppNavigator: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
-      <Stack.Screen name="Splash" component={SplashScreen} />
+    <Stack.Navigator
+      initialRouteName="Splash"
+      screenOptions={{
+        header: ({ route, navigation }) => (
+          <GlobalHeader title={route.name} navigation={navigation} />
+        ),
+      }}
+    >
+      <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="WorkerDashboard" component={WorkerDashboard} />
       <Stack.Screen name="SupervisorDashboard" component={SupervisorDashboard} />
