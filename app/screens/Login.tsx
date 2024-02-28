@@ -1,12 +1,59 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
-const LoginScreen: React.FC = () => {
+type RootStackParamList = {
+  Login: undefined;
+  SupervisorDashboard: undefined;
+  WorkerDashboard: undefined;
+  // Add other screens as needed
+};
+
+type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
+
+interface LoginScreenProps {
+  navigation: LoginScreenNavigationProp;
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const handleRoleSelection = (role: string) => {
+    // Add logic to handle role selection
+    if (role === 'supervisor') {
+      navigation.navigate('SupervisorDashboard');
+    } else {
+      navigation.navigate('WorkerDashboard');
+    }
+  };
+
   return (
-    <View>
-      <Text>Login Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Login Screen</Text>
+      <TouchableOpacity onPress={() => handleRoleSelection('supervisor')}>
+        <Text style={styles.button}>Login as Supervisor</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleRoleSelection('worker')}>
+        <Text style={styles.button}>Login as Worker</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  button: {
+    fontSize: 16,
+    color: 'blue',
+    marginTop: 10,
+  },
+});
 
 export default LoginScreen;

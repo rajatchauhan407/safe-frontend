@@ -1,13 +1,14 @@
-// Example implementation for each screen, you can customize them further as needed
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text } from 'react-native';
+import GlobalHeader from '@/app/components/common/GlobalHeader';
 
-const Dashboard: React.FC = () => {
+const SupervisorDashboard: React.FC = () => {
   return (
     <View>
-      <Text>Dashboard Screen</Text>
+      <GlobalHeader title="Supervisor Dashboard" />
+      <Text>Content for Supervisor Dashboard</Text>
     </View>
   );
 };
 
-export default Dashboard;
+export default SupervisorDashboard;
