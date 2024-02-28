@@ -1,24 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
-
-type RootStackParamList = {
-  Login: undefined;
-  SupervisorDashboard: undefined;
-  WorkerDashboard: undefined;
-  // Add other screens as needed
-};
-
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 interface LoginScreenProps {
-  navigation: LoginScreenNavigationProp;
+  navigation: any;
 }
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const handleRoleSelection = (role: string) => {
-    // Add logic to handle role selection
     if (role === 'supervisor') {
       navigation.navigate('SupervisorDashboard');
     } else {

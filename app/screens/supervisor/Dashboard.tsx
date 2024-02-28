@@ -1,14 +1,23 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import GlobalHeader from '@/app/components/common/GlobalHeader';
+import { View, Text, StyleSheet } from 'react-native';
 
 const SupervisorDashboard: React.FC = () => {
   return (
-    <View>
-      <GlobalHeader title="Supervisor Dashboard" />
-      <Text>Content for Supervisor Dashboard</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Supervisor Dashboard</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
+  },
+});
 
 export default SupervisorDashboard;

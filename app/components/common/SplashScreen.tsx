@@ -1,24 +1,12 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 
-export type RootStackParamList = {
-  SplashScreen: undefined;
-  Login: undefined;
-};
-
-export type SplashScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SplashScreen'>;
-export type SplashScreenRouteProp = RouteProp<RootStackParamList, 'SplashScreen'>;
-
-export interface SplashScreenProps {
-  navigation: SplashScreenNavigationProp;
-  route: SplashScreenRouteProp;
+interface SplashScreenProps {
+  navigation: any;
 }
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
   useEffect(() => {
-    // Your logic here
     setTimeout(() => {
       navigation.replace('Login');
     }, 2000);
