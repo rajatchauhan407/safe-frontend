@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface GlobalHeaderProps {
   title: string;
-  navigation: any; // Add this line
+  navigation: any; 
 }
 
 const GlobalHeader: React.FC<GlobalHeaderProps> = ({ title, navigation }) => {
