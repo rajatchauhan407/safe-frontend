@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import GlobalHeader from '@/app/components/common/globalHeader';
 
 const WorkerDashboard: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Worker Dashboard</Text>
+      <GlobalHeader title="Worker Dashboard" navigation={undefined} showHeader={true} />
+      <Text style={styles.text}>Worker Dashboard Content</Text>
     </View>
   );
 };
@@ -12,12 +14,13 @@ const WorkerDashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   text: {
     fontSize: 20,
+    textAlign: 'center',
+    margin: 20,
   },
 });
 
 export default WorkerDashboard;
+

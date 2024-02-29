@@ -3,10 +3,15 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface GlobalHeaderProps {
   title: string;
-  navigation: any; 
+  navigation: any;
+  showHeader: boolean;
 }
 
-const GlobalHeader: React.FC<GlobalHeaderProps> = ({ title, navigation }) => {
+const GlobalHeader: React.FC<GlobalHeaderProps> = ({ title, navigation, showHeader }) => {
+  if (!showHeader) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
