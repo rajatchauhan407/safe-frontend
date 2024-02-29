@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 
-const SplashScreen: React.FC = ({ navigation }) => {
+const SplashScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   useEffect(() => {
     // Simulate loading or checking user authentication
     setTimeout(() => {

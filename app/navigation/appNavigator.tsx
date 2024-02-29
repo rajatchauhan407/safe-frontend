@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SplashScreen from '../screens/splashScreen';
-import LoginScreen from '../screens/login';
-import WorkerDashboard from '../screens/worker/dashboard';
+import SplashScreen from '../screens/splashScreen'; 
+import LoginScreen from '../screens/login'; 
+import WorkerDashboard from '../screens/worker/dashboard'; 
 import SupervisorDashboard from '../screens/supervisor/dashboard';
 import WorkerAlertScreen from '../screens/worker/alert';
-import SupervisorAlertScreen from '../screens/supervisor/alert';
-import WorkerProfileScreen from '../screens/worker/profile';
-import SupervisorProfileScreen from '../screens/supervisor/profile';
-import GlobalHeader from '../components/common/globalHeader';
+import SupervisorAlertScreen from '../screens/supervisor/alert'; 
+import WorkerProfileScreen from '../screens/worker/profile'; 
+import SupervisorProfileScreen from '../screens/supervisor/profile'; 
+import GlobalHeader from '../components/common/globalHeader'; 
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +30,7 @@ const SupervisorTabNavigator = () => (
   </Tab.Navigator>
 );
 
-const AppNavigator: React.FC = () => {
+const appNavigator: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   return (
@@ -71,4 +71,4 @@ const AppNavigator: React.FC = () => {
   );
 };
 
-export default AppNavigator;
+export default appNavigator;
