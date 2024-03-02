@@ -1,29 +1,29 @@
-import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { config } from "@gluestack-ui/config";
+import { Box } from "@gluestack-ui/themed";
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './app/screens/login';
-import SupervisorDashboard from './app/screens/supervisor/dashboard';
-import WorkerDashboard from './app/screens/worker/dashboard';
-
-const Stack = createNativeStackNavigator();
-
-export type RootStackParamList = {
-  Login: undefined;
-  SupervisorDashboard: undefined;
-  WorkerDashboard: undefined;
-};
-
-
-const App: React.FC = () => {
+import MainNavigator from './navigation/MainNavigator';
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SupervisorDashboard" component={SupervisorDashboard} />
-        <Stack.Screen name="WorkerDashboard" component={WorkerDashboard} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GluestackUIProvider config={config}>
+      {/* <Box style={styles.container}>
+        <Text>Open up App.tsx to start working on your app!</Text>
+        <StatusBar style="auto" />
+      </Box> */}
+      <NavigationContainer>
+          <MainNavigator />
+      </NavigationContainer>
+    </GluestackUIProvider>
   );
-};
+}
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
