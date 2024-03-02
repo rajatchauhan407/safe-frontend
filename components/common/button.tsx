@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, ViewStyle } from 'react-native';
+import { Button } from '@gluestack-ui/themed';
+import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
-interface CommonButtonProps extends TouchableOpacityProps {
+interface CommonButtonProps {
   buttonType: 'default' | 'checkIn';
   isCheckedIn?: boolean;
+  children: React.ReactNode;
+  onPress?: () => void;
+  disabled?: boolean;
 }
 
-const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ...props }) => {
+const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, children, onPress, disabled }) => {
   const [isPressed, setPressed] = useState(false);
 
-  const getButtonStyle = (): ViewStyle => {
-    let baseStyle: ViewStyle = {
+  const getButtonStyle = (): ViewStyle & TextStyle => {
+    let baseStyle: ViewStyle & TextStyle = {
       padding: 10,
       justifyContent: 'center',
       alignItems: 'center',
     };
-  
+
     switch (buttonType) {
       case 'default':
         baseStyle = { ...baseStyle, ...styles.defaultButton };
@@ -29,17 +33,17 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ..
       default:
         baseStyle = { ...baseStyle, ...styles.defaultButton };
     }
-  
-    if (props.disabled) {
+
+    if (disabled) {
       return { ...baseStyle, ...styles.disabledButton };
     }
-  
+
     if (isPressed) {
       return { ...baseStyle, ...styles.clickedButton, ...styles.clickedButtonText };
     }
-  
+
     return baseStyle;
-  };  
+  };
 
   const handlePressIn = () => {
     setPressed(true);
@@ -50,15 +54,15 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ..
   };
 
   return (
-    <TouchableOpacity
+    <Button
       style={[styles.button, getButtonStyle()]}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      activeOpacity={1} 
-      {...props}
+      onPress={onPress}
+      disabled={disabled}
     >
-      <Text style={styles.buttonText}>{props.children}</Text>
-    </TouchableOpacity>
+      {children}
+    </Button>
   );
 };
 
@@ -67,18 +71,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText: {
-    color: 'black',
-  },
   defaultButton: {
     backgroundColor: '#FD9201',
-    borderRadius:100,
+    borderRadius: 100,
   },
   checkInButton: {
     backgroundColor: '#FD9201',
     borderWidth: 2,
     borderColor: '#FD9201',
-    borderRadius:8,
+    borderRadius: 8,
   },
   checkedInButton: {
     backgroundColor: 'white',
@@ -86,12 +87,13 @@ const styles = StyleSheet.create({
     borderColor: 'green',
   },
   disabledButton: {
-    backgroundColor: 'grey',
-    borderColor: 'darkgrey',
+    backgroundColor: '#C7C7C7',
     opacity: 0.6,
   },
   clickedButton: {
-    backgroundColor: 'darkgrey',
+    backgroundColor: 'black',
+    borderWidth: 2,
+    borderColor: 'black',
   },
   clickedButtonText: {
     color: 'white',

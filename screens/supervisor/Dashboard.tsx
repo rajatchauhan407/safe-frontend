@@ -18,7 +18,9 @@ const Dashboard: React.FC = () => {
         <CommonButton buttonType="default" onPress={() => console.log('Default button clicked')}>
           Default Button
         </CommonButton>
-
+        <CommonButton buttonType="default" disabled onPress={() => console.log('Disabled')}>
+          Disabled Button
+        </CommonButton>
         <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
           {isCheckedIn ? 'Check Out' : 'Check In'}
         </CommonButton>
