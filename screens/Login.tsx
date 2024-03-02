@@ -12,7 +12,7 @@ const LoginScreen: React.FC = () => {
   };
 
   const handleWorkerLogin = () => {
-    navigation.navigate('Main',{screen: 'Tasks'});
+    navigation.navigate('Main',{screen: 'Dashboard'});
   };
 
   return (
