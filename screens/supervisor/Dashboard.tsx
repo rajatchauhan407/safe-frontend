@@ -6,7 +6,7 @@ import CommonDaysAccidentCard from "../../components/common/daysAccident";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setCheckedIn] = useState(false);
-  const [userName, setUserName] = useState("John George");
+  const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
 
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
   };
 
   const getStatusText = () => {
-    return isCheckedIn ? `Status: Checked-in at ${checkInTime}` : "Status: Off-site";
+    return isCheckedIn ? `Checked-in at ${checkInTime}` : "Off-site";
   };
 
   const CommonButtonContent = () => (
@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
       </View>
       {/* CARDS */}
       <View>
-        <CommonCard title={getStatusText()} content={<CommonButtonContent />} />
+        <CommonCard title={<Text><Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}</Text>}content={<CommonButtonContent />}/>
       </View>
       <View style={{ height: 20 }} />
       <View>

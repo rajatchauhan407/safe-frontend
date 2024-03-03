@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   leftColumnText: {
     marginTop: 8,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   rightColumn: {

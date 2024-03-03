@@ -10,7 +10,7 @@ const WorkerNavigator: React.FC = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Dashboard" component={Dashboard} />
-      <Tab.Screen name="Alert" component={Alert} />
+      <Tab.Screen name="SOS" component={Alert} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

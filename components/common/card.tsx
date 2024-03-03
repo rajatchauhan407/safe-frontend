@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 interface CommonCardProps {
-    title:string,
+    title:any,
     content:any
   }
 
