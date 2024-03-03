@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
+import AlertButton from "../../components/common/alertButton";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setCheckedIn] = useState(false);
@@ -58,6 +59,11 @@ const Dashboard: React.FC = () => {
     </CommonButton>
   );
 
+  const handleIncidentPress = () => {
+    // Handle navigation or any other logic when the incident is pressed
+    console.log('Incident pressed');
+  };
+
   return (
     <View style={styles.page}>
       {/* GREETING */}
@@ -67,19 +73,27 @@ const Dashboard: React.FC = () => {
         <Text style={styles.buildingText}>Let's start building</Text>
       </Text>
       <View style={{ height: 20 }} />
+
       {/* LOCATION */}
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
         <Text>{siteLocation}</Text>
       </View>
+
       {/* CARDS */}
       <View>
         <CommonCard title={<Text><Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}</Text>}content={<CommonButtonContent />}/>
       </View>
       <View style={{ height: 20 }} />
       <View>
-        <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={360} />
+        <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
       </View>
+      <View style={{ height: 20 }} />
+      {/* ALERT BUTTON */}
+      <View>
+      <AlertButton level={1} userType="supervisor" onPress={handleIncidentPress} />
+      </View>
+
     </View>
   );
 };
