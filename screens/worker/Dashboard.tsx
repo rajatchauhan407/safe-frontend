@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
       <View style={{ height: 20 }} />
       {/* ALERT BUTTON */}
       <View>
-      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} />
+      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
       </View>
 
     </View>
