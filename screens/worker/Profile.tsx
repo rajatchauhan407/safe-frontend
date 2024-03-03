@@ -4,7 +4,7 @@ import { View, Text } from "react-native";
 const Profile: React.FC = () => {
   return (
     <View>
-      <Text>Profile Screen Profile</Text>
+      <Text>Profile Screen Worker</Text>
     </View>
   );
 };

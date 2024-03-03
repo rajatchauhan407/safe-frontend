@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 const SupervisorNavigator: React.FC = () => {
   return (
-    <Tab.Navigator initialRouteName="Profile">
+    <Tab.Navigator initialRouteName="Dashboard">
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Alert" component={Alert} />
       <Tab.Screen name="Profile" component={Profile} />

@@ -8,11 +8,11 @@ const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleSupervisorLogin = () => {
-    navigation.navigate('Main',{screen: 'Dashboard'});
+    navigation.navigate('Main', { screen: 'Supervisor', params: { screen: 'Dashboard' } });
   };
 
   const handleWorkerLogin = () => {
-    navigation.navigate('Main',{screen: 'Dashboard'});
+    navigation.navigate('Main', { screen: 'Worker', params: { screen: 'Dashboard' } });
   };
 
   return (
