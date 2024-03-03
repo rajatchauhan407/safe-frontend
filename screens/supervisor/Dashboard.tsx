@@ -1,18 +1,55 @@
-import React from "react";
-import { useState } from "react";
-import { View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Image } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
+import CommonDaysAccidentCard from "../../components/common/daysAccident";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setCheckedIn] = useState(false);
+  const [userName, setUserName] = useState("John George");
+  const [siteLocation, setSiteLocation] = useState("Site A");
+  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+
+  useEffect(() => {
+    // Simulating data fetching from the backend
+    const fetchData = async () => {
+      try {
+        // Simulating a delay to mimic the asynchronous nature of data fetching
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // const response = await fetch("backend_api_url");
+        // const userData = await response.json();
+        // setUserName(userData.name);
+        // setSiteLocation(userData.siteLocation);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const period = hours >= 12 ? 'pm' : 'am';
+    const formattedTime = `${hours % 12 || 12}:${minutes}${period}`;
+    return formattedTime;
+  };
 
   const handleCheckInToggle = () => {
+    if (!isCheckedIn) {
+      const currentTime = new Date();
+      setCheckInTime(formatTime(currentTime));
+    } else {
+      setCheckInTime("");
+    }
+
     setCheckedIn(!isCheckedIn);
   };
 
   const getStatusText = () => {
-    return isCheckedIn ? "Status: On-Site" : "Status: Off-Site";
+    return isCheckedIn ? `Status: Checked-in at ${checkInTime}` : "Status: Off-site";
   };
 
   const CommonButtonContent = () => (
@@ -22,20 +59,41 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <View>
-      <Text>Dashboard Screen Supervisor</Text>
-
+    <View style={styles.page}>
+      {/* GREETING */}
+      <Text>
+        <Text style={styles.greeting}>{`Hi, ${userName}`}</Text>
+        {"\n"}
+        <Text style={styles.buildingText}>Let's start building</Text>
+      </Text>
+      <View style={{ height: 20 }} />
+      {/* LOCATION */}
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
+        <Text>{siteLocation}</Text>
+      </View>
+      {/* CARDS */}
       <View>
         <CommonCard title={getStatusText()} content={<CommonButtonContent />} />
-        <CommonButton buttonType="default" onPress={() => console.log('Default button clicked')}>
-          Default Button
-        </CommonButton>
-        <CommonButton buttonType="default" disabled onPress={() => console.log('Disabled')}>
-          Disabled Button
-        </CommonButton>
+      </View>
+      <View style={{ height: 20 }} />
+      <View>
+        <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={360} />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 24,
+  },
+  greeting: {
+    fontSize: 16,
+  },
+  buildingText: {
+    fontSize: 24,
+  },
+});
 
 export default Dashboard;
