@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
 
   const CommonButtonContent = () => (
     <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
-      {isCheckedIn ? 'Check Out' : 'Check In'}
+        <Text>{isCheckedIn ? 'Check Out' : 'Check In'}</Text>
     </CommonButton>
   );
 
@@ -68,8 +68,7 @@ const Dashboard: React.FC = () => {
     <View style={styles.page}>
       {/* GREETING */}
       <Text>
-        <Text style={styles.greeting}>{`Hi, ${userName}`}</Text>
-        {"\n"}
+        <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
         <Text style={styles.buildingText}>Let's start building</Text>
       </Text>
       <View style={{ height: 20 }} />
@@ -91,7 +90,7 @@ const Dashboard: React.FC = () => {
       <View style={{ height: 20 }} />
       {/* ALERT BUTTON */}
       <View>
-      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} />
+      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
       </View>
 
     </View>
