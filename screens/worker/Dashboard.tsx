@@ -84,11 +84,19 @@ const Dashboard: React.FC = () => {
             });
             const data = await res.json();
             console.log(data);
-            if(data.message === 'check in successful')
+            if(data.data !== null)
             {
-              const currentTime = new Date();
-              setCheckInTime(formatTime(currentTime));
+              if(data.data.message === 'check in successful')
+              {
+                console.log(data.data.message)
+                const currentTime = new Date();
+                setCheckInTime(formatTime(currentTime));
+              }
             }
+            else{
+              console.log(data.error)
+            }
+           
           } catch (error) {
             console.error('Error:', error);
           }
@@ -103,7 +111,6 @@ const Dashboard: React.FC = () => {
       // const currentTime = new Date();
       // setCheckInTime(formatTime(currentTime));
     } else {
-      console.log("comes here while checkout")
       const checkOutInfo = {
         siteId: "65e021fd0ff9467bbc9535f5",
         workerId: "65dbc52bbebd9d13c94f217e"       
@@ -118,12 +125,19 @@ const Dashboard: React.FC = () => {
           },
         });
         const data = await res.json();
-        console.log(data.message);
-        if(data.message === 'check out successful')
+        
+        if(data.data !== null)
         {
-          setCheckInTime("");
+          console.log(data.data.message)
+          if(data.data.message === 'check out successful')
+          {
+            setCheckInTime("");
+          }
         }
-        // Do something w the data
+        else{
+          console.log(data.error)
+        }
+
       } catch (error) {
         console.error('Error:', error);
       }
