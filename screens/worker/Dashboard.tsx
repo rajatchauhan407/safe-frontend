@@ -4,6 +4,8 @@ import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
+import * as Location from 'expo-location';
+import { BACKEND_BASE_URL } from "../../config/api";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setCheckedIn] = useState(false);
@@ -38,7 +40,58 @@ const Dashboard: React.FC = () => {
     return formattedTime;
   };
 
+  const getLocation = async (): Promise<Location.LocationObject | null> => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        // console.error('Location permission not granted');
+        return null;
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      // console.log('User location:', location);
+      return location;
+    } catch (error) {
+      // console.error('Error getting location:', error);
+      return null;
+    }
+  };
+
   const handleCheckInToggle = () => {
+    getLocation()
+    .then(async (location) => {
+      if (location) {
+        console.log('Received location:', location);
+        const checkInInfo = {
+          siteId: "65e021fd0ff9467bbc9535f5",
+          workerId: "65dbc52bbebd9d13c94f217e",
+          location: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+          }
+        };
+        try {
+          const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
+            method: "POST",
+            credentials: 'include',
+            body: JSON.stringify(checkInInfo),
+            headers: {
+              "Content-type": "application/json",
+            },
+          });
+          const data = await res.json();
+          console.log(data);
+          // Do something with the data
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      } else {
+        console.log('Location permission not granted or error occurred.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
     if (!isCheckedIn) {
       const currentTime = new Date();
       setCheckInTime(formatTime(currentTime));
