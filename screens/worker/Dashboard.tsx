@@ -4,6 +4,8 @@ import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
+import * as Location from 'expo-location';
+import { BACKEND_BASE_URL } from "../../config/api";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setCheckedIn] = useState(false);
@@ -38,12 +40,108 @@ const Dashboard: React.FC = () => {
     return formattedTime;
   };
 
-  const handleCheckInToggle = () => {
+  const getLocation = async (): Promise<Location.LocationObject | null> => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        // console.error('Location permission not granted');
+        return null;
+      }
+      const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
+      // console.log('User location:', location);
+      return location;
+    } catch (error) {
+      // console.error('Error getting location:', error);
+      return null;
+    }
+  };
+
+  const handleCheckInToggle = async () => {
+   
+
     if (!isCheckedIn) {
-      const currentTime = new Date();
-      setCheckInTime(formatTime(currentTime));
+      
+      getLocation()
+      .then(async (location) => {
+        if (location) {
+          console.log('Received location:', location);
+          const checkInInfo = {
+            siteId: "65e021fd0ff9467bbc9535f5",
+            workerId: "65dbc52bbebd9d13c94f217e",
+            location: {
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude
+            }
+          };
+          try {
+            const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
+              method: "POST",
+              credentials: 'include',
+              body: JSON.stringify(checkInInfo),
+              headers: {
+                "Content-type": "application/json",
+              },
+            });
+            const data = await res.json();
+            console.log(data);
+            if(data.data !== null)
+            {
+              if(data.data.message === 'check in successful')
+              {
+                console.log(data.data.message)
+                const currentTime = new Date();
+                setCheckInTime(formatTime(currentTime));
+              }
+            }
+            else{
+              console.log(data.error)
+            }
+           
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        } else {
+          console.log('Location permission not granted or error occurred.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+      
+      // const currentTime = new Date();
+      // setCheckInTime(formatTime(currentTime));
     } else {
-      setCheckInTime("");
+      const checkOutInfo = {
+        siteId: "65e021fd0ff9467bbc9535f5",
+        workerId: "65dbc52bbebd9d13c94f217e"       
+      };
+      try {
+        const res = await fetch(`${BACKEND_BASE_URL}checkout`, {
+          method: "POST",
+          credentials: 'include',
+          body: JSON.stringify(checkOutInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        
+        if(data.data !== null)
+        {
+          console.log(data.data.message)
+          if(data.data.message === 'check out successful')
+          {
+            setCheckInTime("");
+          }
+        }
+        else{
+          console.log(data.error)
+        }
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+      
     }
 
     setCheckedIn(!isCheckedIn);
