@@ -1,116 +1,85 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
-import { RadioButton } from 'react-native-paper';
-import CommonButton from '../../components/common/button';
+import { StyleSheet, Text } from 'react-native';
+import { VStack, FormControl, RadioGroup, Radio, HStack, RadioIndicator, RadioIcon, RadioLabel } from '@gluestack-ui/themed';
+import { CircleIcon } from '@gluestack-ui/icons';
 
-const EmergencyForm: React.FC = () => {
-  const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
-  const [numWorkersInjured, setNumWorkersInjured] = useState(0);
-  const [selectedEmergency, setSelectedEmergency] = useState<string | null>(null);
-  const [emergencyType, setEmergencyType] = useState('');
-  const [urgencyLevel, setUrgencyLevel] = useState<number | null>(null);
-  const [needAssistance, setNeedAssistance] = useState<'Yes' | 'No'>('No');
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [note, setNote] = useState('');
+interface EmergencyFormProps {}
 
-  const handleEmergencySelection = (emergency: string) => {
-    setSelectedEmergency(emergency);
+const EmergencyForm: React.FC<EmergencyFormProps> = () => {
+  const [reportingFor, setReportingFor] = useState<string>('Myself');
+  const [numWorkersInjured, setNumWorkersInjured] = useState<number>(0);
+
+  const handleReportingForChange = (value: string) => {
+    setReportingFor(value);
   };
 
-  const handleUrgencySelection = (level: number) => {
-    setUrgencyLevel(level);
+  const handleIncrement = () => {
+    setNumWorkersInjured(numWorkersInjured + 1);
   };
 
-  const handleSendButtonPress = () => {
-    // Implement logic to send data to the database
-    console.log('Sending data to the database:', {
-      reportingFor,
-      numWorkersInjured,
-      selectedEmergency,
-      emergencyType,
-      urgencyLevel,
-      needAssistance,
-      photo,
-      note,
-    });
+  const handleDecrement = () => {
+    if (numWorkersInjured > 0) {
+      setNumWorkersInjured(numWorkersInjured - 1);
+    }
   };
 
   return (
-    <View>
-      {/* FIELD ONE */}
-      <Text>I am reporting for</Text>
-    <RadioButton.Group onValueChange={(value) => setReportingFor(value as 'Myself' | 'OtherWorker')} value={reportingFor}>
-        {/** Add children components here */}
-    </RadioButton.Group>
+    <VStack space="md" p={4}>
+      {/* FIELD ONE - WHO IS REPORTING */}
+      <FormControl>
+        <VStack space="md">
+          <Text style={styles.label}>I am reporting for</Text>
+          <RadioGroup value={reportingFor} onChange={(value) => handleReportingForChange(value)}>
+            <HStack space="md">
+              <Radio value="Myself" size="md">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} color={reportingFor === 'Myself' ? 'blue' : 'black'} strokeWidth={1} />
+                </RadioIndicator>
+                <RadioLabel>Myself</RadioLabel>
+              </Radio>
+              <Radio value="Other worker" size="md">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} color={reportingFor === 'Other worker' ? 'blue' : 'black'} strokeWidth={1} />
+                </RadioIndicator>
+                <RadioLabel>Other worker</RadioLabel>
+              </Radio>
+            </HStack>
+          </RadioGroup>
+        </VStack>
+      </FormControl>
 
-      {/* FIELD TWO */}
-      <Text>Number of workers injured*</Text>
-      <TouchableOpacity onPress={() => setNumWorkersInjured(Math.max(0, numWorkersInjured - 1))}>
-        <Text>-</Text>
-      </TouchableOpacity>
-      <Text>{numWorkersInjured}</Text>
-      <TouchableOpacity onPress={() => setNumWorkersInjured(numWorkersInjured + 1)}>
-        <Text>+</Text>
-      </TouchableOpacity>
-
-      {/* FIELD THREE */}
-      <Text>I am reporting about*</Text>
-      {/* Implement your custom buttons with icons here */}
-
-      {/* FIELD FOUR */}
-      <Text>Add other</Text>
-      <TextInput
-        placeholder="Type the emergency type"
-        value={emergencyType}
-        onChangeText={(text) => setEmergencyType(text)}
-      />
-
-      {/* FIELD FIVE */}
-      <Text>Select degree of urgency*</Text>
-      {/* Implement your custom urgency bar here */}
-
-      {/* FIELD SIX */}
-      <Text>Do you need assistance on the spot?*</Text>
-      <RadioButton.Group onValueChange={(value) => setNeedAssistance(value)} value={needAssistance}>
-        <RadioButton.Item label="Yes" value="Yes" />
-        <RadioButton.Item label="No" value="No" />
-      </RadioButton.Group>
-
-      {/* FIELD SEVEN */}
-      {needAssistance === 'Yes' && (
-        <>
-          <Text>Photo of Incident Location (Optional)</Text>
-          <TouchableOpacity onPress={() => /* Open Camera Logic */}>
-            <Text>Open Camera</Text>
-          </TouchableOpacity>
-        </>
-      )}
-
-      {/* Add Note (optional) */}
-      <Text>Add Note (optional)</Text>
-      <TextInput
-        placeholder="Location of the incident"
-        value={note}
-        onChangeText={(text) => setNote(text)}
-      />
-
-      {/* Required Fields Warning */}
-      <Text style={{ color: 'red' }}>All the fields above are required.</Text>
-
-      {/* Send Button */}
-      <CommonButton
-        buttonType={/* Disable the button if any required field is not filled */}
-        onPress={handleSendButtonPress}
-      >
-        Send
-      </CommonButton>
-
-      {/* Cancel Alert Button */}
-      <TouchableOpacity>
-        <Text>Cancel Alert</Text>
-      </TouchableOpacity>
-    </View>
+      {/* FIELD TWO - WORKER INJURED */}
+      <Text style={styles.label}>Number of workers injured*</Text>
+      <VStack flexDirection="row" alignItems="center">
+        <TouchableOpacity onPress={handleDecrement}>
+          <Text style={styles.counterButton}>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.counterText}>{numWorkersInjured}</Text>
+        <TouchableOpacity onPress={handleIncrement}>
+          <Text style={styles.counterButton}>+</Text>
+        </TouchableOpacity>
+      </VStack>
+    </VStack>
   );
+};
+
+const styles = {
+  page: {
+    padding: 24,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  counterButton: {
+    fontSize: 24,
+    paddingHorizontal: 16,
+  },
+  counterText: {
+    fontSize: 18,
+    paddingHorizontal: 16,
+  },
 };
 
 export default EmergencyForm;

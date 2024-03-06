@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text, Image } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
@@ -12,6 +13,8 @@ const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Simulating data fetching from the backend
@@ -158,9 +161,9 @@ const Dashboard: React.FC = () => {
   );
 
   const handleIncidentPress = () => {
-    // Handle navigation or any other logic when the incident is pressed
-    console.log('Incident pressed');
+    navigation.navigate('Alert Details');
   };
+  
 
   return (
     <View style={styles.page}>
