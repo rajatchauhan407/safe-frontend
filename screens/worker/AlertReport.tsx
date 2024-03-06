@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { VStack, FormControl, RadioGroup, Radio, HStack, RadioIndicator, RadioIcon, RadioLabel } from '@gluestack-ui/themed';
-import { CircleIcon } from '@gluestack-ui/icons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-interface EmergencyFormProps {}
+interface EmergencyFormProps {
+  // Add any necessary props for database connection here
+}
 
 const EmergencyForm: React.FC<EmergencyFormProps> = () => {
-  const [reportingFor, setReportingFor] = useState<string>('Myself');
-  const [numWorkersInjured, setNumWorkersInjured] = useState<number>(0);
+  const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
+  const [numWorkersInjured, setNumWorkersInjured] = useState(0);
 
-  const handleReportingForChange = (value: string) => {
-    setReportingFor(value);
+  const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
+    setReportingFor(option);
   };
 
   const handleIncrement = () => {
@@ -24,62 +24,84 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   };
 
   return (
-    <VStack space="md" p={4}>
-      {/* FIELD ONE - WHO IS REPORTING */}
-      <FormControl>
-        <VStack space="md">
-          <Text style={styles.label}>I am reporting for</Text>
-          <RadioGroup value={reportingFor} onChange={(value) => handleReportingForChange(value)}>
-            <HStack space="md">
-              <Radio value="Myself" size="md">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} color={reportingFor === 'Myself' ? 'blue' : 'black'} strokeWidth={1} />
-                </RadioIndicator>
-                <RadioLabel>Myself</RadioLabel>
-              </Radio>
-              <Radio value="Other worker" size="md">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} color={reportingFor === 'Other worker' ? 'blue' : 'black'} strokeWidth={1} />
-                </RadioIndicator>
-                <RadioLabel>Other worker</RadioLabel>
-              </Radio>
-            </HStack>
-          </RadioGroup>
-        </VStack>
-      </FormControl>
+    <View style={styles.container}>
+      <Text style={styles.label}>I am reporting for</Text>
+      <View style={styles.radioButtonContainer}>
+        <TouchableOpacity
+          style={[styles.radioButton, reportingFor === 'Myself' && styles.radioButtonSelected]}
+          onPress={() => handleReportingChange('Myself')}
+        >
+          {reportingFor === 'Myself' && <View style={styles.innerCircle} />}
+        </TouchableOpacity>
+        <Text>Myself</Text>
+      </View>
+      <View style={styles.radioButtonContainer}>
+        <TouchableOpacity
+          style={[styles.radioButton, reportingFor === 'OtherWorker' && styles.radioButtonSelected]}
+          onPress={() => handleReportingChange('OtherWorker')}
+        >
+          {reportingFor === 'OtherWorker' && <View style={styles.innerCircle} />}
+        </TouchableOpacity>
+        <Text>Other worker</Text>
+      </View>
 
-      {/* FIELD TWO - WORKER INJURED */}
-      <Text style={styles.label}>Number of workers injured*</Text>
-      <VStack flexDirection="row" alignItems="center">
-        <TouchableOpacity onPress={handleDecrement}>
-          <Text style={styles.counterButton}>-</Text>
+      <Text style={styles.label}>Number of workers injured</Text>
+      <View style={styles.numberInputContainer}>
+        <TouchableOpacity style={styles.plusMinusButton} onPress={handleDecrement}>
+          <Text>-</Text>
         </TouchableOpacity>
-        <Text style={styles.counterText}>{numWorkersInjured}</Text>
-        <TouchableOpacity onPress={handleIncrement}>
-          <Text style={styles.counterButton}>+</Text>
+        <Text>{numWorkersInjured}</Text>
+        <TouchableOpacity style={styles.plusMinusButton} onPress={handleIncrement}>
+          <Text>+</Text>
         </TouchableOpacity>
-      </VStack>
-    </VStack>
+      </View>
+    </View>
   );
 };
 
-const styles = {
-  page: {
-    padding: 24,
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
-  counterButton: {
-    fontSize: 24,
-    paddingHorizontal: 16,
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
-  counterText: {
-    fontSize: 18,
-    paddingHorizontal: 16,
+  radioButton: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
   },
-};
+  radioButtonSelected: {
+    borderColor: '#000',
+  },
+  innerCircle: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: '#000',
+  },
+  numberInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  plusMinusButton: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 4,
+    padding: 8,
+    marginHorizontal: 8,
+  },
+});
 
 export default EmergencyForm;
