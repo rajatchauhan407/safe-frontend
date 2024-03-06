@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Animated, TouchableOpacity } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -12,18 +12,15 @@ const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+  const [isInSiteZone, setIsInSiteZone] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
+
 
   useEffect(() => {
     // Simulating data fetching from the backend
     const fetchData = async () => {
       try {
-        // Simulating a delay to mimic the asynchronous nature of data fetching
         await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // const response = await fetch("backend_api_url");
-        // const userData = await response.json();
-        // setUserName(userData.name);
-        // setSiteLocation(userData.siteLocation);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -31,6 +28,22 @@ const Dashboard: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const fadeInTooltip = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const fadeOutTooltip = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const formatTime = (date: Date): string => {
     const hours = date.getHours();
@@ -147,14 +160,29 @@ const Dashboard: React.FC = () => {
     setCheckedIn(!isCheckedIn);
   };
 
+  useEffect(() => {
+    if (!isInSiteZone) {
+      fadeInTooltip();
+    } else {
+      fadeOutTooltip();
+    }
+  }, [isInSiteZone]);
+
+  const handleOverlayPress = () => {
+    fadeOutTooltip();
+    setIsInSiteZone(true);
+  };
+
   const getStatusText = () => {
     return isCheckedIn ? `Checked-in at ${checkInTime}` : "Off-site";
   };
 
   const CommonButtonContent = () => (
-    <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
+    <View style={{ width: '100%' }}>
+      <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
         <Text>{isCheckedIn ? 'Check Out' : 'Check In'}</Text>
-    </CommonButton>
+      </CommonButton>
+    </View>
   );
 
   const handleIncidentPress = () => {
@@ -176,6 +204,21 @@ const Dashboard: React.FC = () => {
         {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
         <Text>{siteLocation}</Text>
       </View>
+
+      <View style={{ height: 20 }} />
+
+      {/* TOOLTIP */}
+      {!isInSiteZone && (
+        <Animated.View style={{ ...styles.tooltip, opacity: fadeAnim }}>
+          <Text style={styles.tooltipText}>You are not in the site zone. Please reach the location to check in</Text>
+        </Animated.View>
+      )}
+
+      {/* OVERLAY */}
+      {!isInSiteZone && (
+        <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
+        </TouchableOpacity>
+      )}
 
       {/* CARDS */}
       <View>
@@ -204,6 +247,34 @@ const styles = StyleSheet.create({
   },
   buildingText: {
     fontSize: 24,
+  },
+  tooltip: {
+    backgroundColor: 'white',
+    width: '100%',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 15,
+    position: 'absolute',
+    top: 80, 
+    left: 25,
+    zIndex: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  tooltipText: {
+    color: 'red',
+    textAlign: 'center',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    height: '150%',
+    zIndex: 1,
   },
 });
 

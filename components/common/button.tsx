@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FD9201',
     borderRadius: 8,
-    width: '100%',
   },
   checkedInButton: {
     backgroundColor: 'white',
