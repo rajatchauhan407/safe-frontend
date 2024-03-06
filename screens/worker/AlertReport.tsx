@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { VStack, FormControl, RadioGroup, Radio, HStack, RadioIndicator, RadioIcon, RadioLabel } from '@gluestack-ui/themed';
 import { CircleIcon } from '@gluestack-ui/icons';
 
