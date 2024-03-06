@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
@@ -9,6 +9,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
+  const [otherEmergencyType, setOtherEmergencyType] = useState('');
 
   const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
     setReportingFor(option);
@@ -26,6 +27,10 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
 
   const handleReportType = (type: string) => {
     setReportType(type);
+  };
+
+  const handleOtherEmergencyTypeChange = (text: string) => {
+    setOtherEmergencyType(text);
   };
 
   const renderReportButtons = () => {
@@ -60,57 +65,78 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   };
 
   return (
-    <View style={styles.page}>
-      {/* FIELD ONE - WHO IS REPORTING */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>I am reporting for*</Text>
-        <View style={styles.radioButtonContainerHorizontal}>
-          <TouchableOpacity
-            style={[styles.radioButton, reportingFor === 'Myself' && styles.radioButtonSelected]}
-            onPress={() => handleReportingChange('Myself')}
-          >
-            {reportingFor === 'Myself' && <View style={styles.innerCircle} />}
-          </TouchableOpacity>
-          <Text style={styles.radioButtonLabel}>Myself</Text>
-  
-          <TouchableOpacity
-            style={[styles.radioButton, reportingFor === 'OtherWorker' && styles.radioButtonSelected]}
-            onPress={() => handleReportingChange('OtherWorker')}
-          >
-            {reportingFor === 'OtherWorker' && <View style={styles.innerCircle} />}
-          </TouchableOpacity>
-          <Text style={styles.radioButtonLabel}>Other worker</Text>
-        </View>
-      </View>
-  
-      {/* FIELD TWO - NUMBER OF WORKERS INJURED */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Number of workers injured*</Text>
-        <View style={styles.numberInputContainer}>
-          <TouchableOpacity style={styles.circleButton} onPress={handleDecrement}>
-            <Text style={styles.buttonText}>-</Text>
-          </TouchableOpacity>
-          <View style={styles.numberDisplay}>
-            <Text style={styles.numberText}>{numWorkersInjured}</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -50}
+    >
+      <ScrollView
+        contentContainerStyle={styles.page}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.page}>
+          {/* FIELD ONE - WHO IS REPORTING */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>I am reporting for*</Text>
+            <View style={styles.radioButtonContainerHorizontal}>
+              <TouchableOpacity
+                style={[styles.radioButton, reportingFor === 'Myself' && styles.radioButtonSelected]}
+                onPress={() => handleReportingChange('Myself')}
+              >
+                {reportingFor === 'Myself' && <View style={styles.innerCircle} />}
+              </TouchableOpacity>
+              <Text style={styles.radioButtonLabel}>Myself</Text>
+      
+              <TouchableOpacity
+                style={[styles.radioButton, reportingFor === 'OtherWorker' && styles.radioButtonSelected]}
+                onPress={() => handleReportingChange('OtherWorker')}
+              >
+                {reportingFor === 'OtherWorker' && <View style={styles.innerCircle} />}
+              </TouchableOpacity>
+              <Text style={styles.radioButtonLabel}>Other worker</Text>
+            </View>
           </View>
-          <TouchableOpacity style={styles.circleButton} onPress={handleIncrement}>
-            <Text style={styles.buttonText}>+</Text>
-          </TouchableOpacity>
+      
+          {/* FIELD TWO - NUMBER OF WORKERS INJURED */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Number of workers injured*</Text>
+            <View style={styles.numberInputContainer}>
+              <TouchableOpacity style={styles.circleButton} onPress={handleDecrement}>
+                <Text style={styles.buttonText}>-</Text>
+              </TouchableOpacity>
+              <View style={styles.numberDisplay}>
+                <Text style={styles.numberText}>{numWorkersInjured}</Text>
+              </View>
+              <TouchableOpacity style={styles.circleButton} onPress={handleIncrement}>
+                <Text style={styles.buttonText}>+</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+      
+          {/* FIELD THREE - REPORT TYPE */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>I am reporting about*</Text>
+            <View style={styles.reportButtonContainer}>{renderReportButtons()}</View>
+
+            {/* Add other option with TextInput */}
+            <Text style={styles.label}>Add other</Text>
+            <TextInput
+              style={styles.otherEmergencyInput}
+              placeholder="Type the emergency here"
+              value={otherEmergencyType}
+              onChangeText={handleOtherEmergencyTypeChange}
+            />
+          </View>
         </View>
-      </View>
-  
-      {/* FIELD THREE - REPORT TYPE */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>I am reporting about*</Text>
-        <View style={styles.reportButtonContainer}>{renderReportButtons()}</View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-}  
+};
 
 const styles = StyleSheet.create({
   page: {
-    padding: 24,
+    flexGrow: 1,
+    padding: 16,
   },
   fieldContainer: {
     marginBottom: 24,
@@ -213,6 +239,14 @@ const styles = StyleSheet.create({
   },
   reportButtonTextSelected: {
     fontWeight: 'bold',
+  },
+  otherEmergencyInput: {
+    height: 40,
+    borderColor: '#000',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 8,
   },
 });
 
