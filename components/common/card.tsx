@@ -10,7 +10,7 @@ interface CommonCardProps {
     return (
         <View style={styles.card}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.content}>{content}</Text>
+            <Text>{content}</Text>
         </View>
     );
 };
@@ -33,10 +33,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  content: {
-    width: '100%',
-  },
+  }
 });
 
 export default CommonCard;
