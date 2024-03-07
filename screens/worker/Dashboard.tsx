@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text, Image, Animated, TouchableOpacity } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
@@ -15,6 +16,8 @@ const Dashboard: React.FC = () => {
   const [isInSiteZone, setIsInSiteZone] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
 
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Simulating data fetching from the backend
@@ -186,9 +189,9 @@ const Dashboard: React.FC = () => {
   );
 
   const handleIncidentPress = () => {
-    // Handle navigation or any other logic when the incident is pressed
-    console.log('Incident pressed');
+    navigation.navigate('Alert Details');
   };
+  
 
   return (
     <View style={styles.page}>
