@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import CommonButton from '../../components/common/button';
 
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
@@ -20,6 +21,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   const [reportType, setReportType] = useState<string | null>(null);
   const [otherEmergencyType, setOtherEmergencyType] = useState('');
   const [urgencyLevel, setUrgencyLevel] = useState<number | null>(null);
+  const [needAssistance, setNeedAssistance] = useState<boolean>(false);
 
   const urgencyColors = ['yellow', 'orange', 'red'];
 
@@ -47,6 +49,10 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
 
   const handleUrgencySelection = (level: number) => {
     setUrgencyLevel(level);
+  };
+
+  const handleAssistanceChange = (value: boolean) => {
+    setNeedAssistance(value);
   };
 
   const renderReportButtons = () => {
@@ -104,6 +110,54 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
           <Text style={styles.urgencyCircleText}>{level}</Text>
         </TouchableOpacity>        
         ))}
+      </View>
+    );
+  };
+
+  const renderAssistanceField = () => {
+    return (
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Do you need assistance on the spot?</Text>
+        <View style={styles.radioButtonContainerHorizontal}>
+          <TouchableOpacity
+            style={[
+              styles.radioButton,
+              needAssistance && styles.radioButtonSelected,
+            ]}
+            onPress={() => handleAssistanceChange(true)}
+          >
+            {needAssistance && <View style={styles.innerCircle} />}
+          </TouchableOpacity>
+          <Text style={styles.radioButtonLabel}>Yes</Text>
+
+          <TouchableOpacity
+            style={[
+              styles.radioButton,
+              !needAssistance && styles.radioButtonSelected,
+            ]}
+            onPress={() => handleAssistanceChange(false)}
+          >
+            {!needAssistance && <View style={styles.innerCircle} />}
+          </TouchableOpacity>
+          <Text style={styles.radioButtonLabel}>No</Text>
+        </View>
+
+        {needAssistance && renderPhotoField()}
+      </View>
+    );
+  };
+
+  const renderPhotoField = () => {
+    return (
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Photo of the incident location</Text>
+        <CommonButton
+          buttonType="whiteButton"
+          onPress={() => {
+          }}
+        >
+          <Text>Take Photo</Text>
+        </CommonButton>
       </View>
     );
   };
@@ -176,6 +230,8 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
             <Text style={styles.label}>Select degree of urgency*</Text>
             {renderUrgencyCircles()}
           </View>
+          {/* FIELD FIVE - NEED ASSISTANCE */}
+          {renderAssistanceField()}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

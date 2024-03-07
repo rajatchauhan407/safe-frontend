@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@gluestack-ui/themed';
-import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle, Text } from 'react-native';
 
 interface CommonButtonProps {
-  buttonType: 'default' | 'checkIn';
+  buttonType: 'default' | 'checkIn' | 'whiteButton';
   isCheckedIn?: boolean;
   children: React.ReactNode;
   onPress?: () => void;
@@ -30,6 +30,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
           baseStyle = { ...baseStyle, ...styles.checkedInButton };
         }
         break;
+      case 'whiteButton':
+        baseStyle = { ...baseStyle, ...styles.whiteButton };
+        break;
       default:
         baseStyle = { ...baseStyle, ...styles.defaultButton };
     }
@@ -38,11 +41,18 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
       return { ...baseStyle, ...styles.disabledButton };
     }
 
-    if (isPressed) {
-      return { ...baseStyle, ...styles.clickedButton, ...styles.clickedButtonText };
+    if (isPressed && buttonType === 'whiteButton') {
+      return { ...baseStyle, ...styles.clickedButton };
     }
 
     return baseStyle;
+  };
+
+  const getButtonTextStyle = (): TextStyle => {
+    if (isPressed && buttonType === 'whiteButton') {
+      return styles.clickedButtonText;
+    }
+    return {};
   };
 
   const handlePressIn = () => {
@@ -61,7 +71,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
       onPress={onPress}
       disabled={disabled}
     >
-      {children}
+      <Text style={[getButtonTextStyle()]}>{children}</Text>
     </Button>
   );
 };
@@ -81,6 +91,20 @@ const styles = StyleSheet.create({
     borderColor: '#FD9201',
     borderRadius: 8,
     width: '100%',
+  },
+  whiteButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 100,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
   },
   checkedInButton: {
     backgroundColor: 'white',
