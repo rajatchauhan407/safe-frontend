@@ -233,6 +233,32 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
           {/* FIELD FIVE - NEED ASSISTANCE */}
           {renderAssistanceField()}
         </View>
+        
+        {/* SEND REPORT */}
+        <View style={styles.requiredTextContainer}>
+          <Text style={styles.requiredText}>All the above fields are required</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+        <CommonButton
+          buttonType="default"
+          disabled={
+            !(
+              numWorkersInjured >= 0 &&
+              reportType &&
+              (reportType !== 'Type7' || otherEmergencyType.trim() !== '') &&
+              urgencyLevel !== null
+            )
+          }
+        >
+          <Text>Send Alert</Text>
+        </CommonButton>
+        </View>
+        <View style={styles.buttonContainer}>
+          <CommonButton buttonType="underline">
+            <Text>Cancel Alert</Text>
+          </CommonButton>
+        </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -375,6 +401,17 @@ const styles = StyleSheet.create({
   urgencyCircleText: {
     fontSize: 16,
     color: 'black',
+  },
+  requiredTextContainer: {
+    marginTop: 0,
+  },
+  requiredText: {
+    color: 'red',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    marginTop: 16,
   },
 });
 

@@ -3,7 +3,7 @@ import { Button } from '@gluestack-ui/themed';
 import { StyleSheet, ViewStyle, TextStyle, Text } from 'react-native';
 
 interface CommonButtonProps {
-  buttonType: 'default' | 'checkIn' | 'whiteButton';
+  buttonType: 'default' | 'checkIn' | 'whiteButton' | 'underline';
   isCheckedIn?: boolean;
   children: React.ReactNode;
   onPress?: () => void;
@@ -33,6 +33,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
       case 'whiteButton':
         baseStyle = { ...baseStyle, ...styles.whiteButton };
         break;
+      case 'underline':
+          baseStyle = { ...baseStyle, ...styles.underlineButton };
+      break;
       default:
         baseStyle = { ...baseStyle, ...styles.defaultButton };
     }
@@ -51,6 +54,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
   const getButtonTextStyle = (): TextStyle => {
     if (isPressed && buttonType === 'whiteButton') {
       return styles.clickedButtonText;
+    }
+    if (buttonType === 'underline') {
+      return styles.underlineText;
     }
     return {};
   };
@@ -105,6 +111,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 3,
+  },
+  underlineButton: {
+    backgroundColor: 'transparent',
+  },
+  underlineText: {
+    textDecorationLine: 'underline',
   },
   checkedInButton: {
     backgroundColor: 'white',
