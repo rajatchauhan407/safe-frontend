@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
@@ -10,6 +19,9 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [otherEmergencyType, setOtherEmergencyType] = useState('');
+  const [urgencyLevel, setUrgencyLevel] = useState<number | null>(null);
+
+  const urgencyColors = ['yellow', 'orange', 'red'];
 
   const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
     setReportingFor(option);
@@ -33,12 +45,16 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
     setOtherEmergencyType(text);
   };
 
+  const handleUrgencySelection = (level: number) => {
+    setUrgencyLevel(level);
+  };
+
   const renderReportButtons = () => {
     const reportButtonsData = [
       { type: 'Type1', icon: 'ios-alert', text: 'A worker fell' },
       { type: 'Type2', icon: 'ios-medical', text: 'Fire hazard' },
       { type: 'Type3', icon: 'ios-flame', text: 'Electrical hazard' },
-      { type: 'Type4', icon: 'ios-car', text: 'An injury occured' },
+      { type: 'Type4', icon: 'ios-car', text: 'An injury occurred' },
       { type: 'Type5', icon: 'ios-water', text: 'Confined spaces' },
       { type: 'Type6', icon: 'ios-nuclear', text: 'Struck by hazard' },
     ];
@@ -64,6 +80,34 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
     ));
   };
 
+  const renderUrgencyCircles = () => {
+    const levels = [1, 2, 3];
+
+    return (
+      <View style={styles.urgencySliderContainer}>
+        {levels.map((level) => (
+          <TouchableOpacity
+          key={level}
+          style={[
+            styles.urgencyCircle,
+            urgencyLevel === level && {
+              borderColor: urgencyColors[level - 1],
+              backgroundColor: urgencyColors[level - 1],
+            },
+            urgencyLevel !== level && {
+              borderColor: urgencyColors[level - 1],
+            },
+            styles.selectedUrgencyCircle,
+          ]}
+          onPress={() => handleUrgencySelection(level)}
+        >
+          <Text style={styles.urgencyCircleText}>{level}</Text>
+        </TouchableOpacity>        
+        ))}
+      </View>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -86,7 +130,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
                 {reportingFor === 'Myself' && <View style={styles.innerCircle} />}
               </TouchableOpacity>
               <Text style={styles.radioButtonLabel}>Myself</Text>
-      
+
               <TouchableOpacity
                 style={[styles.radioButton, reportingFor === 'OtherWorker' && styles.radioButtonSelected]}
                 onPress={() => handleReportingChange('OtherWorker')}
@@ -96,7 +140,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
               <Text style={styles.radioButtonLabel}>Other worker</Text>
             </View>
           </View>
-      
+
           {/* FIELD TWO - NUMBER OF WORKERS INJURED */}
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Number of workers injured*</Text>
@@ -112,13 +156,13 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
               </TouchableOpacity>
             </View>
           </View>
-      
+
           {/* FIELD THREE - REPORT TYPE */}
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>I am reporting about*</Text>
             <View style={styles.reportButtonContainer}>{renderReportButtons()}</View>
 
-            {/* Add other option with TextInput */}
+            {/* Add other options with TextInput */}
             <Text style={styles.label}>Add other</Text>
             <TextInput
               style={styles.otherEmergencyInput}
@@ -126,6 +170,11 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
               value={otherEmergencyType}
               onChangeText={handleOtherEmergencyTypeChange}
             />
+          </View>
+          {/* FIELD FOUR - DEGREE OF URGENCY */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Select degree of urgency*</Text>
+            {renderUrgencyCircles()}
           </View>
         </View>
       </ScrollView>
@@ -211,9 +260,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   reportButton: {
-    width: '30%', 
-    aspectRatio: 1,
+    width: '30%',
     backgroundColor: 'white',
+    aspectRatio: 1,
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
@@ -235,7 +284,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   reportButtonSelected: {
-    backgroundColor: '#FD9201', 
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#FD9201',
   },
   reportButtonTextSelected: {
     fontWeight: 'bold',
@@ -247,6 +298,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
+  },
+  urgencySliderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  urgencyCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedUrgencyCircle: {
+    borderWidth: 2,
+  },
+  urgencyCircleText: {
+    fontSize: 16,
+    color: 'black',
   },
 });
 
