@@ -11,6 +11,7 @@ import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
 
 import Dropdown from "../components/common/Dropdown";
+import Push from "../push";
 
 const LoginScreen: React.FC = () => {
   const [loginAs, setLoginAs] = useState<string>("");
@@ -82,6 +83,7 @@ const LoginScreen: React.FC = () => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
+      <Push/>
     </View>
   );
 };
