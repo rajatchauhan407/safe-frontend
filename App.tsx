@@ -5,6 +5,7 @@ import { config } from "@gluestack-ui/config";
 import { Box } from "@gluestack-ui/themed";
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './navigation/MainNavigator';
+
 export default function App() {
   return (
     <GluestackUIProvider config={config}>

@@ -9,8 +9,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
-
 import Dropdown from "../components/common/Dropdown";
+import Push from "../push";
+// import DashboardIcon from '../assets/icons/dashboard';
+// import SOSIcon from "../assets/icons/sos";
+// import ProfileIcon from "../assets/icons/profile";
 
 const LoginScreen: React.FC = () => {
   const [loginAs, setLoginAs] = useState<string>("");
@@ -82,6 +85,12 @@ const LoginScreen: React.FC = () => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
+      <View >
+          {/* <DashboardIcon focussed={false} color="black" size={44} /> */}
+          {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
+          {/* <ProfileIcon color="black" size={44} /> */}
+      </View>
+      <Push/>
     </View>
   );
 };
