@@ -49,26 +49,15 @@ const Dashboard: React.FC = () => {
     }).start();
   };
 
-  const formatTime = (date: Date): string => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const period = hours >= 12 ? 'pm' : 'am';
-    const formattedTime = `${hours % 12 || 12}:${minutes}${period}`;
-    return formattedTime;
-  };
-
   const getLocation = async (): Promise<Location.LocationObject | null> => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        // console.error('Location permission not granted');
         return null;
       }
       const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
-      // console.log('User location:', location);
       return location;
     } catch (error) {
-      // console.error('Error getting location:', error);
       return null;
     }
   };
@@ -78,6 +67,8 @@ const Dashboard: React.FC = () => {
       getLocation().then(async (location) => {
         if (location) {
           console.log('Received location:', location);
+
+          //Actual Location of the device
           const checkInInfo = {
             siteId: "65e021fd0ff9467bbc9535f5",
             workerId: "65dbc52bbebd9d13c94f217e",
@@ -86,6 +77,17 @@ const Dashboard: React.FC = () => {
               longitude: location.coords.longitude
             }
           };
+
+          //To simulate check-in successful during demo
+          // const checkInInfo = {
+          //   siteId: "65e021fd0ff9467bbc9535f5",
+          //   workerId: "65dbc52bbebd9d13c94f217e",
+          //   location: {
+          //     latitude: 49.16196980896502,
+          //     longitude: -123.14712911446713
+          //   }
+          // };
+
           try {
             const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
               method: "POST",
@@ -98,11 +100,10 @@ const Dashboard: React.FC = () => {
             const data = await res.json();
             console.log(data);
             if (data.data) {
-              if (data.data.message === 'check in successful') {
-                console.log(data.data.message)
-                const currentTime = new Date();
+              if (data.data.message === 'check in successful') {             
+                let formattedTime = new Date(data.data.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
                 setIsCheckedIn(true);
-                setCheckInTime(formatTime(currentTime));
+                setCheckInTime(formattedTime);
               } else if (data.data.message === 'Please be on site while check-in') {
                 setIsInSiteZone(false);
                 setCheckInErrorMessage("You are not in the site zone. Please reach the location to check in.")
