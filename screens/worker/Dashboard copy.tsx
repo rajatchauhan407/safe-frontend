@@ -71,8 +71,12 @@ const Dashboard: React.FC = () => {
   };
 
   const handleCheckInToggle = async () => {
+   
+
     if (!isCheckedIn) {
-      getLocation().then(async (location) => {
+      
+      getLocation()
+      .then(async (location) => {
         if (location) {
           console.log('Received location:', location);
           const checkInInfo = {
@@ -94,49 +98,51 @@ const Dashboard: React.FC = () => {
             });
             const data = await res.json();
             console.log(data);
-            if (data.data) {
-              if (data.data.message === 'check in successful') {
+            if(data.data)
+            {
+              if(data.data.message === 'check in successful')
+              {
                 console.log(data.data.message)
                 const currentTime = new Date();
-                setIsCheckedIn(true);
                 setCheckInTime(formatTime(currentTime));
-              } else if (data.data.message === 'Please be on site while check-in') {
+              }
+              else if (data.data.message === 'Please be on site while check-in')
+              {
                 setIsInSiteZone(false);
                 setCheckInErrorMessage("You are not in the site zone. Please reach the location to check in.")
                 setCheckInTime("");
-                setIsCheckedIn(false);
+                setIsCheckedIn(false);                
               }
-            } else {
+            }
+            else{
               console.log(data.error.details)
               setIsInSiteZone(false);
               setCheckInErrorMessage(data.error.details)
               setCheckInTime("");
-              setIsCheckedIn(false);
+              setIsCheckedIn(false); 
             }
+           
           } catch (error) {
-            //Error while connecting with backend
             console.error('Error:', error);
-            setIsInSiteZone(false);
-            setCheckInErrorMessage("Unable to check-in - Something went wrong")
-            setCheckInTime("");
-            setIsCheckedIn(false);
           }
         } else {
           setIsInSiteZone(false);
           setCheckInErrorMessage("Please grant permission to access your location.")
           setCheckInTime("");
-          setIsCheckedIn(false);
+          setIsCheckedIn(false); 
           console.log('Location permission not granted or error occurred.');
         }
-      }).catch(error => {
+      })
+      .catch(error => {
         console.error('Error:', error);
       });
+      
+      // const currentTime = new Date();
+      // setCheckInTime(formatTime(currentTime));
     } else {
-      // Check-out process
-      setIsCheckedIn(false);
       const checkOutInfo = {
         siteId: "65e021fd0ff9467bbc9535f5",
-        workerId: "65dbc52bbebd9d13c94f217e"
+        workerId: "65dbc52bbebd9d13c94f217e"       
       };
       try {
         const res = await fetch(`${BACKEND_BASE_URL}checkout`, {
@@ -148,18 +154,26 @@ const Dashboard: React.FC = () => {
           },
         });
         const data = await res.json();
-        if (data.data) {
+        
+        if(data.data)
+        {
           console.log(data.data.message)
-          if (data.data.message === 'check out successful') {
+          if(data.data.message === 'check out successful')
+          {
             setCheckInTime("");
           }
-        } else {
+        }
+        else{
           console.log(data.error.details)
         }
+
       } catch (error) {
         console.error('Error:', error);
       }
+      
     }
+
+    setIsCheckedIn(!isCheckedIn);
   };
 
   useEffect(() => {
