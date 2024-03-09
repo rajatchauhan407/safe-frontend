@@ -4,6 +4,7 @@ import { Image, StyleSheet, ScrollView, Text, View } from "react-native";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
 import AlertSimulationCard from "../../components/common/alertSimulation";
+import NumOfWorkers from "../../components/common/NumOfWorkers";
 
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("Liam");
@@ -31,6 +32,11 @@ const Dashboard: React.FC = () => {
           {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
           <Text>{siteLocation}</Text>
         </View>
+
+        <View style={{ height: 20 }} />
+
+        {/* WORKERS CHECKED IN */}
+        <NumOfWorkers totalCheckedIn={30} totalExpected={34} />
 
         <View style={{ height: 20 }} />
 
