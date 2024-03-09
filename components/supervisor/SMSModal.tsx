@@ -33,15 +33,14 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
           {/* Centered small image on top */}
           {/* <Image source={require("./Image.png")} style={styles.image} /> */}
 
-          {/* Centered text in bold: "Your emergency whistle has been triggered." */}
           <Text style={styles.boldText}>
             Your emergency whistle has been triggered.
           </Text>
 
-          {/* Checklist title (centered): "Choose SMS alert contacts" */}
+          {/* Checklist title */}
           <Text style={styles.checklistTitle}>Choose SMS alert contacts</Text>
 
-          {/* Checklist options (4 options): "First Aid Option 1" */}
+          {/* Checklist options */}
           <View style={styles.checklistContainer}>
             <TouchableOpacity
               style={styles.checklistItem}
@@ -73,12 +72,12 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
             </TouchableOpacity>
           </View>
 
-          {/* Full width button "Send" */}
+          {/* Button "Send" */}
           <TouchableOpacity style={styles.sendButton}>
             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
 
-          {/* Text button underlined "Skip SMS Messages" (centered) */}
+          {/* "Skip SMS Messages" */}
           <TouchableOpacity onPress={onClose} style={styles.skipButton}>
             <Text style={styles.skipButtonText}>Skip SMS Messages</Text>
           </TouchableOpacity>
@@ -91,13 +90,13 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
 const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
-    backgroundColor: "rgba(30, 30, 30, 0.96)", // Rest of the background color
+    backgroundColor: "rgba(30, 30, 30, 0.96)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#F8F8FF", // Modal container color
+    backgroundColor: "#F8F8FF",
     paddingHorizontal: 20,
     paddingVertical: 40,
     borderRadius: 10,
@@ -124,22 +123,22 @@ const styles = StyleSheet.create({
   checklistItem: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between", // Align items evenly
+    justifyContent: "space-between",
     marginBottom: 5,
   },
   checklistText: {
-    flex: 1, // Take up remaining space
-    marginRight: 10, // Add margin to separate text and checkbox
+    flex: 1,
+    marginRight: 10,
   },
   checkbox: {
     width: 20,
     height: 20,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: "#000", // Border color
+    borderColor: "#000",
   },
   sendButton: {
-    backgroundColor: "#FD9201", // Send button color
+    backgroundColor: "#FD9201",
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
