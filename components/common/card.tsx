@@ -1,18 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Card, Heading, Text, Box } from '@gluestack-ui/themed';
+import { StyleSheet } from 'react-native';
 
 interface CommonCardProps {
-    title:any,
-    content:any
-  }
+  title: React.ReactNode;
+  content: React.ReactNode;
+}
 
-  const CommonCard: React.FC<CommonCardProps> = ({ title, content }) => {
-    return (
-        <View style={styles.card}>
-            <Text style={styles.title}>{title}</Text>
-            <Text>{content}</Text>
-        </View>
-    );
+const CommonCard: React.FC<CommonCardProps> = ({ title, content }) => {
+  return (
+    <Card size="md" variant="elevated" m="$3">
+      <Heading mb="$1" size="md">
+        {title}
+      </Heading>
+      <Box>{content}</Box>
+    </Card>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-  }
+  },
 });
 
 export default CommonCard;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@gluestack-ui/themed';
+import { Button, ButtonText, ButtonSpinner, ButtonIcon, ButtonGroup } from '@gluestack-ui/themed';
 import { StyleSheet, ViewStyle, TextStyle, Text } from 'react-native';
 
 interface CommonButtonProps {
@@ -14,41 +14,38 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
   const [isPressed, setPressed] = useState(false);
 
   const getButtonStyle = (): ViewStyle & TextStyle => {
-    let baseStyle: ViewStyle & TextStyle = {
+    const baseStyle: ViewStyle & TextStyle = {
       padding: 10,
       justifyContent: 'center',
       alignItems: 'center',
+      height: 52,
+      width: '100%',
     };
 
-    switch (buttonType) {
-      case 'default':
-        baseStyle = { ...baseStyle, ...styles.defaultButton };
-        break;
-      case 'checkIn':
-        baseStyle = { ...baseStyle, ...styles.checkInButton };
-        if (isCheckedIn) {
-          baseStyle = { ...baseStyle, ...styles.checkedInButton };
-        }
-        break;
-      case 'whiteButton':
-        baseStyle = { ...baseStyle, ...styles.whiteButton };
-        break;
-      case 'underline':
-          baseStyle = { ...baseStyle, ...styles.underlineButton };
-      break;
-      default:
-        baseStyle = { ...baseStyle, ...styles.defaultButton };
+    const buttonStyles = {
+      default: styles.defaultButton,
+      checkIn: styles.checkInButton,
+      whiteButton: styles.whiteButton,
+      underline: styles.underlineButton,
+    };
+
+    const selectedStyle = buttonStyles[buttonType] || styles.defaultButton;
+
+    let finalStyle = { ...baseStyle, ...selectedStyle };
+
+    if (isCheckedIn && buttonType === 'checkIn') {
+      finalStyle = { ...finalStyle, ...styles.checkedInButton };
     }
 
     if (disabled) {
-      return { ...baseStyle, ...styles.disabledButton };
+      finalStyle = { ...finalStyle, ...styles.disabledButton };
     }
 
     if (isPressed && buttonType === 'whiteButton') {
-      return { ...baseStyle, ...styles.clickedButton };
+      finalStyle = { ...finalStyle, ...styles.clickedButton };
     }
 
-    return baseStyle;
+    return finalStyle;
   };
 
   const getButtonTextStyle = (): TextStyle => {
@@ -70,15 +67,19 @@ const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, ch
   };
 
   return (
-    <Button
-      style={[styles.button, getButtonStyle()]}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Text style={[getButtonTextStyle()]}>{children}</Text>
-    </Button>
+    <ButtonGroup>
+      <Button
+        style={[styles.button, getButtonStyle()]}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        disabled={disabled}
+      >
+        <ButtonText style={[getButtonTextStyle()]}>{children}</ButtonText>
+        {buttonType === 'whiteButton' && <ButtonSpinner />}
+        {/* Add ButtonIcon here if needed */}
+      </Button>
+    </ButtonGroup>
   );
 };
 
