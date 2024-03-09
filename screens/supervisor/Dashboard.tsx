@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, ScrollView, Text, View } from "react-native";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -19,6 +19,10 @@ const Dashboard: React.FC = () => {
   const handleIncidentPress = () => {
     navigation.navigate("Alert Details");
   };
+
+  useEffect(() => {
+    setCurrentAlertText("Hi");
+  }, []);
 
   return (
     <View style={styles.container}>
