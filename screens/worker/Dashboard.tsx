@@ -69,24 +69,24 @@ const Dashboard: React.FC = () => {
           console.log('Received location:', location);
 
           //Actual Location of the device
-          const checkInInfo = {
-            siteId: "65e021fd0ff9467bbc9535f5",
-            workerId: "65dbc52bbebd9d13c94f217e",
-            location: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude
-            }
-          };
-
-          //To simulate check-in successful during demo
           // const checkInInfo = {
           //   siteId: "65e021fd0ff9467bbc9535f5",
           //   workerId: "65dbc52bbebd9d13c94f217e",
           //   location: {
-          //     latitude: 49.16196980896502,
-          //     longitude: -123.14712911446713
+          //     latitude: location.coords.latitude,
+          //     longitude: location.coords.longitude
           //   }
           // };
+
+          //To simulate check-in successful during demo
+          const checkInInfo = {
+            siteId: "65e021fd0ff9467bbc9535f5",
+            workerId: "65dbc52bbebd9d13c94f217e",
+            location: {
+              latitude: 49.16196980896502,
+              longitude: -123.14712911446713
+            }
+          };
 
           try {
             const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
