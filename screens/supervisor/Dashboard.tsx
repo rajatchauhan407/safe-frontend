@@ -21,9 +21,9 @@ const Dashboard: React.FC = () => {
   };
 
   /* Use this for alert texts different than default */
-  useEffect(() => {
+  /* useEffect(() => {
     setCurrentAlertText("Hi");
-  }, []);
+  }, []); */
 
   return (
     <View style={styles.container}>
