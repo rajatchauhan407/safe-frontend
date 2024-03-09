@@ -20,6 +20,7 @@ const Dashboard: React.FC = () => {
     navigation.navigate("Alert Details");
   };
 
+  /* Use this for alert texts different than default */
   useEffect(() => {
     setCurrentAlertText("Hi");
   }, []);
