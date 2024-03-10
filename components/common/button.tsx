@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacityProps } from 'react-native';
+import { TouchableOpacityProps, TextStyle, ViewStyle } from 'react-native';
 import { Button, ButtonText, ButtonIcon, AddIcon } from '@gluestack-ui/themed';
 
 interface CommonButtonProps extends TouchableOpacityProps {
@@ -7,7 +7,7 @@ interface CommonButtonProps extends TouchableOpacityProps {
   action?: 'primary' | 'secondary';
   isDisabled?: boolean;
   isCheckIn?: any;
-  showIcon?: boolean; 
+  showIcon?: boolean;
 }
 
 const CommonButton: React.FC<CommonButtonProps> = ({
@@ -28,15 +28,32 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       backgroundColor: 'transparent',
     },
     rounded: {
-      borderRadius: 10,
+      borderRadius: 100,
     },
     text: {
       backgroundColor: 'transparent',
     },
     underline: {
-      borderBottomWidth: 1,
-      borderColor: action === 'primary' ? '#007BFF' : '#6C757D',
       backgroundColor: 'transparent',
+    },
+  } as const;
+
+  const textStyles: Record<string, TextStyle | ViewStyle> = {
+    fill: {
+      color: '#FFFFFF',
+    },
+    outline: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+    },
+    rounded: {
+      color: action === 'primary' ? '#FFFFFF' : '#6C757D',
+    },
+    text: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+    },
+    underline: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+      textDecorationLine: 'underline',
     },
   };
 
@@ -53,7 +70,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   return (
     <Button size="md" variant="solid" action={action} isDisabled={isDisabled} {...props} style={getButtonStyle()}>
       {showIcon && variant !== 'text' && <ButtonIcon as={AddIcon} />}
-      <ButtonText>{children}</ButtonText>
+      <ButtonText style={textStyles[variant as keyof typeof textStyles]}>{children}</ButtonText>
     </Button>
   );
 };

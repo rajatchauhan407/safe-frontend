@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
   const CommonButtonContent = () => (
     <Box style={{ width: '100%' }}>
       <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle}>
-        <Text>{isCheckedIn ? 'Check Out' : 'Check In'}</Text>
+        {isCheckedIn ? 'Check Out' : 'Check In'}
       </CommonButton>
     </Box>
   );
