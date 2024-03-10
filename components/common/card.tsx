@@ -9,7 +9,7 @@ interface CommonCardProps {
 
 const CommonCard: React.FC<CommonCardProps> = ({ title, content }) => {
   return (
-    <Card size="md" variant="elevated" m="$3">
+    <Card size="md" variant="elevated" m={0}>
       <Heading mb="$1" size="md">
         {title}
       </Heading>
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

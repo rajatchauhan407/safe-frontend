@@ -186,14 +186,14 @@ const Dashboard: React.FC = () => {
 
   const CommonButtonContent = () => (
     <Box style={{ width: '100%' }}>
-      <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
+      <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle}>
         <Text>{isCheckedIn ? 'Check Out' : 'Check In'}</Text>
       </CommonButton>
     </Box>
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate('Alert Details');
+    navigation.navigate('Alert Details' as never);
   };
 
   const GreetingSection = () => (
@@ -226,21 +226,23 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <VStack space="md" reversed={false} p="$4">
+    <VStack space="sm" reversed={false} p="$6">
       <GreetingSection />
-      <LocationSection />
-      <TooltipSection />
-      <OverlaySection />
-      <CommonCard
-        title={
-          <Text>
-            <Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}
-          </Text>
-        }
-        content={<CommonButtonContent />}
-      />
-      <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
-      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
+        <VStack space="xs" reversed={false}>
+          <LocationSection />
+          <TooltipSection />
+          <OverlaySection />
+          <CommonCard
+            title={
+              <Text>
+                <Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}
+              </Text>
+            }
+            content={<CommonButtonContent />}
+          />
+          <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
+          <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
+        </VStack>
     </VStack>
   );
 };
