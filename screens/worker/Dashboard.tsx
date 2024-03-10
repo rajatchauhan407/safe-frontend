@@ -12,6 +12,7 @@ import { BACKEND_BASE_URL } from "../../config/api";
 import { RootStackParamList } from "../../types/navigationTypes";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
+import LocationIcon from "../../assets/icons/location";
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(true);
   const [userName, setUserName] = useState("George");
@@ -190,7 +191,7 @@ const Dashboard: React.FC = () => {
   const CommonButtonContent = () => (
     <Box style={{ width: '100%' }}>
       <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle}>
-        {isCheckedIn ? 'Check Out' : 'Check In'}
+        <Typography size="2xl">{isCheckedIn ? 'Check Out' : 'Check In'}</Typography>
       </CommonButton>
     </Box>
   );
@@ -201,15 +202,15 @@ const Dashboard: React.FC = () => {
 
   const GreetingSection = () => (
     <Text>
-      <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-      <Text style={styles.buildingText}>Let's start building</Text>
-    </Text>
+      <Typography size="md">{`Hi, ${userName}\n`}</Typography>
+      <Typography size="2xl">Let's start building</Typography>
+    </Text>  
   );
 
   const LocationSection = () => (
-    <Box style={{ flexDirection: 'row', alignItems: 'center' }}>
-      {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-      <Text>{siteLocation}</Text>
+    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <LocationIcon size={13} color={''} focussed={false} />
+      <Typography size="md" pl={5}>{siteLocation}</Typography>
     </Box>
   );
 
@@ -239,8 +240,8 @@ const Dashboard: React.FC = () => {
           <CommonCard
             title={
               <Text>
-                <Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}
-              </Text>
+              <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
+            </Text>
             }
             content={<CommonButtonContent />}
           />
@@ -252,30 +253,7 @@ const Dashboard: React.FC = () => {
   );
 };
   
-  // const styles = StyleSheet.create({
-  //   page: {
-  //     padding: 24,
-  //   },
-  //   greeting: {
-  //     fontSize: 16,
-  //   },
-  //   buildingText: {
-  //     fontSize: 24,
-  //   }
-  // }
-  // );
-
 const styles = StyleSheet.create({
-  // page: {
-  //   padding: 24,
-  // },
-  greeting: {
-    fontSize: 16,
-  },
-  buildingText: {
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
     tooltip: {
       backgroundColor: 'white',
       width: '100%',
