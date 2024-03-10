@@ -4,7 +4,7 @@ function ScreenLayout({children}) {
     return (
         <Box
         flex={1}
-        bg="background"
+        bg="#F8F8FF"
         p={24}
         >
         {children}
