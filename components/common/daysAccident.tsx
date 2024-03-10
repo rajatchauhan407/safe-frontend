@@ -33,7 +33,7 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({ layout 
 
   return (
     <VStack space="md" m={0}>
-      <Card size="md" variant="elevated" m={0} rounded={10} bg={'$primary0'}
+      <Card size="md" variant="elevated" m={0} rounded={24} bg={'$primary0'}
         style={isRowLayout ? styles.rowContainer : styles.columnContainer}>
         <DaysCheckIcon size={36} color={'#00AE8C'} focussed={false} />
         <Typography size="md">Days without accident</Typography>

@@ -22,6 +22,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   const buttonStyles = {
     fill: {
       backgroundColor: action === 'primary' ? '#FD9201' : '#6C757D',
+      borderRadius: 16,
     },
     outline: {
       borderColor: action === 'primary' ? '#007BFF' : '#6C757D',
