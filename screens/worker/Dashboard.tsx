@@ -6,11 +6,14 @@ import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
+import { NavigationProp } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import { BACKEND_BASE_URL } from "../../config/api";
-
+import { RootStackParamList } from "../../types/navigationTypes";
+import Typography from "../../components/common/typography";
+import ScreenLayout from "../../components/layout/screenLayout";
 const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [isCheckedIn, setIsCheckedIn] = useState(true);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); 
@@ -19,7 +22,7 @@ const Dashboard: React.FC = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
 
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     // Simulating data fetching from the backend
@@ -256,6 +259,34 @@ const Dashboard: React.FC = () => {
     },
     buildingText: {
       fontSize: 24,
+  );
+};
+
+const styles = StyleSheet.create({
+  // page: {
+  //   padding: 24,
+  // },
+  greeting: {
+    fontSize: 16,
+  },
+  buildingText: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  tooltip: {
+    backgroundColor: 'white',
+    width: '100%',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 15,
+    position: 'absolute',
+    top: 80, 
+    left: 25,
+    zIndex: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
     tooltip: {
       backgroundColor: 'white',

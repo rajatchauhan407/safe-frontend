@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -11,6 +12,7 @@ import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
 import Dropdown from "../components/common/Dropdown";
 import Push from "../push";
+import AlertDetails from "./worker/AlertDetails";
 // import DashboardIcon from '../assets/icons/dashboard';
 // import SOSIcon from "../assets/icons/sos";
 // import ProfileIcon from "../assets/icons/profile";
@@ -91,6 +93,7 @@ const LoginScreen: React.FC = () => {
           {/* <ProfileIcon color="black" size={44} /> */}
       </View>
       <Push/>
+      <AlertDetails/>
     </View>
   );
 };
