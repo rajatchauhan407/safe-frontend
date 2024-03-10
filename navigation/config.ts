@@ -12,15 +12,15 @@ interface IIconConfig {
 }
 
 const IconConfig:IIconConfig = {
-    dashboard:{
+    Dashboard:{
         component: DashboardIcon,
         label: "Dashboard"
     },
-    profile:{
+    Profile:{
         component: ProfileIcon,
         label: "Profile"
     },
-    sos:{
+    SOS:{
         component: SOSIcon,
         label: "SOS"
     }
