@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Text, Image, Animated, TouchableOpacity } from "react-native";
+import {Box, VStack, Text} from "@gluestack-ui/themed";
+import { StyleSheet, Image, Animated, TouchableOpacity } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -15,7 +16,7 @@ const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(true);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
-  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+  const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -187,64 +188,77 @@ const Dashboard: React.FC = () => {
   };
 
   const CommonButtonContent = () => (
-    <View style={{ width: '100%' }}>
-      <CommonButton buttonType="checkIn" isCheckedIn={isCheckedIn} onPress={handleCheckInToggle}>
-        <Text>{isCheckedIn ? 'Check Out' : 'Check In'}</Text>
+    <Box style={{ width: '100%' }}>
+      <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle}>
+        {isCheckedIn ? 'Check Out' : 'Check In'}
       </CommonButton>
-    </View>
+    </Box>
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate('AlertDetails');
+    navigation.navigate('Alert Details' as never);
   };
-  
+
+  const GreetingSection = () => (
+    <Text>
+      <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
+      <Text style={styles.buildingText}>Let's start building</Text>
+    </Text>
+  );
+
+  const LocationSection = () => (
+    <Box style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
+      <Text>{siteLocation}</Text>
+    </Box>
+  );
+
+  const TooltipSection = () => (
+    !isInSiteZone && (
+      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+        <Text style={styles.tooltipText}>{checkInErrorMessage}</Text>
+      </Box>
+    )
+  );
+
+  const OverlaySection = () => (
+    !isInSiteZone && (
+      <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
+      </TouchableOpacity>
+    )
+  );
 
   return (
-    <ScreenLayout>
-      {/* GREETING */}
-      <Typography size="2xl" bold={true} >Let's Build</Typography>
-      <Text>
-        <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-        <Text style={styles.buildingText}>Let's start building</Text>
-      </Text>
-      <View style={{ height: 20 }} />
-
-      {/* LOCATION */}
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-        <Text>{siteLocation}</Text>
-      </View>
-
-      <View style={{ height: 20 }} />
-
-      {/* TOOLTIP */}
-      {!isInSiteZone && (
-        <Animated.View style={{ ...styles.tooltip, opacity: fadeAnim }}>
-          <Text style={styles.tooltipText}>{checkInErrorMessage}</Text>
-        </Animated.View>
-      )}
-
-      {/* OVERLAY */}
-      {!isInSiteZone && (
-        <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
-        </TouchableOpacity>
-      )}
-
-      {/* CARDS */}
-      <View>
-        <CommonCard title={<Text><Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}</Text>}content={<CommonButtonContent />}/>
-      </View>
-      <View style={{ height: 20 }} />
-      <View>
-        <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
-      </View>
-      <View style={{ height: 20 }} />
-      {/* ALERT BUTTON */}
-      <View>
-      <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
-      </View>
-
-    </ScreenLayout>
+    <VStack space="sm" reversed={false} p="$6">
+      <GreetingSection />
+        <VStack space="xs" reversed={false}>
+          <LocationSection />
+          <TooltipSection />
+          <OverlaySection />
+          <CommonCard
+            title={
+              <Text>
+                <Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}
+              </Text>
+            }
+            content={<CommonButtonContent />}
+          />
+          <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
+          <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
+        </VStack>
+    </VStack>
+  );
+};
+  
+  const styles = StyleSheet.create({
+    page: {
+      padding: 24,
+    },
+    greeting: {
+      fontSize: 16,
+    },
+    buildingText: {
+      fontSize: 24,
   );
 };
 
@@ -274,19 +288,35 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  tooltipText: {
-    color: 'red',
-    textAlign: 'center',
-  },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    height: '150%',
-    zIndex: 1,
-  },
-});
+    tooltip: {
+      backgroundColor: 'white',
+      width: '100%',
+      alignItems: 'center',
+      padding: 15,
+      borderRadius: 15,
+      position: 'absolute',
+      top: 80, 
+      left: 25,
+      zIndex: 2,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
+    },
+    tooltipText: {
+      color: 'red',
+      textAlign: 'center',
+    },
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      height: '150%',
+      zIndex: 1,
+    },
+  });
+  
 
 export default Dashboard;

@@ -1,139 +1,78 @@
-import React, { useState } from 'react';
-import { Button } from '@gluestack-ui/themed';
-import { StyleSheet, ViewStyle, TextStyle, Text } from 'react-native';
+import React from 'react';
+import { TouchableOpacityProps, TextStyle, ViewStyle } from 'react-native';
+import { Button, ButtonText, ButtonIcon, AddIcon } from '@gluestack-ui/themed';
 
-interface CommonButtonProps {
-  buttonType: 'default' | 'checkIn' | 'whiteButton' | 'underline';
-  isCheckedIn?: boolean;
-  children: React.ReactNode;
-  onPress?: () => void;
-  disabled?: boolean;
+interface CommonButtonProps extends TouchableOpacityProps {
+  variant?: 'fill' | 'outline' | 'rounded' | 'text' | 'underline';
+  action?: 'primary' | 'secondary';
+  isDisabled?: boolean;
+  isCheckIn?: any;
+  showIcon?: boolean;
 }
 
-const CommonButton: React.FC<CommonButtonProps> = ({ buttonType, isCheckedIn, children, onPress, disabled }) => {
-  const [isPressed, setPressed] = useState(false);
+const CommonButton: React.FC<CommonButtonProps> = ({
+  variant = 'fill',
+  action = 'primary',
+  isDisabled = false,
+  children,
+  showIcon = false,
+  ...props
+}) => {
+  const buttonStyles = {
+    fill: {
+      backgroundColor: action === 'primary' ? '#007BFF' : '#6C757D',
+    },
+    outline: {
+      borderColor: action === 'primary' ? '#007BFF' : '#6C757D',
+      borderWidth: 1,
+      backgroundColor: 'transparent',
+    },
+    rounded: {
+      borderRadius: 100,
+    },
+    text: {
+      backgroundColor: 'transparent',
+    },
+    underline: {
+      backgroundColor: 'transparent',
+    },
+  } as const;
 
-  const getButtonStyle = (): ViewStyle & TextStyle => {
-    let baseStyle: ViewStyle & TextStyle = {
-      padding: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-    };
-
-    switch (buttonType) {
-      case 'default':
-        baseStyle = { ...baseStyle, ...styles.defaultButton };
-        break;
-      case 'checkIn':
-        baseStyle = { ...baseStyle, ...styles.checkInButton };
-        if (isCheckedIn) {
-          baseStyle = { ...baseStyle, ...styles.checkedInButton };
-        }
-        break;
-      case 'whiteButton':
-        baseStyle = { ...baseStyle, ...styles.whiteButton };
-        break;
-      case 'underline':
-          baseStyle = { ...baseStyle, ...styles.underlineButton };
-      break;
-      default:
-        baseStyle = { ...baseStyle, ...styles.defaultButton };
-    }
-
-    if (disabled) {
-      return { ...baseStyle, ...styles.disabledButton };
-    }
-
-    if (isPressed && buttonType === 'whiteButton') {
-      return { ...baseStyle, ...styles.clickedButton };
-    }
-
-    return baseStyle;
+  const textStyles: Record<string, TextStyle | ViewStyle> = {
+    fill: {
+      color: '#FFFFFF',
+    },
+    outline: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+    },
+    rounded: {
+      color: action === 'primary' ? '#FFFFFF' : '#6C757D',
+    },
+    text: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+    },
+    underline: {
+      color: action === 'primary' ? '#007BFF' : '#6C757D',
+      textDecorationLine: 'underline',
+    },
   };
 
-  const getButtonTextStyle = (): TextStyle => {
-    if (isPressed && buttonType === 'whiteButton') {
-      return styles.clickedButtonText;
+  const getButtonStyle = () => {
+    let style = { ...buttonStyles[variant] };
+    if (isDisabled) {
+      style = {
+        ...style,
+      };
     }
-    if (buttonType === 'underline') {
-      return styles.underlineText;
-    }
-    return {};
-  };
-
-  const handlePressIn = () => {
-    setPressed(true);
-  };
-
-  const handlePressOut = () => {
-    setPressed(false);
+    return style;
   };
 
   return (
-    <Button
-      style={[styles.button, getButtonStyle()]}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Text style={[getButtonTextStyle()]}>{children}</Text>
+    <Button size="md" variant="solid" action={action} isDisabled={isDisabled} {...props} style={getButtonStyle()}>
+      {showIcon && variant !== 'text' && <ButtonIcon as={AddIcon} />}
+      <ButtonText style={textStyles[variant as keyof typeof textStyles]}>{children}</ButtonText>
     </Button>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  defaultButton: {
-    backgroundColor: '#FD9201',
-    borderRadius: 100,
-  },
-  checkInButton: {
-    backgroundColor: '#FD9201',
-    borderWidth: 2,
-    borderColor: '#FD9201',
-    borderRadius: 8,
-  },
-  whiteButton: {
-    backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: 'white',
-    borderRadius: 100,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  underlineButton: {
-    backgroundColor: 'transparent',
-  },
-  underlineText: {
-    textDecorationLine: 'underline',
-  },
-  checkedInButton: {
-    backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: 'green',
-  },
-  disabledButton: {
-    backgroundColor: '#C7C7C7',
-    opacity: 0.6,
-  },
-  clickedButton: {
-    backgroundColor: 'black',
-    borderWidth: 2,
-    borderColor: 'black',
-  },
-  clickedButtonText: {
-    color: 'white',
-  },
-});
 
 export default CommonButton;
