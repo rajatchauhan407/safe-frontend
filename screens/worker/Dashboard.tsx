@@ -229,7 +229,8 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <VStack space="sm" reversed={false} p="$6">
+    <ScreenLayout>
+    <VStack space="sm" reversed={false}>
       <GreetingSection />
         <VStack space="xs" reversed={false}>
           <LocationSection />
@@ -247,20 +248,22 @@ const Dashboard: React.FC = () => {
           <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
         </VStack>
     </VStack>
+    </ScreenLayout>
   );
 };
   
-  const styles = StyleSheet.create({
-    page: {
-      padding: 24,
-    },
-    greeting: {
-      fontSize: 16,
-    },
-    buildingText: {
-      fontSize: 24,
-  );
-};
+  // const styles = StyleSheet.create({
+  //   page: {
+  //     padding: 24,
+  //   },
+  //   greeting: {
+  //     fontSize: 16,
+  //   },
+  //   buildingText: {
+  //     fontSize: 24,
+  //   }
+  // }
+  // );
 
 const styles = StyleSheet.create({
   // page: {
@@ -273,21 +276,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold'
   },
-  tooltip: {
-    backgroundColor: 'white',
-    width: '100%',
-    alignItems: 'center',
-    padding: 15,
-    borderRadius: 15,
-    position: 'absolute',
-    top: 80, 
-    left: 25,
-    zIndex: 2,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     tooltip: {
       backgroundColor: 'white',
       width: '100%',
