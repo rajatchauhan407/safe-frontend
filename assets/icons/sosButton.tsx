@@ -4,7 +4,7 @@ import { IIconProps } from "../../shared/interfaces/IIconProps.interface";
 
 const sosIcon: React.FC<IIconProps> = ({ focussed,color, size }) => 
 {
-  const fillColor = focussed ? color : "#ffffff";
+  const fillColor = focussed ? color : "#1E1E1E";
   return (
     <Svg 
     width={size}

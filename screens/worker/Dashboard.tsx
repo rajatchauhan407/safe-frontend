@@ -233,20 +233,22 @@ const Dashboard: React.FC = () => {
     <ScreenLayout>
     <VStack space="sm" reversed={false}>
       <GreetingSection />
-        <VStack space="xs" reversed={false}>
-          <LocationSection />
-          <TooltipSection />
-          <OverlaySection />
-          <CommonCard
-            title={
-              <Text>
-              <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
-            </Text>
-            }
-            content={<CommonButtonContent />}
-          />
-          <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
-          <AlertButton level={0} userType="worker" onPress={handleIncidentPress} isCheckedIn={isCheckedIn} />
+        <VStack space="lg" reversed={false} >
+            <LocationSection />
+            <TooltipSection />
+            <OverlaySection />
+            <CommonCard
+              title={
+                <Text>
+                <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
+              </Text>
+              }
+              content={<CommonButtonContent />}
+            />
+            <Box mt={16} mb={16}>
+            <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
+            </Box>
+            <AlertButton user="worker" emergency="evacuation" onPress={handleIncidentPress} />
         </VStack>
     </VStack>
     </ScreenLayout>
