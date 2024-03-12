@@ -92,8 +92,8 @@ const LoginScreen: React.FC = () => {
           {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
           {/* <ProfileIcon color="black" size={44} /> */}
       </View>
-      <Push/>
-      <AlertDetails/>
+      {/* <Push/> */}
+      {/* <AlertDetails/> */}
     </View>
   );
 };
