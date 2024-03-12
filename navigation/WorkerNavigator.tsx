@@ -21,7 +21,7 @@ const WorkerNavigator: React.FC = () => {
         },
         tabBarActiveTintColor: successColor,
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {backgroundColor: 'white', padding: 5, height: 60,paddingBottom:5}
+        tabBarStyle: {backgroundColor: 'white', padding: 5, height: 85,paddingBottom:25}
       })}
       >
       <Tab.Screen name="Dashboard" component={Dashboard} />
