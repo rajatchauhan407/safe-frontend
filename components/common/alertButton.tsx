@@ -14,7 +14,7 @@ interface AlertButtonProps extends TouchableOpacityProps {
   isDisabled?: boolean;
   showIcon?: boolean;
   iconSize?: number;
-  iconColor?: string;
+  color?: string;
 }
 
 const AlertButton: React.FC<AlertButtonProps> = ({
@@ -24,8 +24,8 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   level = 0,
   children,
   showIcon = true,
-  iconSize = 24,
-  iconColor = '#1E1E1E',
+  iconSize = 64,
+  color = "#ffffff",
   ...props
 }) => {
   
@@ -58,22 +58,19 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     worker:{
       report: {
         icon: sosIcon,
-        iconColor: '#FF0000',
-        iconSize: 32,
+        iconSize: 64,
         title: 'Report Incident',
         description: 'Click to report an incident',
       },
       accident: {
         icon: whistleIcon,
-        iconColor: '#FF0000',
-        iconSize: 32,
+        iconSize: 64,
         title: 'Accident Reported',
         description: null,
       },
       evacuation: {
         icon: whistlesIcon,
-        iconColor: '#FFFFFF',
-        iconSize: 320,
+        iconSize: 176,
         title: 'Active Evacuation',
         description: null,
       },
@@ -81,22 +78,19 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     supervisor: {
       accident: {
         icon: hazardIcon,
-        iconColor: '#FF0000',
-        iconSize: 32,
+        iconSize: 64,
         title: 'Accident Reported',
         description: 'Go to emergency details',
       },
       evacuation: {
         icon: hazardIcon,
-        iconColor: '#FF0000',
-        iconSize: 32,
+        iconSize: 64,
         title: 'Hazard Reported',
         description: 'Go to emergency details',
       },
       sos: {
         icon: sosIcon,
-        iconColor: '#FF0000',
-        iconSize: 32,
+        iconSize: 64,
         title: 'SOS Reported',
         description: 'Go to SOS details',
       },
@@ -109,35 +103,44 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     evacuation: { color: '#ffffff' },
     sos: { color: '#ffffff' },
     default: { color: '#000000' },
+    disabled: { color: '#1E1E1E' },
   };
   
-const getButtonStyle = () => {
-  const style = buttonStyles[user as keyof typeof buttonStyles]?.[emergency as keyof typeof buttonStyles[keyof typeof buttonStyles]] || {};
-  return isDisabled ? { ...style } : style;
-};
+  const getButtonStyle = () => {
+    const baseStyle = buttonStyles[user as keyof typeof buttonStyles]?.[emergency as keyof typeof buttonStyles[keyof typeof buttonStyles]] || {};
+    const disabledStyle = isDisabled ? { backgroundColor: '#C0C0C0' } : {};
+    const textColorStyle = showIcon ? { color: color } : {};
+    return { ...baseStyle, ...disabledStyle, ...textColorStyle };
+  };
+  
 
-const { icon: Icon, iconColor: buttonIconColor, iconSize: buttonIconSize, title, description } = iconMapping[user as keyof typeof iconMapping][emergency as keyof typeof iconMapping[keyof typeof iconMapping]];
+const { icon: Icon, iconSize: buttonIconSize, title, description } = iconMapping[user as keyof typeof iconMapping][
+  emergency as keyof typeof iconMapping[keyof typeof iconMapping]
+];
 
 const adjustedIconSize = typeof buttonIconSize === 'number' ? `${buttonIconSize}px` : buttonIconSize;
 
 return (
   <Card p={0}>
-    <Button isDisabled={isDisabled} {...props} style={{ ...getButtonStyle(),
+    <Button isDisabled={isDisabled} {...props} style={{
+      ...getButtonStyle(),
       height: 'auto',  
       padding: 30,
       borderRadius: 24,
     }}>
       <VStack alignItems="center" space="md">
-        {showIcon && <ButtonIcon as={Icon} size={adjustedIconSize as "xs" | "sm" | "md" | "lg" | "xl" | "2xs" | undefined} style={{ color: iconColor, fontSize: adjustedIconSize }} />}
-        <Typography size="2xl" style={{ color: textStyles[emergency] ? textStyles[emergency].color : textStyles.default.color, textTransform: 'uppercase' }}>
+        {showIcon && <ButtonIcon as={Icon} size={adjustedIconSize as "xs" | "sm" | "md" | "lg" | "xl" | "2xs" | undefined} style={{ fontSize: Number(adjustedIconSize), color:color}}  />}
+        <Typography size="2xl" style={{color: isDisabled ? textStyles.disabled.color : textStyles[emergency] ? textStyles[emergency].color : textStyles.default.color, textTransform: 'uppercase'}}>
           {title}
         </Typography>
-        <Typography size="lg" style={{ color: textStyles[emergency] ? textStyles[emergency].color : textStyles.default.color, display: description ? 'block' : 'none' }}>
+        <Typography size="lg" style={{color: isDisabled ? textStyles.disabled.color : textStyles[emergency] ? textStyles[emergency].color : textStyles.default.color, display: description ? 'block' : 'none'}}>
           {description}
         </Typography>
       </VStack>
     </Button>
   </Card>
-);
+)
+};
+
 
 export default AlertButton;

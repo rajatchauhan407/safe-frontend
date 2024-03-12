@@ -248,7 +248,7 @@ const Dashboard: React.FC = () => {
             <Box mt={16} mb={16}>
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
-            <AlertButton user="worker" emergency="evacuation" onPress={handleIncidentPress} />
+            <AlertButton user="supervisor" emergency="sos" color="#000000" onPress={handleIncidentPress} />
         </VStack>
     </VStack>
     </ScreenLayout>
