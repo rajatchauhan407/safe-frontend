@@ -10,21 +10,25 @@ import {
   Platform,
 } from 'react-native';
 import CommonButton from '../../components/common/button';
-
+import useFetch from '../../hooks/useFetch';
+import { BACKEND_BASE_URL } from '../../config/api';
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
 }
 
 const EmergencyForm: React.FC<EmergencyFormProps> = () => {
+  
   const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [otherEmergencyType, setOtherEmergencyType] = useState('');
   const [urgencyLevel, setUrgencyLevel] = useState<number | null>(null);
   const [needAssistance, setNeedAssistance] = useState<boolean>(false);
-
+  
   const urgencyColors = ['yellow', 'orange', 'red'];
-
+  
+  
+  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}alert`, 'POST');
   const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
     setReportingFor(option);
   };
@@ -152,7 +156,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Photo of the incident location</Text>
         <CommonButton
-          buttonType="whiteButton"
+          // buttonType="whiteButton"
           onPress={() => {
           }}
         >
@@ -161,6 +165,33 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
       </View>
     );
   };
+
+/*** send alert for the app ****/
+  const sendAlert = async () => {
+    console.log('Sending alert');
+    console.log('Reporting for:', reportingFor);
+    console.log('Number of workers injured:', numWorkersInjured);
+    console.log('Report type:', reportType);
+    console.log('Other emergency type:', otherEmergencyType);
+    console.log('Urgency level:', urgencyLevel);
+    console.log('Need assistance:', needAssistance);
+    const alertData = {
+      reportingFor,
+      numWorkersInjured,
+      reportType,
+      otherEmergencyType,
+      urgencyLevel,
+      needAssistance,
+    };
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(alertData),
+    }
+    await fetchData(options);
+  };
+
 
   return (
     <KeyboardAvoidingView
@@ -240,7 +271,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
         </View>
         <View style={styles.buttonContainer}>
         <CommonButton
-          buttonType="default"
+          // buttonType="default"
           disabled={
             !(
               numWorkersInjured >= 0 &&
@@ -249,12 +280,15 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
               urgencyLevel !== null
             )
           }
+          onPress={sendAlert}
         >
           <Text>Send Alert</Text>
         </CommonButton>
         </View>
         <View style={styles.buttonContainer}>
-          <CommonButton buttonType="underline">
+          <CommonButton 
+            // buttonType="underline"
+            >
             <Text>Cancel Alert</Text>
           </CommonButton>
         </View>
