@@ -1,3 +1,4 @@
+// Component Imports===============================================
 import React from "react";
 import {
   Modal,
@@ -7,6 +8,11 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+// Connection to backend Imports===============================================
+import axios from 'axios';
+import { BACKEND_BASE_URL } from '../../config/api'
+
+// =================================================================
 
 const CustomCheckbox = ({ checked }: { checked: boolean }) => (
   <View style={[styles.checkbox, checked && { backgroundColor: "#FD9201" }]} />
@@ -20,7 +26,26 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   const [isChecked2, setIsChecked2] = React.useState(false);
   const [isChecked3, setIsChecked3] = React.useState(false);
   const [isChecked4, setIsChecked4] = React.useState(false);
+// =============================================
+// Send SMS to Backend Function
+const sendSMS = async () => {
+  const smsData = {
+    checked1: isChecked1,
+    checked2: isChecked2,
+    checked3: isChecked3,
+    checked4: isChecked4,
+  };
 
+  try {
+    await axios.post(`${BACKEND_BASE_URL}/sms`, smsData);
+    console.log('SMS sent successfully');
+  } catch (error) {
+    console.error('Error sending SMS:', error);
+    // Handle error (e.g., show an error message to the user)
+  }
+};
+// =============================================
+// Renderin the Component:======================
   return (
     <Modal
       visible={visible}
@@ -73,8 +98,11 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
           </View>
 
           {/* Button "Send" */}
-          <TouchableOpacity style={styles.sendButton}>
-            <Text style={styles.sendButtonText}>Send</Text>
+          <TouchableOpacity 
+            style={styles.sendButton}
+            onPress={sendSMS}
+            >
+             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
 
           {/* "Skip SMS Messages" */}
