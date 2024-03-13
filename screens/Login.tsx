@@ -23,6 +23,7 @@ import { Button, ButtonText } from "@gluestack-ui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { changeAuth } from "../lib/slices/authSlice";
 import { RootState, AppDispatch } from "../lib/store";
+import { login } from "../lib/slices/authSlice";
 /*** imports end here****/
 
 
@@ -38,6 +39,11 @@ const LoginScreen: React.FC = () => {
   
   console.log(authState);
   const handleLogin = () => {
+    let userData = {
+      userId:workerID,
+      password:password
+    }
+    dispatch(login(userData))
     if (loginAs === "Supervisor") {
       navigation.navigate("Main", {
         screen: "Supervisor",
