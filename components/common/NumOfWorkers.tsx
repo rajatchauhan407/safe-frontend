@@ -27,13 +27,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({
   };
 
   return (
-    <Card
-      size="md"
-      variant="filled"
-      bgColor="$highlight"
-      borderRadius="$3xl"
-      m="$1"
-    >
+    <Card size="md" variant="filled" bgColor="$highlight" borderRadius="$3xl">
       <Heading mb="$1" size="md">
         Total Checked-in Workers
       </Heading>
@@ -50,7 +44,9 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({
           action="primary"
           onPress={handleSeeAll}
         >
-          <ButtonText sx={{ textDecorationLine: "underline" }}>Add </ButtonText>
+          <ButtonText sx={{ textDecorationLine: "underline" }}>
+            See All
+          </ButtonText>
         </Button>
       </HStack>
     </Card>
