@@ -10,6 +10,7 @@ const initialState:IAuth = {
 }
 
 export const login = createAsyncThunk('auth/login', async (payload:{userId:string, password:string}) => {
+ 
     const response = await fetch('http://localhost:9000/api/v1/login', {
         method:'POST',
         headers:{
@@ -18,6 +19,10 @@ export const login = createAsyncThunk('auth/login', async (payload:{userId:strin
         body:JSON.stringify(payload)
     });
     const data = await response.json();
+    // if(data.statusCode !== 201){
+    //   throw new Error(data);
+    // }
+    console.log(data);
     return data;
 })
 
@@ -35,17 +40,20 @@ const authSlice = createSlice({
     extraReducers:(builder)=>{
         builder.addCase(login.pending, (state, action) => {
             state.status = 'loading';
+            console.log(state)
         });
         builder.addCase(login.fulfilled, (state, action) => {
             state.status = 'succeed';
             state.isAuthenticated = true;
             state.token = action.payload.token;
             state.user = action.payload.user;
+            console.log(state)
         });
         builder.addCase(login.rejected, (state, action) => {
             state.status = 'failed';
-            // state.error = action.error as string;
-            console.log(action);
+            state.error = action.payload;
+            console.log(action.payload);
+            console.log(state)
         });
     }
 });
