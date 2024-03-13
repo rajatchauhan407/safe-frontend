@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacityProps, TextStyle, ViewStyle } from 'react-native';
 import { Button, ButtonText, ButtonIcon, AddIcon } from '@gluestack-ui/themed';
+import Typography from './typography';
 
 interface CommonButtonProps extends TouchableOpacityProps {
   variant?: 'fill' | 'outline' | 'rounded' | 'text' | 'underline';
@@ -20,7 +21,8 @@ const CommonButton: React.FC<CommonButtonProps> = ({
 }) => {
   const buttonStyles = {
     fill: {
-      backgroundColor: action === 'primary' ? '#007BFF' : '#6C757D',
+      backgroundColor: action === 'primary' ? '#FD9201' : '#6C757D',
+      borderRadius: 16,
     },
     outline: {
       borderColor: action === 'primary' ? '#007BFF' : '#6C757D',
@@ -40,7 +42,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
 
   const textStyles: Record<string, TextStyle | ViewStyle> = {
     fill: {
-      color: '#FFFFFF',
+      color: '#1E1E1E',
     },
     outline: {
       color: action === 'primary' ? '#007BFF' : '#6C757D',
@@ -68,9 +70,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   };
 
   return (
-    <Button size="md" variant="solid" action={action} isDisabled={isDisabled} {...props} style={getButtonStyle()}>
+    <Button height={52} action={action} isDisabled={isDisabled} {...props} style={getButtonStyle()}>
       {showIcon && variant !== 'text' && <ButtonIcon as={AddIcon} />}
-      <ButtonText style={textStyles[variant as keyof typeof textStyles]}>{children}</ButtonText>
+      <Typography size="2xl" style={textStyles[variant as keyof typeof textStyles]}>{children}</Typography>
     </Button>
   );
 };
