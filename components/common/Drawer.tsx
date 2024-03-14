@@ -1,17 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../types/navigationTypes";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import AlertButton from "./alertButton";
 
 interface DrawerProps {
-  alertText: string;
+  alertType: "none" | "accident" | "evacuation" | "sos";
 }
 
-const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
+const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [autoOpen, setAutoOpen] = useState(false);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  useEffect(() => {
+    if (alertType !== "none") {
+      setIsOpen(true);
+      setAutoOpen(true);
+    }
+  }, [alertType]);
 
   const handleDrawerToggle = () => {
-    if (alertText !== "Great! There’s no alert report.") {
-      setIsOpen(!isOpen);
+    setIsOpen(!isOpen);
+    setAutoOpen(false);
+  };
+
+  const handleIncidentPress = () => {
+    navigation.navigate("AlertDetails");
+  };
+
+  const getAlertColor = (): string => {
+    if (alertType === "accident") {
+      return "#000000";
+    } else {
+      return "#ffffff";
     }
   };
 
@@ -20,18 +45,27 @@ const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
       <TouchableOpacity
         style={styles.handle}
         onPress={handleDrawerToggle}
-        disabled={alertText === "Great! There’s no alert report."}
+        disabled={alertType === "none"}
       >
         <View style={styles.contentWrapper}>
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
-          <Text style={styles.drawerText}>{alertText}</Text>
+          <Text style={styles.drawerText}>
+            {alertType === "none"
+              ? "Great! There's no alert to report"
+              : "You have received 01 Alert."}
+          </Text>
         </View>
       </TouchableOpacity>
       {isOpen && (
         <View style={styles.content}>
           {/* Content of the drawer based on the alert text */}
-          {alertText !== "Great! There’s no alert report." && (
-            <Text>{/* Display content of the alert */}</Text>
+          {alertType !== "none" && (
+            <AlertButton
+              user="supervisor"
+              emergency={alertType}
+              color={getAlertColor()}
+              onPress={handleIncidentPress}
+            />
           )}
         </View>
       )}

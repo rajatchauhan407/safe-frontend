@@ -14,13 +14,14 @@ import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
 const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(true);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [showTooltip, setShowTooltip] = useState(false);
 
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -37,6 +38,16 @@ const Dashboard: React.FC = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (showTooltip) {
+      const tooltipTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 10000);
+
+      return () => clearTimeout(tooltipTimer);
+    }
+  }, [showTooltip]);
 
   const fadeInTooltip = () => {
     Animated.timing(fadeAnim, {
@@ -88,10 +99,20 @@ const Dashboard: React.FC = () => {
             siteId: "65e220e17fdb2514ce5b4a08",
             workerId: "65f25eaec3231aa6adaaec6f",
             location: {
-              latitude: 49.16196980896502,
-              longitude: -123.14712911446713
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude
             }
           };
+
+          //To simulate check-in successful during demo
+          // const checkInInfo = {
+          //   siteId: "65e021fd0ff9467bbc9535f5",
+          //   workerId: "65dbc52bbebd9d13c94f217e",
+          //   location: {
+          //     latitude: 49.16196980896502,
+          //     longitude: -123.14712911446713
+          //   }
+          // };
 
           try {
             const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
@@ -130,6 +151,10 @@ const Dashboard: React.FC = () => {
             setCheckInTime("");
             setIsCheckedIn(false);
           }
+
+          // Show tooltip about the SOS button
+          setShowTooltip(true);
+
         } else {
           setIsInSiteZone(false);
           setCheckInErrorMessage("Please grant permission to access your location.")
@@ -190,8 +215,8 @@ const Dashboard: React.FC = () => {
 
   const CommonButtonContent = () => (
     <Box style={{ width: '100%' }}>
-      <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle}>
-        <Typography size="2xl">{isCheckedIn ? 'Check Out' : 'Check In'}</Typography>
+      <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle} buttonTextSize={24} >
+        {isCheckedIn ? 'Check Out' : 'Check In'}
       </CommonButton>
     </Box>
   );
@@ -229,6 +254,14 @@ const Dashboard: React.FC = () => {
     )
   );
 
+  const TooltipSOS = () => (
+    showTooltip && (
+      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+        <Text style={styles.tooltipText}>Hold Alert button for 3 seconds to activate an SOS for help</Text>
+      </Box>
+    )
+  );
+
   return (
     <ScreenLayout>
     <VStack space="sm" reversed={false}>
@@ -248,7 +281,9 @@ const Dashboard: React.FC = () => {
             <Box mt={16} mb={16}>
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
-            <AlertButton user="supervisor" emergency="sos" color="#000000" onPress={handleIncidentPress} />
+            {/* <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} /> */}
+            <AlertButton user="supervisor" emergency="accident" onPress={handleIncidentPress} />
+            <TooltipSOS />
         </VStack>
     </VStack>
     </ScreenLayout>

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { IAuth } from "../../shared/interfaces/auth.interface";
 import * as Keychain from 'react-native-keychain';
+import { BACKEND_BASE_URL,BACKEND_ORIGIN } from "../../config/api";
 
 const initialState:IAuth = {
     isAuthenticated:false,
@@ -47,7 +48,7 @@ const getToken = async () => {
 
 export const login = createAsyncThunk('auth/login', async (payload:{userId:string,password:string}, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:9000/api/v1/login', {
+      const response = await fetch(`${BACKEND_BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

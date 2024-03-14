@@ -1,31 +1,33 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
+import { StyleSheet, View } from "react-native";
+import {
+  Box,
+  Button,
+  ButtonText,
+  Center,
+  FormControl,
+  FormControlLabel,
+  FormControlLabelText,
+  HStack,
+  Input,
+  InputField,
+  Text,
+  VStack,
+} from "@gluestack-ui/themed";
 import Dropdown from "../components/common/Dropdown";
-import Push from "../push";
-import AlertDetails from "./worker/AlertDetails";
-// import DashboardIcon from '../assets/icons/dashboard';
-// import SOSIcon from "../assets/icons/sos";
-// import ProfileIcon from "../assets/icons/profile";
-
-import { Button, ButtonText } from "@gluestack-ui/themed";
+import ScreenLayout from "../components/layout/screenLayout";
+import CommonButton from "../components/common/button";
 
 /*** imports to use redux ***/
 import { useDispatch, useSelector } from "react-redux";
 import { changeAuth } from "../lib/slices/authSlice";
 import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
+import Push from "../push";
 /*** imports end here****/
-
 
 const LoginScreen: React.FC = () => {
   const [loginAs, setLoginAs] = useState<string>("");
@@ -34,186 +36,163 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const authState = useSelector((state:RootState)=>state.auth);
+  const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-  
+
   // console.log(authState);
   const handleLogin = async () => {
     let userData = {
-      userId:loginAs === "Worker" ? workerID : supervisorID,
-      password:password
-    }
+      userId: loginAs === "Worker" ? workerID : supervisorID,
+      password: password,
+    };
     // console.log(userData)
-    try{
-      const actionResult =  await dispatch(login(userData))
-      const {payload} = actionResult;
-       console.log(actionResult);
-       console.log(payload);
-       if(actionResult.type === "auth/login/fulfilled"){
-         if (loginAs === "Supervisor") {
-           navigation.navigate("Main", {
-             screen: "Supervisor",
-             params: { screen: "Dashboard" },
-           });
-         } else if (loginAs === "Worker") {
-           navigation.navigate("Main", {
-             screen: "Worker",
-             params: { screen: "Dashboard" },
-           });
-         }
-       }else {
-         // Handle login failure
-         console.error("Login failed:", payload);
-         // Show an error message to the user, if desired
-       }
+    try {
+      const actionResult = await dispatch(login(userData));
+      const { payload } = actionResult;
+      console.log(actionResult);
+      console.log(payload);
+      if (actionResult.type === "auth/login/fulfilled") {
+        if (loginAs === "Supervisor") {
+          navigation.navigate("Main", {
+            screen: "Supervisor",
+            params: { screen: "Dashboard" },
+          });
+        } else if (loginAs === "Worker") {
+          navigation.navigate("Main", {
+            screen: "Worker",
+            params: { screen: "Dashboard" },
+          });
+        }
+      } else {
+        // Handle login failure
+        console.error("Login failed:", payload);
+        // Show an error message to the user, if desired
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
     }
-  catch(error){
-    console.error("An error occurred during login:", error);
-    }
-   
   };
-// ================== Redux ==================
+  // ================== Redux ==================
   const handleRedux = () => {
     console.log(authState);
     // dispatch(changeAuth);
     dispatch(changeAuth());
     // console.log(authState);
-  }
+  };
   // =========================================
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Login</Text>
+    <ScreenLayout>
+      <Box h="$full" w="$full">
+        <Center>
+          <Box h="$4/5" w="$full">
+            <VStack h="$4/5" space="lg">
+              {/* SAFE LOGO GOES HERE */}
+              <Box>
+                <Text mb="$1">Login as</Text>
+                <HStack space="md">
+                  <Box flex={1}>
+                    <CommonButton
+                      variant="rounded"
+                      showIcon={true}
+                      onPress={() => setLoginAs("Supervisor")}
+                    >
+                      <ButtonText fontSize="$lg" fontWeight="$bold">
+                        Supervisor
+                      </ButtonText>
+                    </CommonButton>
+                  </Box>
+                  <Box flex={1}>
+                    <CommonButton
+                      variant="rounded"
+                      onPress={() => setLoginAs("Worker")}
+                    >
+                      <ButtonText fontSize="$lg" fontWeight="$bold">
+                        Worker
+                      </ButtonText>
+                    </CommonButton>
+                  </Box>
+                </HStack>
+              </Box>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setLoginAs("Supervisor")}
-        >
-          <Text style={styles.buttonText}>Supervisor</Text>
-        </TouchableOpacity>
+              <Dropdown />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setLoginAs("Worker")}
-        >
-          <Text style={styles.buttonText}>Worker</Text>
-        </TouchableOpacity>
-      </View>
+              <FormControl size="md" isRequired>
+                <FormControlLabel>
+                  <FormControlLabelText fontWeight="$bold">
+                    {loginAs === "Worker" ? "Worker" : "Supervisor"} ID
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Input>
+                  <InputField
+                    type="text"
+                    placeholder="EnterID"
+                    onChangeText={(text) =>
+                      loginAs === "Worker"
+                        ? setWorkerID(text)
+                        : setSupervisorID(text)
+                    }
+                    value={loginAs === "Worker" ? workerID : supervisorID}
+                    autoCapitalize="none"
+                    keyboardType="numeric"
+                  />
+                </Input>
+              </FormControl>
 
-      <Text style={styles.label}>Site</Text>
-      <Dropdown />
+              <FormControl size="md" isRequired>
+                <FormControlLabel>
+                  <FormControlLabelText fontWeight="$bold">
+                    Password
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Input>
+                  <InputField
+                    type="password"
+                    placeholder="Enter Password"
+                    onChangeText={setPassword}
+                    value={password}
+                    secureTextEntry
+                  />
+                </Input>
+              </FormControl>
 
-      <Text style={styles.label}>
-        {loginAs === "Worker" ? "Worker" : "Supervisor"} ID
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter ID"
-        onChangeText={(text) =>
-          loginAs === "Worker" ? setWorkerID(text) : setSupervisorID(text)
-        }
-        value={loginAs === "Worker" ? workerID : supervisorID}
-        autoCapitalize="none"
-        keyboardType="numeric"
-      />
+              <Box mx="$5" mt="$5">
+                <CommonButton variant="rounded" onPress={handleLogin}>
+                  <ButtonText fontSize="$md" fontWeight="$bold">
+                    Login
+                  </ButtonText>
+                </CommonButton>
+              </Box>
 
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry
-      />
+              <Button variant="link" p="$0" size="sm" mt="$4">
+                <ButtonText textDecorationLine="underline" color="#1E1E1E">
+                  Forgot your password?
+                </ButtonText>
+              </Button>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-      <View >
-        {/* ======================================= */}
-        <Button
+              <View>
+                {/* ======================================= */}
+                {/* <Button
           bg="$success"
           p="$6"
           onPress={handleRedux}
         >
           <ButtonText>Click Me</ButtonText>
-        </Button>
-        {/* ===================================== */}
+        </Button> */}
+                {/* ===================================== */}
 
-
-          {/* <DashboardIcon focussed={false} color="black" size={44} /> */}
-          {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
-          {/* <ProfileIcon color="black" size={44} /> */}
-      </View>
-      {/* <Push/> */}
-      {/* <AlertDetails/> */}
-    </View>
+                {/* <DashboardIcon focussed={false} color="black" size={44} /> */}
+                {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
+                {/* <ProfileIcon color="black" size={44} /> */}
+              </View>
+              {/* <Push/> */}
+              {/* <AlertDetails/> */}
+            </VStack>
+          </Box>
+        </Center>
+      </Box>
+    </ScreenLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F8FF",
-    padding: 20,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 20,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#FD9201",
-    padding: 15,
-    borderRadius: 5,
-    width: "48%",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  loginButton: {
-    backgroundColor: "#FD9201",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  loginButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  buttonGroup: {
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-  activeButton: {
-    backgroundColor: "blue",
-    borderColor: "blue",
-    color: "white",
-  },
-});
 
 export default LoginScreen;

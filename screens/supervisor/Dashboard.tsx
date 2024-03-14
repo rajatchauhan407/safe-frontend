@@ -1,99 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, ScrollView, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
-import AlertButton from "../../components/common/alertButton";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
 import websocketService from "../../services/websocket.service";
+import ScreenLayout from "../../components/layout/screenLayout";
 
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("Liam");
   const [siteLocation, setSiteLocation] = useState("Site A");
-  const [currentAlertText, setCurrentAlertText] = useState(
-    "Great! There’s no alert report."
-  );
+  const [currentAlertType, setCurrentAlertType] = useState<
+    "none" | "accident" | "evacuation" | "sos"
+  >("none");
 
-  const navigation = useNavigation();
-
-  const handleIncidentPress = () => {
-    // navigation.navigate("Alert Details");
-  };
   useEffect(() => {
-      websocketService.connect();
-      
-      console.log("Connected to websocket");
-      websocketService.subscribeToEvent('alert',(data)=>{
-          console.log(data);
-      })
+    websocketService.connect();
 
-      return () => {
-          websocketService.disconnect();
-      }
-   })
-  /* Use this for alert texts different than default */
-  /* useEffect(() => {
-    setCurrentAlertText("Hi");
-  }, []); */
+    console.log("Connected to websocket");
+    websocketService.subscribeToEvent("alert", (data) => {
+      console.log(data);
+      setCurrentAlertType(data.alertType);
+    });
+
+    return () => {
+      websocketService.disconnect();
+    };
+  });
+
+  /* Use this to change alert type */
+  useEffect(() => {
+    setCurrentAlertType("accident");
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.page}>
-          {/* GREETING */}
-          <Text>
-            <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-            <Text style={styles.buildingText}>Let's start building</Text>
-          </Text>
+    <Box w="$full" h="$full">
+      <ScreenLayout>
+        <ScrollView>
+          <View>
+            {/* GREETING */}
+            <Text>
+              <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
+              <Text style={styles.buildingText}>Let's start building</Text>
+            </Text>
 
-          <View style={{ height: 20 }} />
+            <View style={{ height: 20 }} />
 
-          {/* LOCATION */}
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-            <Text>{siteLocation}</Text>
-          </View>
-
-          <View style={{ height: 20 }} />
-
-          {/* WORKERS CHECKED IN */}
-          {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-          <NumOfWorkers totalCheckedIn={0} totalExpected={0}/>
-
-          <View style={{ height: 20 }} />
-
-          {/* CARDS */}
-          <View style={styles.cardContainer}>
-            <View style={styles.column}>
-              <CommonDaysAccidentCard
-                layout={"column"}
-                daysWithoutAccident={0}
-              />
+            {/* LOCATION */}
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
+              <Text>{siteLocation}</Text>
             </View>
-            <View style={styles.column}>
-              <AlertSimulationCard layout={"column"} daysWithoutAccident={0} />
+
+            <View style={{ height: 20 }} />
+
+            {/* WORKERS CHECKED IN */}
+            {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
+            <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
+
+            <View style={{ height: 20 }} />
+
+            {/* CARDS */}
+            <View style={styles.cardContainer}>
+              <View style={styles.column}>
+                <CommonDaysAccidentCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
+              <View style={styles.column}>
+                <AlertSimulationCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
             </View>
           </View>
+        </ScrollView>
+      </ScreenLayout>
 
-          <View style={{ height: 20 }} />
-
-          {/* ALERT BUTTON */}
-          {/* <View>
-            <AlertButton
-              level={0}
-              user="supervisor"
-              onPress={handleIncidentPress}
-              // isCheckedIn={true}
-              
-            />
-          </View> */}
-        </View>
-      </ScrollView>
+      {/* DRAWER */}
       <View style={styles.drawer}>
-        <Drawer alertText={currentAlertText} />
+        <Drawer alertType={currentAlertType} />
       </View>
-    </View>
+    </Box>
   );
 };
 
