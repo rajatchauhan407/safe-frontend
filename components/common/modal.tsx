@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalBackdrop, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@gluestack-ui/themed';
+import { Box, Modal, ModalBackdrop, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@gluestack-ui/themed';
 import { View, StyleSheet, GestureResponderEvent } from 'react-native';
 import CommonButton from './button';
 import Typography from './typography';
@@ -20,7 +20,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
   };
 
   return (
-    <Modal size='lg' isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} style={styles.modal}>
+    <Modal size='lg' isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
       <ModalBackdrop style={styles.overlay} />
       <ModalContent style={styles.modalContent}>
         <View style={styles.modalContainer}>
@@ -32,16 +32,17 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
               <View style={styles.iconContainer}>
                 {icon}
               </View>
-              <Typography style={styles.title}>{title}</Typography>
-              <Typography style={styles.description}>{description}</Typography>
-              <CommonButton
-                variant="fill"
+              <Typography size="md" style={styles.title}>{title}</Typography>
+              <Typography size="md" style={styles.description}>{description}</Typography>
+              <Box style={{ width: '100%' }}>
+                <CommonButton
+                variant="rounded"
                 action="primary"
                 onPress={buttonAction}
                 disabled={!isOpen}
               >
                 {buttonText}
-              </CommonButton>
+              </CommonButton></Box>
             </View>
           </ModalBody>
           <ModalFooter />
@@ -55,15 +56,12 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalContent: {
-    borderRadius: 24, // Adjust the border radius of the modal component itself
+    borderRadius: 28, 
   },
   modalContainer: {
     backgroundColor: 'white',
+    padding: 20,
   },
   content: {
     alignItems: 'center',
@@ -72,14 +70,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 18,
+    textAlign: 'center',
     fontWeight: 'bold',
-    textAlign: 'center', // Center the text horizontally
     marginBottom: 10,
   },
   description: {
-    fontSize: 16,
-    textAlign: 'center', // Center the text horizontally
+    textAlign: 'center',
     marginBottom: 20,
   },
 });
