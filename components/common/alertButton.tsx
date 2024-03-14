@@ -28,6 +28,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   color = "#ffffff",
   ...props
 }) => {
+
   const buttonStyles = {
     worker: {
       report: {
@@ -58,18 +59,21 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       report: {
         icon: SosIcon,
         iconSize: 64,
+        color: color,
         title: "Report Incident",
         description: "Click to report an incident",
       },
       accident: {
         icon: WhistleIcon,
         iconSize: 64,
+        color: color,
         title: "Accident Reported",
         description: null,
       },
       evacuation: {
         icon: WhistlesIcon,
         iconSize: 176,
+        color: color,
         title: "Active Evacuation",
         description: null,
       },
@@ -78,18 +82,21 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       accident: {
         icon: HazardIcon,
         iconSize: 64,
+        color: color,
         title: "Accident Reported",
         description: "Go to emergency details",
       },
       evacuation: {
         icon: HazardIcon,
         iconSize: 64,
+        color: color,
         title: "Hazard Reported",
         description: "Go to emergency details",
       },
       sos: {
         icon: SosIcon,
         iconSize: 64,
+        color: color,
         title: "SOS Reported",
         description: "Go to SOS details",
       },
@@ -126,7 +133,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
 
   const adjustedIconSize =
     typeof buttonIconSize === "number" ? `${buttonIconSize}px` : buttonIconSize;
-
+  
   return (
     <Card p={0} rounded={"$3xl"}>
       <Button
@@ -165,6 +172,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                 ? textStyles[emergency].color
                 : textStyles.default.color,
               textTransform: "uppercase",
+              fontFamily: 'NunitoSans_700Bold',
             }}
           >
             {title}
@@ -187,5 +195,6 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     </Card>
   );
 };
+
 
 export default AlertButton;
