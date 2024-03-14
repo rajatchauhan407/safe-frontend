@@ -121,7 +121,7 @@ const { icon: Icon, iconSize: buttonIconSize, title, description } = iconMapping
 const adjustedIconSize = typeof buttonIconSize === 'number' ? `${buttonIconSize}px` : buttonIconSize;
 
 return (
-  <Card p={0}>
+  <Card p={0} borderRadius={24}>
     <Button isDisabled={isDisabled} {...props} style={{
       ...getButtonStyle(),
       height: 'auto',  
