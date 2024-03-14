@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, ModalBackdrop, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@gluestack-ui/themed';
-import { View, StyleSheet, GestureResponderEvent, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, GestureResponderEvent } from 'react-native';
+import CommonButton from './button';
+import Typography from './typography';
 
 interface CustomModalProps {
   isOpen: boolean;
@@ -18,9 +20,9 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+    <Modal size='lg' isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} style={styles.modal}>
       <ModalBackdrop style={styles.overlay} />
-      <ModalContent>
+      <ModalContent style={styles.modalContent}>
         <View style={styles.modalContainer}>
           <ModalHeader>
             <ModalCloseButton onPress={handleClose} />
@@ -30,11 +32,16 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
               <View style={styles.iconContainer}>
                 {icon}
               </View>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.description}>{description}</Text>
-              <TouchableOpacity style={styles.button} onPress={buttonAction}>
-                <Text style={styles.buttonText}>{buttonText}</Text>
-              </TouchableOpacity>
+              <Typography style={styles.title}>{title}</Typography>
+              <Typography style={styles.description}>{description}</Typography>
+              <CommonButton
+                variant="fill"
+                action="primary"
+                onPress={buttonAction}
+                disabled={!isOpen}
+              >
+                {buttonText}
+              </CommonButton>
             </View>
           </ModalBody>
           <ModalFooter />
@@ -48,36 +55,32 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    borderRadius: 24, // Adjust the border radius of the modal component itself
+  },
   modalContainer: {
     backgroundColor: 'white',
-    borderRadius: 24, 
-    padding: 20,
   },
   content: {
     alignItems: 'center',
   },
   iconContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
+    textAlign: 'center', // Center the text horizontally
+    marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    textAlign: 'center', // Center the text horizontally
+    marginBottom: 20,
   },
 });
 
