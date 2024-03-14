@@ -18,7 +18,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     NunitoSans_400Regular,
     NunitoSans_600SemiBold,
-    NunitoSans_700Bold,
+    /* NunitoSans_700Bold, */
     NunitoSans_800ExtraBold,
   });
 
