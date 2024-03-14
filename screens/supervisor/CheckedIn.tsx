@@ -32,9 +32,9 @@ const CheckedIn: React.FC = () => {
         {/* LIST OF WORKERS */}
         <CheckedInList />
       </ScrollView>
-      <Box style={styles.drawer}>
+      {/* <Box style={styles.drawer}>
         <Drawer alertText={currentAlertText} />
-      </Box>
+      </Box> */}
     </ScreenLayout>
   );
 };
