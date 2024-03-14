@@ -17,6 +17,16 @@ import AlertDetails from "./worker/AlertDetails";
 // import SOSIcon from "../assets/icons/sos";
 // import ProfileIcon from "../assets/icons/profile";
 
+import { Button, ButtonText } from "@gluestack-ui/themed";
+
+/*** imports to use redux ***/
+import { useDispatch, useSelector } from "react-redux";
+import { changeAuth } from "../lib/slices/authSlice";
+import { RootState, AppDispatch } from "../lib/store";
+import { login } from "../lib/slices/authSlice";
+/*** imports end here****/
+
+
 const LoginScreen: React.FC = () => {
   const [loginAs, setLoginAs] = useState<string>("");
   const [workerID, setWorkerID] = useState<string>("");
@@ -24,7 +34,16 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const authState = useSelector((state:RootState)=>state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  
+  console.log(authState);
   const handleLogin = () => {
+    let userData = {
+      userId:workerID,
+      password:password
+    }
+    dispatch(login(userData))
     if (loginAs === "Supervisor") {
       navigation.navigate("Main", {
         screen: "Supervisor",
@@ -37,6 +56,14 @@ const LoginScreen: React.FC = () => {
       });
     }
   };
+// ================== Redux ==================
+  const handleRedux = () => {
+    console.log(authState);
+    // dispatch(changeAuth);
+    dispatch(changeAuth());
+    // console.log(authState);
+  }
+  // =========================================
 
   return (
     <View style={styles.container}>
@@ -88,6 +115,17 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
       <View >
+        {/* ======================================= */}
+        <Button
+          bg="$success"
+          p="$6"
+          onPress={handleRedux}
+        >
+          <ButtonText>Click Me</ButtonText>
+        </Button>
+        {/* ===================================== */}
+
+
           {/* <DashboardIcon focussed={false} color="black" size={44} /> */}
           {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
           {/* <ProfileIcon color="black" size={44} /> */}

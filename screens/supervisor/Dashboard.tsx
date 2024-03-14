@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
 
           {/* WORKERS CHECKED IN */}
           {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-          <NumOfWorkers/>
+          <NumOfWorkers totalCheckedIn={0} totalExpected={0}/>
 
           <View style={{ height: 20 }} />
 
@@ -77,9 +77,10 @@ const Dashboard: React.FC = () => {
           <View>
             <AlertButton
               level={0}
-              userType="supervisor"
+              user="supervisor"
               onPress={handleIncidentPress}
-              isCheckedIn={true}
+              // isCheckedIn={true}
+              
             />
           </View>
         </View>
