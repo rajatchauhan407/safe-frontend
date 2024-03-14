@@ -21,6 +21,7 @@ const Dashboard: React.FC = () => {
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [showTooltip, setShowTooltip] = useState(false);
 
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -37,6 +38,16 @@ const Dashboard: React.FC = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (showTooltip) {
+      const tooltipTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 10000);
+
+      return () => clearTimeout(tooltipTimer);
+    }
+  }, [showTooltip]);
 
   const fadeInTooltip = () => {
     Animated.timing(fadeAnim, {
@@ -130,6 +141,10 @@ const Dashboard: React.FC = () => {
             setCheckInTime("");
             setIsCheckedIn(false);
           }
+
+          // Show tooltip about the SOS button
+          setShowTooltip(true);
+
         } else {
           setIsInSiteZone(false);
           setCheckInErrorMessage("Please grant permission to access your location.")
@@ -229,6 +244,14 @@ const Dashboard: React.FC = () => {
     )
   );
 
+  const TooltipSOS = () => (
+    showTooltip && (
+      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+        <Text style={styles.tooltipText}>Hold Alert button for 3 seconds to activate an SOS for help</Text>
+      </Box>
+    )
+  );
+
   return (
     <ScreenLayout>
     <VStack space="sm" reversed={false}>
@@ -249,6 +272,7 @@ const Dashboard: React.FC = () => {
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
             <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
+            <TooltipSOS />
         </VStack>
     </VStack>
     </ScreenLayout>
