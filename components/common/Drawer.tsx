@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
@@ -12,14 +12,26 @@ interface DrawerProps {
 
 const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [autoOpen, setAutoOpen] = useState(false);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  useEffect(() => {
+    if (alertType !== "none") {
+      setIsOpen(true);
+      setAutoOpen(true);
+    }
+  }, [alertType]);
 
   const handleDrawerToggle = () => {
+    setIsOpen(!isOpen);
+    setAutoOpen(false);
+  };
+  /* const handleDrawerToggle = () => {
     if (alertType !== "none") {
       setIsOpen(!isOpen);
     }
-  };
-
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  }; */
 
   const handleIncidentPress = () => {
     navigation.navigate("AlertDetails");
