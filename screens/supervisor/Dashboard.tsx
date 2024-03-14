@@ -22,7 +22,12 @@ const Dashboard: React.FC = () => {
   };
   useEffect(() => {
       websocketService.connect();
+      
       console.log("Connected to websocket");
+      websocketService.subscribeToEvent('alert',(data)=>{
+          console.log(data);
+      })
+
       return () => {
           websocketService.disconnect();
       }
@@ -74,7 +79,7 @@ const Dashboard: React.FC = () => {
           <View style={{ height: 20 }} />
 
           {/* ALERT BUTTON */}
-          <View>
+          {/* <View>
             <AlertButton
               level={0}
               user="supervisor"
@@ -82,7 +87,7 @@ const Dashboard: React.FC = () => {
               // isCheckedIn={true}
               
             />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <View style={styles.drawer}>

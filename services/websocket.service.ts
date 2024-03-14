@@ -13,7 +13,10 @@ class WebSocketService{
         this.socket.on('disconnect',()=>{
             console.log("disconnected from websocket server");
         });
+
     }
+
+    
 
     connect(){
         this.socket.connect();
@@ -21,6 +24,16 @@ class WebSocketService{
 
     disconnect(){
         this.socket.disconnect();
+    }
+
+    // Subscribe to a specific event
+    subscribeToEvent(eventName: string, callback: (data: any) => void) {
+        this.socket.on(eventName, callback);
+    }
+
+    // Unsubscribe from a specific event
+    unsubscribeFromEvent(eventName: string) {
+        this.socket.off(eventName);
     }
 }
 
