@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, ScrollView, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
 import websocketService from "../../services/websocket.service";
+import ScreenLayout from "../../components/layout/screenLayout";
 
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("Liam");
@@ -34,50 +37,56 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.page}>
-          {/* GREETING */}
-          <Text>
-            <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-            <Text style={styles.buildingText}>Let's start building</Text>
-          </Text>
+    <Box w="$full" h="$full">
+      <ScreenLayout>
+        <ScrollView>
+          <View>
+            {/* GREETING */}
+            <Text>
+              <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
+              <Text style={styles.buildingText}>Let's start building</Text>
+            </Text>
 
-          <View style={{ height: 20 }} />
+            <View style={{ height: 20 }} />
 
-          {/* LOCATION */}
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-            <Text>{siteLocation}</Text>
-          </View>
-
-          <View style={{ height: 20 }} />
-
-          {/* WORKERS CHECKED IN */}
-          {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-          <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
-
-          <View style={{ height: 20 }} />
-
-          {/* CARDS */}
-          <View style={styles.cardContainer}>
-            <View style={styles.column}>
-              <CommonDaysAccidentCard
-                layout={"column"}
-                daysWithoutAccident={0}
-              />
+            {/* LOCATION */}
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
+              <Text>{siteLocation}</Text>
             </View>
-            <View style={styles.column}>
-              <AlertSimulationCard layout={"column"} daysWithoutAccident={0} />
+
+            <View style={{ height: 20 }} />
+
+            {/* WORKERS CHECKED IN */}
+            {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
+            <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
+
+            <View style={{ height: 20 }} />
+
+            {/* CARDS */}
+            <View style={styles.cardContainer}>
+              <View style={styles.column}>
+                <CommonDaysAccidentCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
+              <View style={styles.column}>
+                <AlertSimulationCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </ScreenLayout>
+
       {/* DRAWER */}
       <View style={styles.drawer}>
         <Drawer alertType={currentAlertType} />
       </View>
-    </View>
+    </Box>
   );
 };
 
