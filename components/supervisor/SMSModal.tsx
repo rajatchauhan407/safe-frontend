@@ -1,3 +1,4 @@
+// Component Imports===============================================
 import React from "react";
 import {
   Modal,
@@ -7,7 +8,17 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-
+// Connection to backend Imports===============================================
+import axios from 'axios';
+import { BACKEND_BASE_URL } from '../../config/api'
+// =================================================================
+// HardCoded Emergency Contacts
+const emergencyContacts = [
+  { id: '1', name: '911', phoneNumber: '+16047206967' },
+  { id: '2', name: 'BC Workers', phoneNumber: '+16729998362' },
+  { id: '3', name: 'FireFighter', phoneNumber: '+16043633286' },
+  { id: '4', name: 'Manager', phoneNumber: '+16043633286' },
+];
 const CustomCheckbox = ({ checked }: { checked: boolean }) => (
   <View style={[styles.checkbox, checked && { backgroundColor: "#FD9201" }]} />
 );
@@ -16,11 +27,46 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   visible,
   onClose,
 }) => {
-  const [isChecked1, setIsChecked1] = React.useState(false);
-  const [isChecked2, setIsChecked2] = React.useState(false);
-  const [isChecked3, setIsChecked3] = React.useState(false);
-  const [isChecked4, setIsChecked4] = React.useState(false);
+  const [checkedContacts, setCheckedContacts] = React.useState<string[]>([]);
+  const [message, setMessage] = React.useState('');
+// =============================================
+// Emergency Contact Toggle Function:
+const toggleContact = (contactId: string) => {
+  const isChecked = checkedContacts.includes(contactId);
+  if (isChecked) {
+    setCheckedContacts(checkedContacts.filter(id => id !== contactId));
+  } else {
+    setCheckedContacts([...checkedContacts, contactId]);
+  }
+};
+// Send SMS to Backend Function
+const sendSMS = async () => {
+  try {
+    const contactsArray = checkedContacts.map(contactId => {
+      const selectedContact = emergencyContacts.find(contact => contact.id === contactId);
+      if (selectedContact) {
+        return { phoneNumber: selectedContact.phoneNumber };
+      }
+      return null;
+    }).filter(Boolean);
+    await axios.post(
+      `${BACKEND_BASE_URL}/sms`, 
+      {
+        contacts: contactsArray,
+        message: 'This is an Emergency Alert From SAFE App',
+      }
+    );
+    console.log('SMS sent successfully');
+    console.log('Checked Contacts:', checkedContacts);
+  } catch (error) {
+    console.error('Error sending SMS:', error);
+  }
+};
 
+
+
+// =============================================
+// Renderin the Component:======================
   return (
     <Modal
       visible={visible}
@@ -41,40 +87,25 @@ const SMSModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
           <Text style={styles.checklistTitle}>Choose SMS alert contacts</Text>
 
           {/* Checklist options */}
-          <View style={styles.checklistContainer}>
+          {emergencyContacts.map(contact => (
+          <View key={contact.id} style={styles.checklistContainer} >
             <TouchableOpacity
               style={styles.checklistItem}
-              onPress={() => setIsChecked1(!isChecked1)}
+              onPress={() => toggleContact(contact.id)}
             >
-              <Text style={styles.checklistText}>First Aid Option 1</Text>
-              <CustomCheckbox checked={isChecked1} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.checklistItem}
-              onPress={() => setIsChecked2(!isChecked2)}
-            >
-              <Text style={styles.checklistText}>First Aid Option 2</Text>
-              <CustomCheckbox checked={isChecked2} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.checklistItem}
-              onPress={() => setIsChecked3(!isChecked3)}
-            >
-              <Text style={styles.checklistText}>First Aid Option 3</Text>
-              <CustomCheckbox checked={isChecked3} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.checklistItem}
-              onPress={() => setIsChecked4(!isChecked4)}
-            >
-              <Text style={styles.checklistText}>First Aid Option 4</Text>
-              <CustomCheckbox checked={isChecked4} />
+              <Text style={styles.checklistText}>{contact.name}</Text>
+              <CustomCheckbox
+                  checked={checkedContacts.includes(contact.id)} />
             </TouchableOpacity>
           </View>
+          ))}
 
           {/* Button "Send" */}
-          <TouchableOpacity style={styles.sendButton}>
-            <Text style={styles.sendButtonText}>Send</Text>
+          <TouchableOpacity 
+            style={styles.sendButton}
+            onPress={sendSMS}
+            >
+             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
 
           {/* "Skip SMS Messages" */}
