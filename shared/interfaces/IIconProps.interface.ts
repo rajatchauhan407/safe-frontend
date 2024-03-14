@@ -1,5 +1,9 @@
+import { GestureResponderEvent } from 'react-native';
+
 export interface IIconProps {
-    color: string;
-    size: number;
-    focussed: boolean;
-  }
+  focussed: boolean;
+  size: number;
+  color: string;
+  onLongPress?: (event: GestureResponderEvent) => void; 
+  onPressOut?: (event: GestureResponderEvent) => void;
+}

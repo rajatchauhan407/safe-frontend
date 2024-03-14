@@ -7,7 +7,7 @@ import MainNavigator from './navigation/MainNavigator';
 import { StyledProvider } from "@gluestack-style/react";
 import { config } from './config/gluestack-ui.config';
 import { useFonts } from 'expo-font';
-import { NunitoSans_400Regular,NunitoSans_600SemiBold, NunitoSans_800ExtraBold} from '@expo-google-fonts/nunito-sans';
+import { NunitoSans_400Regular,NunitoSans_600SemiBold, NunitoSans_700Bold, NunitoSans_800ExtraBold} from '@expo-google-fonts/nunito-sans';
 import {Provider} from 'react-redux';
 import { store } from './lib/store';
 
@@ -15,6 +15,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     NunitoSans_400Regular,
     NunitoSans_600SemiBold,
+    NunitoSans_700Bold,
     NunitoSans_800ExtraBold
   });
 

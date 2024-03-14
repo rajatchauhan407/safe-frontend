@@ -39,6 +39,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
                 action="primary"
                 onPress={buttonAction}
                 disabled={!isOpen}
+                buttonTextSize={18}
               >
                 {buttonText}
               </CommonButton></Box>
