@@ -8,6 +8,8 @@ import { StyledProvider } from "@gluestack-style/react";
 import { config } from './config/gluestack-ui.config';
 import { useFonts } from 'expo-font';
 import { NunitoSans_400Regular,NunitoSans_600SemiBold, NunitoSans_800ExtraBold} from '@expo-google-fonts/nunito-sans';
+import {Provider} from 'react-redux';
+import { store } from './lib/store';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,9 +26,11 @@ export default function App() {
   }
   return (
     <GluestackUIProvider config={config}>
+    <Provider store={store}>
           <NavigationContainer>
               <MainNavigator />
           </NavigationContainer>
+    </Provider>
     </GluestackUIProvider>
   );
 }

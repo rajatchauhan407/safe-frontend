@@ -197,7 +197,7 @@ const Dashboard: React.FC = () => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate('Alert Details' as never);
+    navigation.navigate('AlertDetails');
   };
 
   const GreetingSection = () => (

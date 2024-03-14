@@ -17,6 +17,16 @@ import AlertDetails from "./worker/AlertDetails";
 // import SOSIcon from "../assets/icons/sos";
 // import ProfileIcon from "../assets/icons/profile";
 
+import { Button, ButtonText } from "@gluestack-ui/themed";
+
+/*** imports to use redux ***/
+import { useDispatch, useSelector } from "react-redux";
+import { changeAuth } from "../lib/slices/authSlice";
+import { RootState, AppDispatch } from "../lib/store";
+import { login } from "../lib/slices/authSlice";
+/*** imports end here****/
+
+
 const LoginScreen: React.FC = () => {
   const [loginAs, setLoginAs] = useState<string>("");
   const [workerID, setWorkerID] = useState<string>("");
@@ -24,19 +34,52 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const handleLogin = () => {
-    if (loginAs === "Supervisor") {
-      navigation.navigate("Main", {
-        screen: "Supervisor",
-        params: { screen: "Dashboard" },
-      });
-    } else if (loginAs === "Worker") {
-      navigation.navigate("Main", {
-        screen: "Worker",
-        params: { screen: "Dashboard" },
-      });
+  const authState = useSelector((state:RootState)=>state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  
+  // console.log(authState);
+  const handleLogin = async () => {
+    let userData = {
+      userId:loginAs === "Worker" ? workerID : supervisorID,
+      password:password
     }
+    // console.log(userData)
+    try{
+      const actionResult =  await dispatch(login(userData))
+      const {payload} = actionResult;
+       console.log(actionResult);
+       console.log(payload);
+       if(actionResult.type === "auth/login/fulfilled"){
+         if (loginAs === "Supervisor") {
+           navigation.navigate("Main", {
+             screen: "Supervisor",
+             params: { screen: "Dashboard" },
+           });
+         } else if (loginAs === "Worker") {
+           navigation.navigate("Main", {
+             screen: "Worker",
+             params: { screen: "Dashboard" },
+           });
+         }
+       }else {
+         // Handle login failure
+         console.error("Login failed:", payload);
+         // Show an error message to the user, if desired
+       }
+    }
+  catch(error){
+    console.error("An error occurred during login:", error);
+    }
+   
   };
+// ================== Redux ==================
+  const handleRedux = () => {
+    console.log(authState);
+    // dispatch(changeAuth);
+    dispatch(changeAuth());
+    // console.log(authState);
+  }
+  // =========================================
 
   return (
     <View style={styles.container}>
@@ -88,6 +131,17 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
       <View >
+        {/* ======================================= */}
+        <Button
+          bg="$success"
+          p="$6"
+          onPress={handleRedux}
+        >
+          <ButtonText>Click Me</ButtonText>
+        </Button>
+        {/* ===================================== */}
+
+
           {/* <DashboardIcon focussed={false} color="black" size={44} /> */}
           {/* <SOSIcon focussed ={true} color="green" size={44} /> */}
           {/* <ProfileIcon color="black" size={44} /> */}

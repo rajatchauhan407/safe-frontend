@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { Circle, Path, G, ClipPath, Defs, Rect } from "react-native-svg";
 import { IIconProps } from "../../shared/interfaces/IIconProps.interface";
 
-const whistlesIcon: React.FC<IIconProps> = ({ color, size }) => {
+const WhistlesIcon: React.FC<IIconProps> = ({ color, size }) => {
   color = "#FFFFFF"
   
   return (
@@ -17,6 +17,6 @@ const whistlesIcon: React.FC<IIconProps> = ({ color, size }) => {
   );
 };
 
-export default whistlesIcon;
+export default WhistlesIcon;
 
 

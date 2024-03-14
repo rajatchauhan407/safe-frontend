@@ -6,6 +6,7 @@ import AlertButton from "../../components/common/alertButton";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
+import websocketService from "../../services/websocket.service";
 
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("Liam");
@@ -17,9 +18,20 @@ const Dashboard: React.FC = () => {
   const navigation = useNavigation();
 
   const handleIncidentPress = () => {
-    navigation.navigate("Alert Details");
+    // navigation.navigate("Alert Details");
   };
+  useEffect(() => {
+      websocketService.connect();
+      
+      console.log("Connected to websocket");
+      websocketService.subscribeToEvent('alert',(data)=>{
+          console.log(data);
+      })
 
+      return () => {
+          websocketService.disconnect();
+      }
+   })
   /* Use this for alert texts different than default */
   /* useEffect(() => {
     setCurrentAlertText("Hi");
@@ -46,7 +58,8 @@ const Dashboard: React.FC = () => {
           <View style={{ height: 20 }} />
 
           {/* WORKERS CHECKED IN */}
-          <NumOfWorkers totalCheckedIn={30} totalExpected={34} />
+          {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
+          <NumOfWorkers totalCheckedIn={0} totalExpected={0}/>
 
           <View style={{ height: 20 }} />
 
@@ -66,13 +79,15 @@ const Dashboard: React.FC = () => {
           <View style={{ height: 20 }} />
 
           {/* ALERT BUTTON */}
-          <View>
+          {/* <View>
             <AlertButton
               level={0}
-              userType="supervisor"
+              user="supervisor"
               onPress={handleIncidentPress}
+              // isCheckedIn={true}
+              
             />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <View style={styles.drawer}>
