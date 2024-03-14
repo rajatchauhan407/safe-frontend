@@ -11,7 +11,7 @@ interface sosModalProps {
   onPressButton: () => void;
 }
 
-const sosModal: React.FC<sosModalProps> = ({ isOpen, onClose, title, description, buttonText, onPressButton }) => {
+const InfoModal: React.FC<sosModalProps> = ({ isOpen, onClose, title, description, buttonText, onPressButton }) => {
   return (
     <CustomModal isOpen={isOpen} onClose={onClose}>
       <Icon name="information-circle" size={32} color="blue" />
@@ -35,4 +35,4 @@ const styles = {
   },
 };
 
-export default sosModal;
+export default InfoModal;

@@ -14,7 +14,7 @@ import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
 const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(true);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
   const [checkInTime, setCheckInTime] = useState(""); 
@@ -248,7 +248,7 @@ const Dashboard: React.FC = () => {
             <Box mt={16} mb={16}>
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
-            <AlertButton user="supervisor" emergency="sos" color="#000000" onPress={handleIncidentPress} />
+            <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
         </VStack>
     </VStack>
     </ScreenLayout>

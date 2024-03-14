@@ -11,7 +11,7 @@ interface CommonCardProps {
 const CommonCard: React.FC<CommonCardProps> = ({ title, content }) => {
 
   return (
-    <Card size="md" variant="elevated" m={0} rounded={24} bg={'$primary0'}>
+    <Card size="md" variant="elevated" m={0} rounded={24} bg={'$white'}>
       <Heading mb="$1" size="md">
         <Typography size="md">
           {title}
