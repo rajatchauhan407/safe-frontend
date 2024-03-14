@@ -27,11 +27,6 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
     setIsOpen(!isOpen);
     setAutoOpen(false);
   };
-  /* const handleDrawerToggle = () => {
-    if (alertType !== "none") {
-      setIsOpen(!isOpen);
-    }
-  }; */
 
   const handleIncidentPress = () => {
     navigation.navigate("AlertDetails");
