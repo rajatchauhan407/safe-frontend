@@ -42,19 +42,29 @@ const toggleContact = (contactId: string) => {
 // Send SMS to Backend Function
 const sendSMS = async () => {
   try {
+    const contactsArray = checkedContacts.map(contactId => {
+      const selectedContact = emergencyContacts.find(contact => contact.id === contactId);
+      if (selectedContact) {
+        return { phoneNumber: selectedContact.phoneNumber };
+      }
+      return null;
+    }).filter(Boolean);
     await axios.post(
       `${BACKEND_BASE_URL}/sms`, 
       {
-        contacts: checkedContacts,
+        contacts: contactsArray,
         message: 'This is an Emergency Alert From SAFE App',
       }
-      );
+    );
     console.log('SMS sent successfully');
-    console.log('Checked Contacts:', checkedContacts)
+    console.log('Checked Contacts:', checkedContacts);
   } catch (error) {
     console.error('Error sending SMS:', error);
   }
 };
+
+
+
 // =============================================
 // Renderin the Component:======================
   return (
