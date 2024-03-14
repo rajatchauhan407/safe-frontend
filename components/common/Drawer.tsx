@@ -7,14 +7,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import AlertButton from "./alertButton";
 
 interface DrawerProps {
-  alertText: string;
+  alertType: "none" | "accident" | "evacuation" | "sos";
 }
 
-const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
+const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDrawerToggle = () => {
-    if (alertText !== "Great! There’s no alert report.") {
+    if (alertType !== "none") {
       setIsOpen(!isOpen);
     }
   };
@@ -25,27 +25,38 @@ const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
     navigation.navigate("AlertDetails");
   };
 
+  const getAlertColor = (): string => {
+    if (alertType === "accident") {
+      return "#000000";
+    } else {
+      return "#ffffff";
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.handle}
         onPress={handleDrawerToggle}
-        disabled={alertText === "Great! There’s no alert report."}
+        disabled={alertType === "none"}
       >
         <View style={styles.contentWrapper}>
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
-          <Text style={styles.drawerText}>{alertText}</Text>
+          <Text style={styles.drawerText}>
+            {alertType === "none"
+              ? "Great! There's no alert to report"
+              : "You have received 01 Alert."}
+          </Text>
         </View>
       </TouchableOpacity>
       {isOpen && (
         <View style={styles.content}>
           {/* Content of the drawer based on the alert text */}
-          {/* <Text>Hi from alert type</Text> */}
-          {alertText !== "Great! There’s no alert report." && (
+          {alertType !== "none" && (
             <AlertButton
               user="supervisor"
-              emergency="accident"
-              color="#000000"
+              emergency={alertType}
+              color={getAlertColor()}
               onPress={handleIncidentPress}
             />
           )}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, ScrollView, Text, View } from "react-native";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
-import AlertButton from "../../components/common/alertButton";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
@@ -11,15 +10,9 @@ import websocketService from "../../services/websocket.service";
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("Liam");
   const [siteLocation, setSiteLocation] = useState("Site A");
-  const [currentAlertText, setCurrentAlertText] = useState(
-    "Great! There’s no alert report."
-  );
-
-  const navigation = useNavigation();
-
-  const handleIncidentPress = () => {
-    // navigation.navigate("Alert Details");
-  };
+  const [currentAlertType, setCurrentAlertType] = useState<
+    "none" | "accident" | "evacuation" | "sos"
+  >("none");
 
   useEffect(() => {
     websocketService.connect();
@@ -27,6 +20,7 @@ const Dashboard: React.FC = () => {
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alert", (data) => {
       console.log(data);
+      setCurrentAlertType(data.alertType);
     });
 
     return () => {
@@ -34,9 +28,9 @@ const Dashboard: React.FC = () => {
     };
   });
 
-  /* Use this for alert texts different than default */
+  /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertText("Hi");
+    setCurrentAlertType("sos");
   }, []);
 
   return (
@@ -81,7 +75,7 @@ const Dashboard: React.FC = () => {
       </ScrollView>
       {/* DRAWER */}
       <View style={styles.drawer}>
-        <Drawer alertText={currentAlertText} />
+        <Drawer alertType={currentAlertType} />
       </View>
     </View>
   );
