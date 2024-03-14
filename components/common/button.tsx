@@ -30,6 +30,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       backgroundColor: 'transparent',
     },
     rounded: {
+      backgroundColor: action === 'primary' ? '#FD9201' : '#6C757D',
       borderRadius: 100,
     },
     text: {
@@ -43,19 +44,29 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   const textStyles: Record<string, TextStyle | ViewStyle> = {
     fill: {
       color: '#1E1E1E',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     outline: {
       color: action === 'primary' ? '#007BFF' : '#6C757D',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     rounded: {
-      color: action === 'primary' ? '#FFFFFF' : '#6C757D',
+      color: action === 'primary' ? '#1E1E1E' : '#6C757D',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     text: {
       color: action === 'primary' ? '#007BFF' : '#6C757D',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     underline: {
       color: action === 'primary' ? '#007BFF' : '#6C757D',
       textDecorationLine: 'underline',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
   };
 
