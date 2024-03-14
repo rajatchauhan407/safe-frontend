@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../types/navigationTypes";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import AlertButton from "./alertButton";
 
 interface DrawerProps {
   alertText: string;
@@ -13,6 +17,12 @@ const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
     if (alertText !== "Great! There’s no alert report.") {
       setIsOpen(!isOpen);
     }
+  };
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const handleIncidentPress = () => {
+    navigation.navigate("AlertDetails");
   };
 
   return (
@@ -30,8 +40,14 @@ const Drawer: React.FC<DrawerProps> = ({ alertText }) => {
       {isOpen && (
         <View style={styles.content}>
           {/* Content of the drawer based on the alert text */}
+          {/* <Text>Hi from alert type</Text> */}
           {alertText !== "Great! There’s no alert report." && (
-            <Text>{/* Display content of the alert */}</Text>
+            <AlertButton
+              user="supervisor"
+              emergency="accident"
+              color="#000000"
+              onPress={handleIncidentPress}
+            />
           )}
         </View>
       )}

@@ -20,22 +20,24 @@ const Dashboard: React.FC = () => {
   const handleIncidentPress = () => {
     // navigation.navigate("Alert Details");
   };
-  useEffect(() => {
-      websocketService.connect();
-      
-      console.log("Connected to websocket");
-      websocketService.subscribeToEvent('alert',(data)=>{
-          console.log(data);
-      })
 
-      return () => {
-          websocketService.disconnect();
-      }
-   })
+  useEffect(() => {
+    websocketService.connect();
+
+    console.log("Connected to websocket");
+    websocketService.subscribeToEvent("alert", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      websocketService.disconnect();
+    };
+  });
+
   /* Use this for alert texts different than default */
-  /* useEffect(() => {
+  useEffect(() => {
     setCurrentAlertText("Hi");
-  }, []); */
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -59,7 +61,7 @@ const Dashboard: React.FC = () => {
 
           {/* WORKERS CHECKED IN */}
           {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-          <NumOfWorkers totalCheckedIn={0} totalExpected={0}/>
+          <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
 
           <View style={{ height: 20 }} />
 
@@ -75,21 +77,9 @@ const Dashboard: React.FC = () => {
               <AlertSimulationCard layout={"column"} daysWithoutAccident={0} />
             </View>
           </View>
-
-          <View style={{ height: 20 }} />
-
-          {/* ALERT BUTTON */}
-          {/* <View>
-            <AlertButton
-              level={0}
-              user="supervisor"
-              onPress={handleIncidentPress}
-              // isCheckedIn={true}
-              
-            />
-          </View> */}
         </View>
       </ScrollView>
+      {/* DRAWER */}
       <View style={styles.drawer}>
         <Drawer alertText={currentAlertText} />
       </View>
