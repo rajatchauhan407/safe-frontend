@@ -20,7 +20,7 @@ const MainNavigator: React.FC = () => {
         component={MainTabNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Alert Details" component={AlertReport} />
+      <Stack.Screen name="AlertDetails" component={AlertReport} />
       <Stack.Screen name="Checked In" component={CheckedIn} />
     </Stack.Navigator>
   );

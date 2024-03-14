@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { Circle, Path, G, ClipPath, Defs, Rect } from "react-native-svg";
 import { IIconProps } from "../../shared/interfaces/IIconProps.interface";
 
-const hazardIcon: React.FC<IIconProps> = ({ focussed,color, size }) => 
+const HazardIcon: React.FC<IIconProps> = ({ focussed,color, size }) => 
 {
   const fillColor = focussed ? color : "#1e1e1e";
   return (
@@ -18,4 +18,4 @@ const hazardIcon: React.FC<IIconProps> = ({ focussed,color, size }) =>
     </Svg>
 )};
 
-export default hazardIcon;
+export default HazardIcon;
