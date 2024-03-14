@@ -132,13 +132,13 @@ const LoginScreen: React.FC = () => {
       </TouchableOpacity>
       <View >
         {/* ======================================= */}
-        <Button
+        {/* <Button
           bg="$success"
           p="$6"
           onPress={handleRedux}
         >
           <ButtonText>Click Me</ButtonText>
-        </Button>
+        </Button> */}
         {/* ===================================== */}
 
 
