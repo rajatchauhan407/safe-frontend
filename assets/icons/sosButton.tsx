@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { Circle, Path, G, ClipPath, Defs, Rect } from "react-native-svg";
 import { IIconProps } from "../../shared/interfaces/IIconProps.interface";
 
-const sosIcon: React.FC<IIconProps> = ({ focussed,color, size }) => 
+const SosIcon: React.FC<IIconProps> = ({ focussed,color, size }) => 
 {
   const fillColor = focussed ? color : "#1E1E1E";
   return (
@@ -20,4 +20,4 @@ const sosIcon: React.FC<IIconProps> = ({ focussed,color, size }) =>
     </Svg>
 )};
 
-export default sosIcon;
+export default SosIcon;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { TouchableOpacityProps } from 'react-native';
 import { Button, ButtonIcon, VStack, Card} from '@gluestack-ui/themed';
-import sosIcon from '../../assets/icons/sosButton';
-import hazardIcon from '../../assets/icons/hazard';
-import whistleIcon from '../../assets/icons/whistle';
-import whistlesIcon from '../../assets/icons/3whistles';
+import SosIcon from '../../assets/icons/sosButton';
+import HazardIcon from '../../assets/icons/hazard';
+import WhistleIcon from '../../assets/icons/whistle';
+import WhistlesIcon from '../../assets/icons/3whistles';
 import Typography from './typography';
 
 interface AlertButtonProps extends TouchableOpacityProps {
@@ -57,19 +57,19 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   const iconMapping = {
     worker:{
       report: {
-        icon: sosIcon,
+        icon: SosIcon,
         iconSize: 64,
         title: 'Report Incident',
         description: 'Click to report an incident',
       },
       accident: {
-        icon: whistleIcon,
+        icon: WhistleIcon,
         iconSize: 64,
         title: 'Accident Reported',
         description: null,
       },
       evacuation: {
-        icon: whistlesIcon,
+        icon: WhistlesIcon,
         iconSize: 176,
         title: 'Active Evacuation',
         description: null,
@@ -77,19 +77,19 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     },
     supervisor: {
       accident: {
-        icon: hazardIcon,
+        icon: HazardIcon,
         iconSize: 64,
         title: 'Accident Reported',
         description: 'Go to emergency details',
       },
       evacuation: {
-        icon: hazardIcon,
+        icon: HazardIcon,
         iconSize: 64,
         title: 'Hazard Reported',
         description: 'Go to emergency details',
       },
       sos: {
-        icon: sosIcon,
+        icon: SosIcon,
         iconSize: 64,
         title: 'SOS Reported',
         description: 'Go to SOS details',
