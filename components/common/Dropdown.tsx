@@ -19,7 +19,7 @@ const Dropdown = () => {
   return (
     <Box>
       <Text fontWeight="$bold">Site</Text>
-      <Select>
+      <Select isRequired>
         <SelectTrigger variant="outline" size="md">
           <SelectInput placeholder="Select option" />
           {/* <SelectIcon mr="$3">

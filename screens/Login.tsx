@@ -117,7 +117,7 @@ const LoginScreen: React.FC = () => {
 
               <Dropdown />
 
-              <FormControl size="md">
+              <FormControl size="md" isRequired>
                 <FormControlLabel>
                   <FormControlLabelText fontWeight="$bold">
                     {loginAs === "Worker" ? "Worker" : "Supervisor"} ID
@@ -139,7 +139,7 @@ const LoginScreen: React.FC = () => {
                 </Input>
               </FormControl>
 
-              <FormControl size="md">
+              <FormControl size="md" isRequired>
                 <FormControlLabel>
                   <FormControlLabelText fontWeight="$bold">
                     Password
