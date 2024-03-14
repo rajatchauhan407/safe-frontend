@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
 
   /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertType("sos");
+    setCurrentAlertType("accident");
   }, []);
 
   return (
