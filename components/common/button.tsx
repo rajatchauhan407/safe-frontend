@@ -9,6 +9,7 @@ interface CommonButtonProps extends TouchableOpacityProps {
   isDisabled?: boolean;
   isCheckIn?: any;
   showIcon?: boolean;
+  buttonTextSize?: number;
 }
 
 const CommonButton: React.FC<CommonButtonProps> = ({
@@ -17,6 +18,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   isDisabled = false,
   children,
   showIcon = false,
+  buttonTextSize = 18,
   ...props
 }) => {
   const buttonStyles = {
@@ -43,29 +45,34 @@ const CommonButton: React.FC<CommonButtonProps> = ({
 
   const textStyles: Record<string, TextStyle | ViewStyle> = {
     fill: {
+      fontFamily: 'NunitoSans_600SemiBold',
       color: '#1E1E1E',
-      fontSize: 18,
+      fontSize: buttonTextSize,
       fontWeight: 'bold',
     },
     outline: {
+      fontFamily: 'NunitoSans_600SemiBold',
       color: action === 'primary' ? '#007BFF' : '#6C757D',
-      fontSize: 18,
+      fontSize: buttonTextSize,
       fontWeight: 'bold',
     },
     rounded: {
+      fontFamily: 'NunitoSans_700Bold',
       color: action === 'primary' ? '#1E1E1E' : '#6C757D',
-      fontSize: 18,
+      fontSize: buttonTextSize,
       fontWeight: 'bold',
     },
     text: {
+      fontFamily: 'NunitoSans_600SemiBold',
       color: action === 'primary' ? '#007BFF' : '#6C757D',
-      fontSize: 18,
+      fontSize: buttonTextSize,
       fontWeight: 'bold',
     },
     underline: {
+      fontFamily: 'NunitoSans_600SemiBold',
       color: action === 'primary' ? '#007BFF' : '#6C757D',
       textDecorationLine: 'underline',
-      fontSize: 18,
+      fontSize: buttonTextSize,
       fontWeight: 'bold',
     },
   };
@@ -83,7 +90,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   return (
     <Button height={52} action={action} isDisabled={isDisabled} {...props} style={getButtonStyle()}>
       {showIcon && variant !== 'text' && <ButtonIcon as={AddIcon} />}
-      <Typography size="2xl" style={textStyles[variant as keyof typeof textStyles]}>{children}</Typography>
+      <Typography size={buttonTextSize} style={textStyles[variant as keyof typeof textStyles]}>{children}</Typography>
     </Button>
   );
 };
