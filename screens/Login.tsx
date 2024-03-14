@@ -37,24 +37,40 @@ const LoginScreen: React.FC = () => {
   const authState = useSelector((state:RootState)=>state.auth);
   const dispatch = useDispatch<AppDispatch>();
   
-  console.log(authState);
-  const handleLogin = () => {
+  // console.log(authState);
+  const handleLogin = async () => {
     let userData = {
-      userId:workerID,
+      userId:loginAs === "Worker" ? workerID : supervisorID,
       password:password
     }
-    dispatch(login(userData))
-    if (loginAs === "Supervisor") {
-      navigation.navigate("Main", {
-        screen: "Supervisor",
-        params: { screen: "Dashboard" },
-      });
-    } else if (loginAs === "Worker") {
-      navigation.navigate("Main", {
-        screen: "Worker",
-        params: { screen: "Dashboard" },
-      });
+    // console.log(userData)
+    try{
+      const actionResult =  await dispatch(login(userData))
+      const {payload} = actionResult;
+       console.log(actionResult);
+       console.log(payload);
+       if(actionResult.type === "auth/login/fulfilled"){
+         if (loginAs === "Supervisor") {
+           navigation.navigate("Main", {
+             screen: "Supervisor",
+             params: { screen: "Dashboard" },
+           });
+         } else if (loginAs === "Worker") {
+           navigation.navigate("Main", {
+             screen: "Worker",
+             params: { screen: "Dashboard" },
+           });
+         }
+       }else {
+         // Handle login failure
+         console.error("Login failed:", payload);
+         // Show an error message to the user, if desired
+       }
     }
+  catch(error){
+    console.error("An error occurred during login:", error);
+    }
+   
   };
 // ================== Redux ==================
   const handleRedux = () => {
