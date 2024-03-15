@@ -22,7 +22,6 @@ const Dashboard: React.FC = () => {
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
-  const [fadeAnim] = useState(new Animated.Value(0));
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -38,23 +37,6 @@ const Dashboard: React.FC = () => {
 
     fetchData();
   }, []);
-
-
-  const fadeInTooltip = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const fadeOutTooltip = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
 
   const getLocation = async (): Promise<Location.LocationObject | null> => {
     try {
@@ -76,24 +58,24 @@ const Dashboard: React.FC = () => {
           console.log('Received location:', location);
 
           //Actual Location of the device
-          const checkInInfo = {
-            siteId: "65e220e17fdb2514ce5b4a08",
-            workerId: "65f25eaec3231aa6adaaec6f",
-            location: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude
-            }
-          };
-
-          //To simulate check-in successful during demo
           // const checkInInfo = {
           //   siteId: "65e220e17fdb2514ce5b4a08",
           //   workerId: "65f25eaec3231aa6adaaec6f",
           //   location: {
-          //     latitude: 49.16196980896502,
-          //     longitude: -123.14712911446713
+          //     latitude: location.coords.latitude,
+          //     longitude: location.coords.longitude
           //   }
           // };
+
+          //To simulate check-in successful during demo
+          const checkInInfo = {
+            siteId: "65e220e17fdb2514ce5b4a08",
+            workerId: "65f25eaec3231aa6adaaec6f",
+            location: {
+              latitude: 49.16196980896502,
+              longitude: -123.14712911446713
+            }
+          };
 
           try {
             const res = await fetch(`${BACKEND_BASE_URL}/checkin`, {
@@ -174,14 +156,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!isInSiteZone) {
-      fadeInTooltip();
-    } else {
-      fadeOutTooltip();
-    }
-  }, [isInSiteZone]);
-
   const getStatusText = () => {
     return isCheckedIn ? `Checked-in at ${checkInTime}` : "Off-site";
   };
@@ -201,7 +175,7 @@ const Dashboard: React.FC = () => {
   const GreetingSection = () => (
   <Text>
     <Typography size="md">{`Hi, ${userName}\n`}</Typography>
-    <Typography size="2xl">Let's start building</Typography>
+    <Typography size="2xl" bold>Let's start building</Typography>
   </Text>
   );
 
@@ -220,14 +194,47 @@ const Dashboard: React.FC = () => {
     )
   );
 
-  
-// const TooltipSOS = () => (
-//   isCheckedIn && (
-//   <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
-//     <Typography>Hold Alert button for 3 seconds to activate an SOS for help</Typography>
-//   </Box>
-//   )
-// );
+const TooltipSOS = () => {
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000, // Adjust duration as needed
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => fadeOut(), 5000);
+    });
+  };
+
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 1000, 
+      useNativeDriver: true,
+    }).start();
+  };
+
+  useEffect(() => {
+    if (isCheckedIn) {
+      fadeIn();
+    } else {
+      fadeOut();
+    }
+  }, [isCheckedIn]);
+
+  return (
+      <Animated.View
+        style={{
+          ...styles.tooltip,
+          opacity: fadeAnim,
+        }}>
+        <Typography textAlign={'center'} bold>
+          Hold SOS button for 3 seconds to activate an SOS for help
+        </Typography>
+      </Animated.View>
+    );
+  };
 
   return (
   <>
@@ -235,7 +242,7 @@ const Dashboard: React.FC = () => {
       <ScreenLayout>
         <VStack space="sm" reversed={false}>
           <GreetingSection />
-          <VStack space="lg" reversed={false} >
+          <VStack space="xs" reversed={false} >
             <LocationSection />
             <CommonCard
             title={
@@ -249,27 +256,25 @@ const Dashboard: React.FC = () => {
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
           </Box>
             <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
-          {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */}
-          {/* <TooltipSOS /> */}
+          {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */} 
           </VStack>
         </VStack>
-      </ScreenLayout>
+        <TooltipSOS /> 
+      </ScreenLayout> 
   </>
   );
 };
 
 const styles = StyleSheet.create({
 tooltip: {
-backgroundColor: 'white',
-width: '100%',
-alignItems: 'center',
-padding: 15,
-borderRadius: 15,
-position: 'absolute',
-bottom: 0,
-left: 0,
-right: 0,
-zIndex: 2,
+  backgroundColor: 'white',
+  padding: 15,
+  borderRadius: 15,
+  position: 'absolute',
+  bottom: 10,
+  alignSelf: 'center',
+  width: '80%',
+  zIndex: 2,
 shadowColor: '#000',
 shadowOffset: {
 width: 0,

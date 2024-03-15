@@ -36,9 +36,9 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({ layout 
       <Card size="md" variant="elevated" m={0} rounded={24} bg={'$white'}
         style={isRowLayout ? styles.rowContainer : styles.columnContainer}>
         <DaysCheckIcon size={36} color={'#00AE8C'} focussed={false} />
-        <Typography size="md">Days without accident</Typography>
+        <Typography size="md" bold> Days without accident</Typography>
         <Box style={styles.daysTextContainer}>
-          <Text style={styles.daysText}>{daysWithoutAccident}</Text>
+          <Typography style={styles.daysText}>{daysWithoutAccident}</Typography>
         </Box>
       </Card>
     </VStack>
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   daysText: {
     fontSize: 44,
+    fontFamily: 'NunitoSans_700Bold',
   },
 });
 

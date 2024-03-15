@@ -21,8 +21,8 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
 
   return (
     <Modal size='lg'isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
-      <ModalBackdrop style={styles.overlay} />
-      <ModalContent bg='$white' p={10} borderRadius={28}>
+      <ModalBackdrop style={[styles.overlay, styles.overlayAdditional]} />
+      <ModalContent bg='$white' p={10} borderRadius={28} zIndex={3}>
           <ModalHeader>
             <ModalCloseButton onPress={handleClose} />
           </ModalHeader>
@@ -53,7 +53,17 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgb(0, 0, 0, 1)',
+    zIndex: 1,
+  },
+  overlayAdditional: {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
   },
   content: {
     alignItems: 'center',
