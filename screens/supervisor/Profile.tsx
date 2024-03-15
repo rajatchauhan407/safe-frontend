@@ -1,11 +1,12 @@
-// Example implementation for each screen, you can customize them further as needed
 import React from "react";
 import { View, Text } from "react-native";
+import SMSModal from "../../components/supervisor/SMSModal";
 
 const Profile: React.FC = () => {
   return (
     <View>
-      <Text>Profile Screen</Text>
+      <Text>Profile Screen Supervisor</Text>
+      <SMSModal />
     </View>
   );
 };

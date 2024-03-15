@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458988682953",
+    "project_id": "safe-bda99",
+    "storage_bucket": "safe-bda99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458988682953:android:0f89bc6ccce82bd83ad718",
+        "android_client_info": {
+          "package_name": "com.safesitealert.safe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlXA-hnJEFJt6nAaRHogeM-8aelcdFDOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

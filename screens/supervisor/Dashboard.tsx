@@ -1,13 +1,124 @@
-// Example implementation for each screen, you can customize them further as needed
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Image, StyleSheet, View } from "react-native";
+import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import LocationIcon from "../../assets/icons/location";
+import CommonDaysAccidentCard from "../../components/common/daysAccident";
+import AlertSimulationCard from "../../components/common/alertSimulation";
+import NumOfWorkers from "../../components/common/NumOfWorkers";
+import Drawer from "../../components/common/Drawer";
+import websocketService from "../../services/websocket.service";
+import ScreenLayout from "../../components/layout/screenLayout";
 
 const Dashboard: React.FC = () => {
+  const [userName, setUserName] = useState("Liam");
+  const [siteLocation, setSiteLocation] = useState("Site A");
+  const [currentAlertType, setCurrentAlertType] = useState<
+    "none" | "accident" | "evacuation" | "sos"
+  >("none");
+
+  useEffect(() => {
+    websocketService.connect();
+
+    console.log("Connected to websocket");
+    websocketService.subscribeToEvent("alert", (data) => {
+      console.log(data);
+      setCurrentAlertType(data.alertType);
+    });
+
+    return () => {
+      websocketService.disconnect();
+    };
+  });
+
+  /* Use this to change alert type */
+  useEffect(() => {
+    setCurrentAlertType("accident");
+  }, []);
+
   return (
-    <View>
-      <Text>Dashboard Screen</Text>
-    </View>
+    <Box w="$full" h="$full">
+      <ScreenLayout>
+        <ScrollView>
+          <View>
+            {/* GREETING */}
+            <Text>
+              <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
+              <Text style={styles.buildingText}>Let's start building</Text>
+            </Text>
+
+            <View style={{ height: 20 }} />
+
+            {/* LOCATION */}
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
+              <Text>{siteLocation}</Text>
+            </View>
+
+            <View style={{ height: 20 }} />
+
+            {/* WORKERS CHECKED IN */}
+            {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
+            <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
+
+            <View style={{ height: 20 }} />
+
+            {/* CARDS */}
+            <View style={styles.cardContainer}>
+              <View style={styles.column}>
+                <CommonDaysAccidentCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
+              <View style={styles.column}>
+                <AlertSimulationCard
+                  layout={"column"}
+                  daysWithoutAccident={0}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </ScreenLayout>
+
+      {/* DRAWER */}
+      <View style={styles.drawer}>
+        <Drawer alertType={currentAlertType} />
+      </View>
+    </Box>
   );
 };
 
 export default Dashboard;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  page: {
+    padding: 24,
+    flex: 1,
+  },
+  greeting: {
+    fontSize: 16,
+  },
+  buildingText: {
+    fontSize: 24,
+  },
+  cardContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  column: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  drawer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 999,
+  },
+});
