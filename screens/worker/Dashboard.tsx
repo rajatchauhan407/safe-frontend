@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
           // };
 
           try {
-            const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
+            const res = await fetch(`${BACKEND_BASE_URL}/checkin`, {
               method: "POST",
               credentials: 'include',
               body: JSON.stringify(checkInInfo),
@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
         workerId: "65f25eaec3231aa6adaaec6f",
       };
       try {
-        const res = await fetch(`${BACKEND_BASE_URL}checkout`, {
+        const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {
           method: "POST",
           credentials: 'include',
           body: JSON.stringify(checkOutInfo),

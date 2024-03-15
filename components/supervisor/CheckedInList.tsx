@@ -72,7 +72,7 @@ const CheckedInList: React.FC = () => {
         const siteId = {
           siteId: "65e220e17fdb2514ce5b4a08",
         };
-        const res = await fetch(`${BACKEND_BASE_URL}workersdata`, {
+        const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
           method: "POST",
           credentials: 'include',
           body: JSON.stringify(siteId),
