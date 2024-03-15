@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Text, Image, Animated, TouchableOpacity} from "react-native";
+import {Box, VStack, Text} from "@gluestack-ui/themed";
+import { StyleSheet, Image, Animated, TouchableOpacity } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
+import { NavigationProp } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import { BACKEND_BASE_URL } from "../../config/api";
-import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
-
+import Typography from "../../components/common/typography";
+import ScreenLayout from "../../components/layout/screenLayout";
+import LocationIcon from "../../assets/icons/location";
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
-  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+  const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [currLocation,setCurrLocation] = useState();
- 
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [isLoadingCheckIn, setIsLoadingCheckIn] = useState(false);
+
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -35,6 +39,16 @@ const Dashboard: React.FC = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (showTooltip) {
+      const tooltipTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 10000);
+
+      return () => clearTimeout(tooltipTimer);
+    }
+  }, [showTooltip]);
 
   const fadeInTooltip = () => {
     Animated.timing(fadeAnim, {
@@ -58,7 +72,7 @@ const Dashboard: React.FC = () => {
       if (status !== 'granted') {
         return null;
       }
-      const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Lowest});
+      const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
       return location;
     } catch (error) {
       return null;
@@ -67,6 +81,7 @@ const Dashboard: React.FC = () => {
 
   const handleCheckInToggle = async () => {
     if (!isCheckedIn) {
+      setIsLoadingCheckIn(true);
       getLocation().then(async (location) => {
         if (location) {
           console.log('Received location:', location);
@@ -128,6 +143,10 @@ const Dashboard: React.FC = () => {
             setCheckInTime("");
             setIsCheckedIn(false);
           }
+
+          // Show tooltip about the SOS button
+          setShowTooltip(true);
+
         } else {
           setIsInSiteZone(false);
           setCheckInErrorMessage("Please grant permission to access your location.")
@@ -187,109 +206,112 @@ const Dashboard: React.FC = () => {
   };
 
   const CommonButtonContent = () => (
-    <View style={{ width: '100%' }}>
+    <Box style={{ width: '100%' }}>
       <CommonButton variant="fill" isCheckIn={isCheckedIn} onPress={handleCheckInToggle} buttonTextSize={24} >
         {isCheckedIn ? 'Check Out' : 'Check In'}
       </CommonButton>
-    </View>
+    </Box>
   );
 
   const handleIncidentPress = () => {
     navigation.navigate('AlertDetails');
   };
 
+  const GreetingSection = () => (
+    <Text>
+      <Typography size="md">{`Hi, ${userName}\n`}</Typography>
+      <Typography size="2xl">Let's start building</Typography>
+    </Text>  
+  );
+
+  const LocationSection = () => (
+    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <LocationIcon size={13} color={''} focussed={false} />
+      <Typography size="md" pl={5}>{siteLocation}</Typography>
+    </Box>
+  );
+
+  const TooltipSection = () => (
+    !isInSiteZone && (
+      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+        <Text style={styles.tooltipText}>{checkInErrorMessage}</Text>
+      </Box>
+    )
+  );
+
+  const OverlaySection = () => (
+    !isInSiteZone && (
+      <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
+      </TouchableOpacity>
+    )
+  );
+
+  const TooltipSOS = () => (
+    showTooltip && (
+      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+        <Text style={styles.tooltipText}>Hold Alert button for 3 seconds to activate an SOS for help</Text>
+      </Box>
+    )
+  );
+
   return (
-    <View style={styles.page}>
-      {/* GREETING */}
-      <Text>
-        <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-        <Text style={styles.buildingText}>Let's start building</Text>
-      </Text>
-      <View style={{ height: 20 }} />
-
-      {/* LOCATION */}
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-        <Text>{siteLocation}</Text>
-      </View>
-
-      <View style={{ height: 20 }} />
-
-      {/* TOOLTIP */}
-      {!isInSiteZone && (
-        <Animated.View style={{ ...styles.tooltip, opacity: fadeAnim }}>
-          <Text style={styles.tooltipText}>{checkInErrorMessage}</Text>
-        </Animated.View>
-      )}
-
-      {/* OVERLAY */}
-      {!isInSiteZone && (
-        <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
-        </TouchableOpacity>
-      )}
-
-      {/* CARDS */}
-      <View>
-        <CommonCard title={<Text><Text style={{ fontWeight: 'normal' }}>Status:</Text> {getStatusText()}</Text>}content={<CommonButtonContent />}/>
-      </View>
-      <View style={{ height: 20 }} />
-      <View>
-        <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
-      </View>
-      <View style={{ height: 20 }} />
-      {/* ALERT BUTTON */}
-      <View>
-      <AlertButton user="supervisor" emergency="accident" onPress={handleIncidentPress} />
-      </View>
-
-    </View>
+    <ScreenLayout>
+    <VStack space="sm" reversed={false}>
+      <GreetingSection />
+        <VStack space="lg" reversed={false} >
+            <LocationSection />
+            <TooltipSection />
+            <OverlaySection />
+            <CommonCard
+              title={
+                <Text>
+                <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
+              </Text>
+              }
+              content={<CommonButtonContent />}
+            />
+            <Box mt={16} mb={16}>
+            <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
+            </Box>
+            {/* <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} /> */}
+            <AlertButton user="supervisor" emergency="accident" onPress={handleIncidentPress} />
+            <TooltipSOS />
+        </VStack>
+    </VStack>
+    </ScreenLayout>
   );
 };
-
+  
 const styles = StyleSheet.create({
-  page: {
-    padding: 24,
-  },
-  greeting: {
-    fontSize: 16,
-  },
-  buildingText: {
-    fontSize: 24,
-  },
-  tooltip: {
-    backgroundColor: 'white',
-    width: '100%',
-    alignItems: 'center',
-    padding: 15,
-    borderRadius: 15,
-    position: 'absolute',
-    top: 80, 
-    left: 25,
-    zIndex: 2,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    tooltip: {
+      backgroundColor: 'white',
+      width: '100%',
+      alignItems: 'center',
+      padding: 15,
+      borderRadius: 15,
+      position: 'absolute',
+      top: 80, 
+      left: 25,
+      zIndex: 2,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  tooltipText: {
-    color: 'red',
-    textAlign: 'center',
-  },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    height: '150%',
-    zIndex: 1,
-  },
-  loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  },
-});
+    tooltipText: {
+      color: 'red',
+      textAlign: 'center',
+    },
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      height: '150%',
+      zIndex: 1,
+    },
+  });
+  
 
 export default Dashboard;
