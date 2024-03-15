@@ -26,7 +26,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = () => {
     const fetchWorkers = async () => {
       try {
         const siteId = {
-          siteId: "65e220e17fdb2514ce5b4a08",
+          siteId: "65f4145c0c71a29f15263723",
         };
         const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
           method: "POST",
