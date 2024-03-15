@@ -7,7 +7,7 @@ interface CommonButtonProps extends TouchableOpacityProps {
   variant?: 'fill' | 'outline' | 'rounded' | 'text' | 'underline';
   action?: 'primary' | 'secondary';
   isDisabled?: boolean;
-  isCheckIn?: any;
+  isCheckIn?: boolean;
   showIcon?: boolean;
   buttonTextSize?: number;
 }
@@ -16,6 +16,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   variant = 'fill',
   action = 'primary',
   isDisabled = false,
+  isCheckIn = false,
   children,
   showIcon = false,
   buttonTextSize = 18,
@@ -23,8 +24,11 @@ const CommonButton: React.FC<CommonButtonProps> = ({
 }) => {
   const buttonStyles = {
     fill: {
-      backgroundColor: action === 'primary' ? '#FD9201' : '#6C757D',
+      backgroundColor: isCheckIn ? '#FFFFFF' : (action === 'primary' ? '#FD9201' : '#6C757D'),
       borderRadius: 16,
+      borderWidth: 2,
+      borderColor: isCheckIn ? '#00AE8C' : (action === 'primary' ? '#FD9201' : '#6C757D'),
+
     },
     outline: {
       borderColor: action === 'primary' ? '#007BFF' : '#6C757D',
