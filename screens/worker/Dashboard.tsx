@@ -85,27 +85,27 @@ const Dashboard: React.FC = () => {
           console.log('Received location:', location);
 
           //Actual Location of the device
-          const checkInInfo = {
-            siteId: "65e021fd0ff9467bbc9535f5",
-            workerId: "65dbc52bbebd9d13c94f217e",
-            location: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude
-            }
-          };
-
-          //To simulate check-in successful during demo
           // const checkInInfo = {
-          //   siteId: "65e021fd0ff9467bbc9535f5",
-          //   workerId: "65dbc52bbebd9d13c94f217e",
+          //   siteId: "65e220e17fdb2514ce5b4a08",
+          //   workerId: "65f25eaec3231aa6adaaec6f",
           //   location: {
-          //     latitude: 49.16196980896502,
-          //     longitude: -123.14712911446713
+          //     latitude: location.coords.latitude,
+          //     longitude: location.coords.longitude
           //   }
           // };
 
+          //To simulate check-in successful during demo
+          const checkInInfo = {
+            siteId: "65e220e17fdb2514ce5b4a08",
+            workerId: "65f25eaec3231aa6adaaec6f",
+            location: {
+              latitude: 49.16196980896502,
+              longitude: -123.14712911446713
+            }
+          };
+
           try {
-            const res = await fetch(`${BACKEND_BASE_URL}checkin`, {
+            const res = await fetch(`${BACKEND_BASE_URL}/checkin`, {
               method: "POST",
               credentials: 'include',
               body: JSON.stringify(checkInInfo),
@@ -159,11 +159,11 @@ const Dashboard: React.FC = () => {
       // Check-out process
       setIsCheckedIn(false);
       const checkOutInfo = {
-        siteId: "65e021fd0ff9467bbc9535f5",
-        workerId: "65dbc52bbebd9d13c94f217e"
+        siteId: "65e220e17fdb2514ce5b4a08",
+        workerId: "65f25eaec3231aa6adaaec6f",
       };
       try {
-        const res = await fetch(`${BACKEND_BASE_URL}checkout`, {
+        const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {
           method: "POST",
           credentials: 'include',
           body: JSON.stringify(checkOutInfo),

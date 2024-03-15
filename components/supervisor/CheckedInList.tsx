@@ -12,6 +12,7 @@ import {
   AvatarImage,
 } from "@gluestack-ui/themed";
 import { MaterialIcons } from "@expo/vector-icons";
+import { BACKEND_BASE_URL } from "../../config/api";
 
 interface Worker {
   id: number;
@@ -22,6 +23,8 @@ interface Worker {
 }
 
 const CheckedInList: React.FC = () => {
+
+
   const [workers, setWorkers] = useState<Worker[]>([
     {
       id: 1,
@@ -59,6 +62,7 @@ const CheckedInList: React.FC = () => {
       checkedIn: false,
     },
   ]);
+
   const [sortAscending, setSortAscending] = useState<boolean>(true);
   const [sortCheckedFirst, setSortCheckedFirst] = useState<boolean>(true);
 
