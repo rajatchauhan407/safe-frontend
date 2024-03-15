@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
+import { Keyboard } from "react-native";
 import {
   Box,
   Button,
@@ -12,14 +13,18 @@ import {
   FormControlLabel,
   FormControlLabelText,
   HStack,
+  Image,
   Input,
   InputField,
+  InputSlot,
   Text,
   VStack,
 } from "@gluestack-ui/themed";
+import Typography from "../components/common/typography";
 import Dropdown from "../components/common/Dropdown";
 import ScreenLayout from "../components/layout/screenLayout";
 import CommonButton from "../components/common/button";
+import { Ionicons } from "@expo/vector-icons";
 
 /*** imports to use redux ***/
 import { useDispatch, useSelector } from "react-redux";
@@ -27,14 +32,21 @@ import { changeAuth } from "../lib/slices/authSlice";
 import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
 import Push from "../push";
+import { dismissNotificationAsync } from "expo-notifications";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loginAs, setLoginAs] = useState<string>("");
   const [workerID, setWorkerID] = useState<string>("");
   const [supervisorID, setSupervisorID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePswState = () => {
+    Keyboard.dismiss();
+    setShowPassword((showState) => !showState);
+  };
 
   const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
@@ -87,28 +99,42 @@ const LoginScreen: React.FC = () => {
         <Center>
           <Box h="$4/5" w="$full">
             <VStack h="$4/5" space="lg">
-              {/* SAFE LOGO GOES HERE */}
+              <Box mx="$10" my="$5">
+                <Image
+                  w="$full"
+                  source={{
+                    uri: "https://techandtribe-eco.s3.us-east-2.amazonaws.com/safe-logo.png",
+                  }}
+                  alt="SAFE logo"
+                />
+              </Box>
               <Box>
                 <Text mb="$1">Login as</Text>
                 <HStack space="md">
                   <Box flex={1}>
                     <CommonButton
-                      variant="rounded"
-                      showIcon={true}
-                      onPress={() => setLoginAs("Supervisor")}
+                      variant={loginAs === "Worker" ? "outline" : "rounded"}
+                      isLogIn={true}
+                      onPress={() => setLoginAs("Worker")}
                     >
-                      <ButtonText fontSize="$lg" fontWeight="$bold">
-                        Supervisor
+                      <ButtonText>
+                        <Typography buttonTextSize={24} bold>
+                          Worker
+                        </Typography>
                       </ButtonText>
                     </CommonButton>
                   </Box>
                   <Box flex={1}>
                     <CommonButton
-                      variant="rounded"
-                      onPress={() => setLoginAs("Worker")}
+                      variant={loginAs === "Supervisor" ? "outline" : "rounded"}
+                      isLogIn={true}
+                      /* showIcon={true} */
+                      onPress={() => setLoginAs("Supervisor")}
                     >
-                      <ButtonText fontSize="$lg" fontWeight="$bold">
-                        Worker
+                      <ButtonText>
+                        <Typography buttonTextSize={24} bold>
+                          Supervisor
+                        </Typography>
                       </ButtonText>
                     </CommonButton>
                   </Box>
@@ -120,7 +146,9 @@ const LoginScreen: React.FC = () => {
               <FormControl size="md" isRequired>
                 <FormControlLabel>
                   <FormControlLabelText fontWeight="$bold">
-                    {loginAs === "Worker" ? "Worker" : "Supervisor"} ID
+                    <Typography color="$neutral" bold>
+                      {loginAs === "Worker" ? "Worker" : "Supervisor"} ID
+                    </Typography>
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Input>
@@ -142,24 +170,35 @@ const LoginScreen: React.FC = () => {
               <FormControl size="md" isRequired>
                 <FormControlLabel>
                   <FormControlLabelText fontWeight="$bold">
-                    Password
+                    <Typography color="$neutral" bold>
+                      Password
+                    </Typography>
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Input>
                   <InputField
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter Password"
                     onChangeText={setPassword}
                     value={password}
-                    secureTextEntry
+                    secureTextEntry={!showPassword}
                   />
+                  <InputSlot pr="$3" onPress={handlePswState}>
+                    <Ionicons
+                      name={showPassword ? "eye" : "eye-off"}
+                      size={24}
+                      color="black"
+                    />
+                  </InputSlot>
                 </Input>
               </FormControl>
 
               <Box mx="$5" mt="$5">
                 <CommonButton variant="rounded" onPress={handleLogin}>
-                  <ButtonText fontSize="$md" fontWeight="$bold">
-                    Login
+                  <ButtonText>
+                    <Typography color="$neutral" bold>
+                      Login
+                    </Typography>
                   </ButtonText>
                 </CommonButton>
               </Box>
