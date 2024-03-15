@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
 import {Box, VStack, Text} from "@gluestack-ui/themed";
 import { StyleSheet, Image, Animated, TouchableOpacity } from "react-native";
+import AlertMessage from "../../components/common/alertMessage";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -229,37 +230,30 @@ const Dashboard: React.FC = () => {
     </Box>
   );
 
-  const TooltipSection = () => (
+  const CheckInAlertMessage = () => (
     !isInSiteZone && (
-      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
-        <Text style={styles.tooltipText}>{checkInErrorMessage}</Text>
+      <Box style={{ opacity: fadeAnim }}>
+        <AlertMessage backgroundColor="$alert" textColor="$white" iconColor="$white" text={checkInErrorMessage} />
       </Box>
     )
   );
 
-  const OverlaySection = () => (
-    !isInSiteZone && (
-      <TouchableOpacity style={[styles.overlay, StyleSheet.absoluteFillObject]} activeOpacity={1} onPress={handleOverlayPress}>
-      </TouchableOpacity>
-    )
-  );
-
   const TooltipSOS = () => (
-    showTooltip && (
+    isCheckedIn && (
       <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
-        <Text style={styles.tooltipText}>Hold Alert button for 3 seconds to activate an SOS for help</Text>
+        <Typography>Hold Alert button for 3 seconds to activate an SOS for help</Typography>
       </Box>
     )
   );
 
   return (
+  <>   
+  <CheckInAlertMessage />
     <ScreenLayout>
     <VStack space="sm" reversed={false}>
       <GreetingSection />
         <VStack space="lg" reversed={false} >
             <LocationSection />
-            <TooltipSection />
-            <OverlaySection />
             <CommonCard
               title={
                 <Text>
@@ -271,12 +265,13 @@ const Dashboard: React.FC = () => {
             <Box mt={16} mb={16}>
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
-            {/* <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} /> */}
-            <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} />
+            <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
+            {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */}
             <TooltipSOS />
         </VStack>
-    </VStack>
+      </VStack>
     </ScreenLayout>
+  </>
   );
 };
   
@@ -288,8 +283,9 @@ const styles = StyleSheet.create({
       padding: 15,
       borderRadius: 15,
       position: 'absolute',
-      top: 80, 
-      left: 25,
+      bottom: 0,
+      left: 0,
+      right: 0,
       zIndex: 2,
       shadowColor: '#000',
       shadowOffset: {
@@ -299,15 +295,6 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.2,
       shadowRadius: 3,
       elevation: 3,
-    },
-    tooltipText: {
-      color: 'red',
-      textAlign: 'center',
-    },
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-      height: '150%',
-      zIndex: 1,
     },
   });
   
