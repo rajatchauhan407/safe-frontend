@@ -7,6 +7,7 @@ import { Keyboard } from "react-native";
 import {
   Box,
   Button,
+  ButtonIcon,
   ButtonText,
   Center,
   FormControl,
@@ -33,6 +34,8 @@ import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
 import Push from "../push";
 import { dismissNotificationAsync } from "expo-notifications";
+import SupervisorIcon from "../assets/icons/supervisor";
+import WorkerIcon from "../assets/icons/worker";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
@@ -117,11 +120,22 @@ const LoginScreen: React.FC = () => {
                       isLogIn={true}
                       onPress={() => setLoginAs("Worker")}
                     >
-                      <ButtonText>
-                        <Typography buttonTextSize={24} bold>
-                          Worker
-                        </Typography>
-                      </ButtonText>
+                      <HStack space="sm">
+                        <Box>
+                          <WorkerIcon
+                            size={22}
+                            color="$neutral"
+                            focussed={false}
+                          />
+                        </Box>
+                        <Box>
+                          <ButtonText>
+                            <Typography buttonTextSize={24} bold>
+                              Worker
+                            </Typography>
+                          </ButtonText>
+                        </Box>
+                      </HStack>
                     </CommonButton>
                   </Box>
                   <Box flex={1}>
@@ -131,11 +145,22 @@ const LoginScreen: React.FC = () => {
                       /* showIcon={true} */
                       onPress={() => setLoginAs("Supervisor")}
                     >
-                      <ButtonText>
-                        <Typography buttonTextSize={24} bold>
-                          Supervisor
-                        </Typography>
-                      </ButtonText>
+                      <HStack space="sm">
+                        <Box>
+                          <SupervisorIcon
+                            size={20}
+                            color="$neutral"
+                            focussed={false}
+                          />
+                        </Box>
+                        <Box>
+                          <ButtonText>
+                            <Typography buttonTextSize={24} bold>
+                              Supervisor
+                            </Typography>
+                          </ButtonText>
+                        </Box>
+                      </HStack>
                     </CommonButton>
                   </Box>
                 </HStack>
