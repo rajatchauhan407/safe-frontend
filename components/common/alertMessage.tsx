@@ -19,7 +19,7 @@ const AlertMessage: React.FC<AlertMessageProps> = ({ backgroundColor, textColor 
 
   return (
     showAlert && (
-      <Alert borderRadius={0} action="info" variant="solid" backgroundColor={backgroundColor}>
+      <Alert pl={24} pr={24} borderRadius={0} action="info" variant="solid" backgroundColor={backgroundColor}>
         <AlertText><Typography color={textColor}>{text}</Typography></AlertText>
         <TouchableOpacity onPress={handleClose}>
           <Icon as={CloseIcon} m="$2" w="$4" h="$4" color={iconColor} />

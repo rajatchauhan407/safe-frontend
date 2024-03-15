@@ -184,7 +184,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                 : textStyles[emergency]
                 ? textStyles[emergency].color
                 : textStyles.default.color,
-              display: description ? "block" : "none",
+              //display: description ? "block" : "none",
             }}
           >
             {description}

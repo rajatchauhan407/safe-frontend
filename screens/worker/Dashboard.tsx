@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
-import {Box, VStack, Text} from "@gluestack-ui/themed";
-import { StyleSheet, Image, Animated, TouchableOpacity } from "react-native";
-import AlertMessage from "../../components/common/alertMessage";
+import { StyleSheet, View, Animated, TouchableOpacity } from "react-native";
 import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
-import { NavigationProp } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import { BACKEND_BASE_URL } from "../../config/api";
+import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
+import {Box, VStack, Text} from "@gluestack-ui/themed";
+import AlertMessage from "../../components/common/alertMessage";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
+
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [userName, setUserName] = useState("George");
   const [siteLocation, setSiteLocation] = useState("Site A");
-  const [checkInTime, setCheckInTime] = useState(""); 
+  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [showTooltip, setShowTooltip] = useState(false);
-
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -40,15 +39,6 @@ const Dashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (showTooltip) {
-      const tooltipTimer = setTimeout(() => {
-        setShowTooltip(false);
-      }, 10000);
-
-      return () => clearTimeout(tooltipTimer);
-    }
-  }, [showTooltip]);
 
   const fadeInTooltip = () => {
     Animated.timing(fadeAnim, {
@@ -86,24 +76,24 @@ const Dashboard: React.FC = () => {
           console.log('Received location:', location);
 
           //Actual Location of the device
-          // const checkInInfo = {
-          //   siteId: "65e220e17fdb2514ce5b4a08",
-          //   workerId: "65f25eaec3231aa6adaaec6f",
-          //   location: {
-          //     latitude: location.coords.latitude,
-          //     longitude: location.coords.longitude
-          //   }
-          // };
-
-          //To simulate check-in successful during demo
           const checkInInfo = {
             siteId: "65e220e17fdb2514ce5b4a08",
             workerId: "65f25eaec3231aa6adaaec6f",
             location: {
-              latitude: 49.16196980896502,
-              longitude: -123.14712911446713
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude
             }
           };
+
+          //To simulate check-in successful during demo
+          // const checkInInfo = {
+          //   siteId: "65e220e17fdb2514ce5b4a08",
+          //   workerId: "65f25eaec3231aa6adaaec6f",
+          //   location: {
+          //     latitude: 49.16196980896502,
+          //     longitude: -123.14712911446713
+          //   }
+          // };
 
           try {
             const res = await fetch(`${BACKEND_BASE_URL}/checkin`, {
@@ -142,9 +132,6 @@ const Dashboard: React.FC = () => {
             setCheckInTime("");
             setIsCheckedIn(false);
           }
-
-          // Show tooltip about the SOS button
-          setShowTooltip(true);
 
         } else {
           setIsInSiteZone(false);
@@ -195,11 +182,6 @@ const Dashboard: React.FC = () => {
     }
   }, [isInSiteZone]);
 
-  const handleOverlayPress = () => {
-    fadeOutTooltip();
-    setIsInSiteZone(true);
-  };
-
   const getStatusText = () => {
     return isCheckedIn ? `Checked-in at ${checkInTime}` : "Off-site";
   };
@@ -210,93 +192,93 @@ const Dashboard: React.FC = () => {
         {isCheckedIn ? 'Check Out' : 'Check In'}
       </CommonButton>
     </Box>
-  );
+);
 
   const handleIncidentPress = () => {
     navigation.navigate('AlertDetails');
   };
 
   const GreetingSection = () => (
-    <Text>
-      <Typography size="md">{`Hi, ${userName}\n`}</Typography>
-      <Typography size="2xl">Let's start building</Typography>
-    </Text>  
+  <Text>
+    <Typography size="md">{`Hi, ${userName}\n`}</Typography>
+    <Typography size="2xl">Let's start building</Typography>
+  </Text>
   );
 
   const LocationSection = () => (
-    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <LocationIcon size={13} color={''} focussed={false} />
-      <Typography size="md" pl={5}>{siteLocation}</Typography>
-    </Box>
+  <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <LocationIcon size={13} color={''} focussed={false} />
+    <Typography size="md" pl={5}>{siteLocation}</Typography>
+  </Box>
   );
 
   const CheckInAlertMessage = () => (
     !isInSiteZone && (
-      <Box style={{ opacity: fadeAnim }}>
-        <AlertMessage backgroundColor="$alert" textColor="$white" iconColor="$white" text={checkInErrorMessage} />
+      <Box>
+        <AlertMessage backgroundColor="#D0080F" textColor="#ffffff" iconColor="#ffffff" text={checkInErrorMessage} />
       </Box>
     )
   );
 
-  const TooltipSOS = () => (
-    isCheckedIn && (
-      <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
-        <Typography>Hold Alert button for 3 seconds to activate an SOS for help</Typography>
-      </Box>
-    )
-  );
+  
+// const TooltipSOS = () => (
+//   isCheckedIn && (
+//   <Box style={{ ...styles.tooltip, opacity: fadeAnim }}>
+//     <Typography>Hold Alert button for 3 seconds to activate an SOS for help</Typography>
+//   </Box>
+//   )
+// );
 
   return (
-  <>   
-  <CheckInAlertMessage />
-    <ScreenLayout>
-    <VStack space="sm" reversed={false}>
-      <GreetingSection />
-        <VStack space="lg" reversed={false} >
+  <>
+    <CheckInAlertMessage />
+      <ScreenLayout>
+        <VStack space="sm" reversed={false}>
+          <GreetingSection />
+          <VStack space="lg" reversed={false} >
             <LocationSection />
             <CommonCard
-              title={
-                <Text>
-                <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
-              </Text>
-              }
-              content={<CommonButtonContent />}
+            title={
+            <Text>
+            <Typography>Status:</Typography> <Typography bold>{getStatusText()}</Typography>
+            </Text>
+            }
+            content={<CommonButtonContent />}
             />
-            <Box mt={16} mb={16}>
+          <Box mt={16} mb={16}>
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
-            </Box>
+          </Box>
             <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
-            {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */}
-            <TooltipSOS />
+          {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */}
+          {/* <TooltipSOS /> */}
+          </VStack>
         </VStack>
-      </VStack>
-    </ScreenLayout>
+      </ScreenLayout>
   </>
   );
 };
-  
+
 const styles = StyleSheet.create({
-    tooltip: {
-      backgroundColor: 'white',
-      width: '100%',
-      alignItems: 'center',
-      padding: 15,
-      borderRadius: 15,
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 2,
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-      elevation: 3,
-    },
-  });
-  
+tooltip: {
+backgroundColor: 'white',
+width: '100%',
+alignItems: 'center',
+padding: 15,
+borderRadius: 15,
+position: 'absolute',
+bottom: 0,
+left: 0,
+right: 0,
+zIndex: 2,
+shadowColor: '#000',
+shadowOffset: {
+width: 0,
+height: 2,
+},
+shadowOpacity: 0.2,
+shadowRadius: 3,
+elevation: 3,
+},
+});
 
 export default Dashboard;
