@@ -23,7 +23,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({
   const navigation = useNavigation();
 
   const handleSeeAll = () => {
-    navigation.navigate("Checked In");
+    navigation.navigate("Checked In" as never);
   };
 
   return (

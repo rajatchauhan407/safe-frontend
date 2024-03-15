@@ -28,7 +28,6 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   color = "#ffffff",
   ...props
 }) => {
-
   const buttonStyles = {
     worker: {
       report: {
@@ -133,7 +132,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
 
   const adjustedIconSize =
     typeof buttonIconSize === "number" ? `${buttonIconSize}px` : buttonIconSize;
-  
+
   return (
     <Card p={0} rounded={"$3xl"}>
       <Button
@@ -172,7 +171,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                 ? textStyles[emergency].color
                 : textStyles.default.color,
               textTransform: "uppercase",
-              fontFamily: 'NunitoSans_700Bold',
+              fontFamily: "NunitoSans_700Bold",
             }}
           >
             {title}
@@ -195,6 +194,5 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     </Card>
   );
 };
-
 
 export default AlertButton;
