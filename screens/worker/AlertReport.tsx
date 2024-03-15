@@ -12,6 +12,7 @@ import {
 import CommonButton from '../../components/common/button';
 import useFetch from '../../hooks/useFetch';
 import { BACKEND_BASE_URL } from '../../config/api';
+import ScreenLayout from '../../components/layout/screenLayout';
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
 }
@@ -194,16 +195,16 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
 
 
   return (
+  <ScreenLayout>
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -50}
     >
       <ScrollView
-        contentContainerStyle={styles.page}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.page}>
+        <View>
           {/* FIELD ONE - WHO IS REPORTING */}
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>I am reporting for*</Text>
@@ -295,14 +296,11 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
 
       </ScrollView>
     </KeyboardAvoidingView>
+  </ScreenLayout>  
   );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    flexGrow: 1,
-    padding: 16,
-  },
   fieldContainer: {
     marginBottom: 24,
   },

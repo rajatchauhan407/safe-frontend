@@ -1,10 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
+import AlertMessage from "../../components/common/alertMessage";
 
 const Profile: React.FC = () => {
   return (
     <View>
-      <Text>Profile Screen Worker</Text>
+      <AlertMessage backgroundColor="#00AE8C" text="Your incident has been reported" />
     </View>
   );
 };

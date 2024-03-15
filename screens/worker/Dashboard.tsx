@@ -272,7 +272,7 @@ const Dashboard: React.FC = () => {
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
             </Box>
             {/* <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} /> */}
-            <AlertButton user="supervisor" emergency="accident" onPress={handleIncidentPress} />
+            <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} />
             <TooltipSOS />
         </VStack>
     </VStack>
