@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
       if (status !== 'granted') {
         return null;
       }
-      const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
+      const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Lowest});
       return location;
     } catch (error) {
       return null;
@@ -59,8 +59,8 @@ const Dashboard: React.FC = () => {
 
           //Actual Location of the device
           // const checkInInfo = {
-          //   siteId: "65e220e17fdb2514ce5b4a08",
-          //   workerId: "65f25eaec3231aa6adaaec6f",
+          //   siteId: "65f4145c0c71a29f15263723",
+          //   workerId: "65f419da6035b412f72c869c",
           //   location: {
           //     latitude: location.coords.latitude,
           //     longitude: location.coords.longitude
@@ -69,8 +69,8 @@ const Dashboard: React.FC = () => {
 
           //To simulate check-in successful during demo
           const checkInInfo = {
-            siteId: "65e220e17fdb2514ce5b4a08",
-            workerId: "65f25eaec3231aa6adaaec6f",
+            siteId: "65f4145c0c71a29f15263723",
+            workerId: "65f419da6035b412f72c869c",
             location: {
               latitude: 49.16196980896502,
               longitude: -123.14712911446713
@@ -129,8 +129,8 @@ const Dashboard: React.FC = () => {
       // Check-out process
       setIsCheckedIn(false);
       const checkOutInfo = {
-        siteId: "65e220e17fdb2514ce5b4a08",
-        workerId: "65f25eaec3231aa6adaaec6f",
+        siteId: "65f4145c0c71a29f15263723",
+        workerId: "65f419da6035b412f72c869c",
       };
       try {
         const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {
