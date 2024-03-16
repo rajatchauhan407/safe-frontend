@@ -17,8 +17,8 @@ import LocationIcon from "../../assets/icons/location";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [userName, setUserName] = useState("George");
-  const [siteLocation, setSiteLocation] = useState("Site A");
+  const [userName, setUserName] = useState("Prinkle Gagarin");
+  const [siteLocation, setSiteLocation] = useState("Langara College 49th Ave");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
 
   const GreetingSection = () => (
   <Text>
-    <Typography size="md">{`Hi, ${userName}\n`}</Typography>
+    <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
     <Typography size="2xl" bold>Let's start building</Typography>
   </Text>
   );
