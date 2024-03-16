@@ -24,7 +24,7 @@ const Dropdown = () => {
           <SelectInput placeholder="Select option" />
           <Box>
             <Typography>
-              <Feather name="chevron-down" size={24} color="$neutral" />
+              <Feather name="chevron-down" size={24} color="#1E1E1E" />
             </Typography>
           </Box>
         </SelectTrigger>
@@ -34,10 +34,27 @@ const Dropdown = () => {
             <SelectDragIndicatorWrapper>
               <SelectDragIndicator />
             </SelectDragIndicatorWrapper>
-            <SelectItem label="Banmode" value="banmode" />
-            <SelectItem label="Marcopolo" value="marcopolo" />
-            <SelectItem label="49 Avenue" value="49 avenue" />
-            <SelectItem label="Riverside" value="riverside" isDisabled={true} />
+            <SelectItem
+              label="Cascade Heights Development"
+              value="CascadeHeightsDevelopment"
+            />
+            <SelectItem
+              label="Pacific Harbor Construction Zone"
+              value="PacificHarborConstructionZone"
+            />
+            <SelectItem
+              label="Mountview Estates Project Area"
+              value="MountviewEstatesProjectArea"
+            />
+            <SelectItem
+              label="Emerald City Building Site"
+              value="EmeraldCityBuildingSite"
+              isDisabled={true}
+            />
+            <SelectItem
+              label="Langara College 49th Ave"
+              value="LangaraCollege49thAve"
+            />
           </SelectContent>
         </SelectPortal>
       </Select>
