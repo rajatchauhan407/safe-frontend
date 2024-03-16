@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
 
   const GreetingSection = () => (
   <Text>
-    <Typography size="md">{`Hi, ${userName}\n`}</Typography>
+    <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
     <Typography size="2xl" bold>Let's start building</Typography>
   </Text>
   );
