@@ -14,10 +14,10 @@ import { BACKEND_BASE_URL } from '../../config/api'
 // =================================================================
 // HardCoded Emergency Contacts
 const emergencyContacts = [
-  { id: '1', name: '911', phoneNumber: '+16047206967' },
+  { id: '1', name: '911', phoneNumber: '+16726736640' },
   { id: '2', name: 'BC Workers', phoneNumber: '+16729998362' },
   { id: '3', name: 'FireFighter', phoneNumber: '+16043633286' },
-  { id: '4', name: 'Manager', phoneNumber: '+16043633286' },
+  { id: '4', name: 'Manager', phoneNumber: '+16047206967' },
 ];
 const CustomCheckbox = ({ checked }: { checked: boolean }) => (
   <View style={[styles.checkbox, checked && { backgroundColor: "#FD9201" }]} />
