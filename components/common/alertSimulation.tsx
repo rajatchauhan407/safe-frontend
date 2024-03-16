@@ -25,7 +25,7 @@ const AlertSimulationCard: React.FC<AlertSimulationCardProps> = ({
         style={isRowLayout ? styles.rowContainer : styles.columnContainer}
       >
         <SimulatorIcon size={36} color="" focussed={false} />
-        <Box w="$full" mb="$1/4">
+        <Box w="$full" mb="$2">
           <Typography size="md" bold>
             Alert
           </Typography>
