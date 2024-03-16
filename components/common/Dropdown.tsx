@@ -10,21 +10,23 @@ import {
   SelectDragIndicatorWrapper,
   SelectItem,
   SelectIcon,
-  Icon,
   Box,
-  Text,
 } from "@gluestack-ui/themed";
+import Typography from "./typography";
+import { Feather } from "@expo/vector-icons";
 
 const Dropdown = () => {
   return (
     <Box>
-      <Text fontWeight="$bold">Site</Text>
+      <Typography bold>Site</Typography>
       <Select isRequired>
         <SelectTrigger variant="outline" size="md">
           <SelectInput placeholder="Select option" />
-          {/* <SelectIcon mr="$3">
-          <Icon as={ChevronDownIcon} />
-        </SelectIcon> */}
+          <Box>
+            <Typography>
+              <Feather name="chevron-down" size={24} color="$neutral" />
+            </Typography>
+          </Box>
         </SelectTrigger>
         <SelectPortal>
           <SelectBackdrop />

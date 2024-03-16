@@ -5,6 +5,7 @@ import { RootStackParamList } from "../../types/navigationTypes";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertButton from "./alertButton";
+import Typography from "./typography";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
@@ -49,11 +50,11 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
       >
         <View style={styles.contentWrapper}>
           <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
-          <Text style={styles.drawerText}>
+          <Typography style={styles.drawerText}>
             {alertType === "none"
               ? "Great! There's no alert to report"
               : "You have received 01 Alert."}
-          </Text>
+          </Typography>
         </View>
       </TouchableOpacity>
       {isOpen && (

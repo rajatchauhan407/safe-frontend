@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, View } from "react-native";
-import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import { StyleSheet, View } from "react-native";
+import { Box, HStack, ScrollView, Text } from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
-import websocketService from "../../services/websocket.service";
 import ScreenLayout from "../../components/layout/screenLayout";
+import Typography from "../../components/common/typography";
+import websocketService from "../../services/websocket.service";
 
 const Dashboard: React.FC = () => {
-  const [userName, setUserName] = useState("Liam");
-  const [siteLocation, setSiteLocation] = useState("Site A");
+  const [userName, setUserName] = useState("David");
+  const [siteLocation, setSiteLocation] = useState("Richmond, BC");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
@@ -33,54 +34,44 @@ const Dashboard: React.FC = () => {
 
   /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertType("accident");
+    setCurrentAlertType("sos");
   }, []);
 
   return (
     <Box w="$full" h="$full">
+      {/* <ScrollView> */}
       <ScreenLayout>
-        <ScrollView>
-          <View>
-            {/* GREETING */}
-            <Text>
-              <Text style={styles.greeting}>{`Hi, ${userName}\n`}</Text>
-              <Text style={styles.buildingText}>Let's start building</Text>
-            </Text>
+        {/* GREETING */}
+        <Text>
+          <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
+          <Typography size="2xl" bold>
+            Let's start building!
+          </Typography>
+        </Text>
 
-            <View style={{ height: 20 }} />
+        {/* LOCATION */}
+        <HStack mt="$2" mb="$3" alignItems="center">
+          <LocationIcon size={13} color={""} focussed={false} />
+          <Typography size="md" pl={5}>
+            {siteLocation}
+          </Typography>
+        </HStack>
 
-            {/* LOCATION */}
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {/* <Image source={userLocationIcon} style={{ width: 30, height: 30 }} /> */}
-              <Text>{siteLocation}</Text>
-            </View>
+        {/* WORKERS CHECKED IN */}
+        {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
+        <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
 
-            <View style={{ height: 20 }} />
-
-            {/* WORKERS CHECKED IN */}
-            {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-            <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
-
-            <View style={{ height: 20 }} />
-
-            {/* CARDS */}
-            <View style={styles.cardContainer}>
-              <View style={styles.column}>
-                <CommonDaysAccidentCard
-                  layout={"column"}
-                  daysWithoutAccident={0}
-                />
-              </View>
-              <View style={styles.column}>
-                <AlertSimulationCard
-                  layout={"column"}
-                  daysWithoutAccident={0}
-                />
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+        {/* CARDS */}
+        <HStack space="md" mt={"$5"}>
+          <Box flex={1}>
+            <CommonDaysAccidentCard layout={"column"} daysWithoutAccident={0} />
+          </Box>
+          <Box flex={1}>
+            <AlertSimulationCard layout={"column"} daysWithoutAccident={0} />
+          </Box>
+        </HStack>
       </ScreenLayout>
+      {/* </ScrollView> */}
 
       {/* DRAWER */}
       <View style={styles.drawer}>
