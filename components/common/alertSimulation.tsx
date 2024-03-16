@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { VStack, Card, Text, Box } from "@gluestack-ui/themed";
+import Typography from "./typography";
+import SimulatorIcon from "../../assets/icons/simulator";
 
 interface AlertSimulationCardProps {
   daysWithoutAccident: number;
@@ -10,86 +13,55 @@ const AlertSimulationCard: React.FC<AlertSimulationCardProps> = ({
   layout = "row",
 }) => {
   const isRowLayout: boolean = layout === "row";
-  const [daysWithoutAccident, setDaysWithoutAccident] = useState<number | null>(
-    null
-  );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Simulate a delay (e.g., fetching data from a server)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Simulate receiving the number from the database
-        const simulatedNumber = 365;
-
-        setDaysWithoutAccident(simulatedNumber);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
-    <View
-      style={[
-        styles.card,
-        isRowLayout ? styles.rowLayout : styles.columnLayout,
-      ]}
-    >
-      <View style={styles.leftColumn}>
-        <Text style={styles.leftColumnText}>Alert Simulation</Text>
-      </View>
-      <View style={styles.rightColumn}>
-        <Text style={styles.rightColumnNumber}>Start</Text>
-      </View>
-    </View>
+    <VStack space="md" m={0}>
+      <Card
+        size="md"
+        variant="elevated"
+        m={0}
+        rounded={24}
+        bg={"$white"}
+        style={isRowLayout ? styles.rowContainer : styles.columnContainer}
+      >
+        <SimulatorIcon size={36} color="" focussed={false} />
+        <Box w="$full" mb="$1/4">
+          <Typography size="md" bold>
+            Alert
+          </Typography>
+          <Typography size="md" bold>
+            Simulation
+          </Typography>
+        </Box>
+        <Box style={styles.textContainer}>
+          <Typography style={styles.startText}>Start</Typography>
+        </Box>
+      </Card>
+    </VStack>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  rowLayout: {
+  rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  columnLayout: {
+  columnContainer: {
     flexDirection: "column",
     alignItems: "center",
   },
-  leftColumn: {
-    alignItems: "center",
+  textContainer: {
+    backgroundColor: "#F8F8FF",
+    borderRadius: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
-  leftColumnText: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  rightColumn: {
-    backgroundColor: "#ccc",
-    borderRadius: 5,
-    padding: 8,
-    marginTop: 8,
-  },
-  rightColumnNumber: {
-    fontSize: 44,
-    fontWeight: "bold",
-    color: "black",
+  startText: {
+    fontSize: 38,
+    fontFamily: "NunitoSans_700Bold",
   },
 });
 
