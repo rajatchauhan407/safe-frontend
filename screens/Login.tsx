@@ -26,6 +26,8 @@ import Dropdown from "../components/common/Dropdown";
 import ScreenLayout from "../components/layout/screenLayout";
 import CommonButton from "../components/common/button";
 import { Ionicons } from "@expo/vector-icons";
+import SupervisorIcon from "../assets/icons/supervisor";
+import WorkerIcon from "../assets/icons/worker";
 
 /*** imports to use redux ***/
 import { useDispatch, useSelector } from "react-redux";
@@ -34,8 +36,6 @@ import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
 import Push from "../push";
 import { dismissNotificationAsync } from "expo-notifications";
-import SupervisorIcon from "../assets/icons/supervisor";
-import WorkerIcon from "../assets/icons/worker";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
