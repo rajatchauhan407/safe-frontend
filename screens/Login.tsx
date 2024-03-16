@@ -112,32 +112,8 @@ const LoginScreen: React.FC = () => {
                 />
               </Box>
               <Box>
-                <Text mb="$1">Login as</Text>
+                <Typography mb="$1">Login as</Typography>
                 <HStack space="md">
-                  <Box flex={1}>
-                    <CommonButton
-                      variant={loginAs === "Worker" ? "outline" : "rounded"}
-                      isLogIn={true}
-                      onPress={() => setLoginAs("Worker")}
-                    >
-                      <HStack space="sm">
-                        <Box>
-                          <WorkerIcon
-                            size={22}
-                            color="$neutral"
-                            focussed={false}
-                          />
-                        </Box>
-                        <Box>
-                          <ButtonText>
-                            <Typography buttonTextSize={24} bold>
-                              Worker
-                            </Typography>
-                          </ButtonText>
-                        </Box>
-                      </HStack>
-                    </CommonButton>
-                  </Box>
                   <Box flex={1}>
                     <CommonButton
                       variant={loginAs === "Supervisor" ? "outline" : "rounded"}
@@ -147,16 +123,32 @@ const LoginScreen: React.FC = () => {
                     >
                       <HStack space="sm">
                         <Box>
-                          <SupervisorIcon
-                            size={20}
-                            color="$neutral"
-                            focussed={false}
-                          />
+                          <SupervisorIcon size={20} color="" focussed={false} />
                         </Box>
                         <Box>
                           <ButtonText>
                             <Typography buttonTextSize={24} bold>
                               Supervisor
+                            </Typography>
+                          </ButtonText>
+                        </Box>
+                      </HStack>
+                    </CommonButton>
+                  </Box>
+                  <Box flex={1}>
+                    <CommonButton
+                      variant={loginAs === "Worker" ? "outline" : "rounded"}
+                      isLogIn={true}
+                      onPress={() => setLoginAs("Worker")}
+                    >
+                      <HStack space="sm">
+                        <Box>
+                          <WorkerIcon size={22} color="" focussed={false} />
+                        </Box>
+                        <Box>
+                          <ButtonText>
+                            <Typography buttonTextSize={24} bold>
+                              Worker
                             </Typography>
                           </ButtonText>
                         </Box>
@@ -212,7 +204,7 @@ const LoginScreen: React.FC = () => {
                     <Ionicons
                       name={showPassword ? "eye" : "eye-off"}
                       size={24}
-                      color="black"
+                      color="#1E1E1E"
                     />
                   </InputSlot>
                 </Input>
@@ -230,7 +222,7 @@ const LoginScreen: React.FC = () => {
 
               <Button variant="link" p="$0" size="sm" mt="$4">
                 <ButtonText textDecorationLine="underline" color="#1E1E1E">
-                  Forgot your password?
+                  <Typography>Forgot your password?</Typography>
                 </ButtonText>
               </Button>
 
