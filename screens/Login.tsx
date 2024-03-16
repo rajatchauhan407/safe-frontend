@@ -102,6 +102,7 @@ const LoginScreen: React.FC = () => {
         <Center>
           <Box h="$4/5" w="$full">
             <VStack h="$4/5" space="lg">
+              {/* LOGO */}
               <Box mx="$10" my="$5">
                 <Image
                   w="$full"
@@ -111,12 +112,14 @@ const LoginScreen: React.FC = () => {
                   alt="SAFE logo"
                 />
               </Box>
+
+              {/* LOGIN BUTTONS */}
               <Box>
                 <Typography mb="$1">Login as</Typography>
                 <HStack space="md">
                   <Box flex={1}>
                     <CommonButton
-                      variant={loginAs === "Supervisor" ? "outline" : "rounded"}
+                      variant={loginAs === "Supervisor" ? "rounded" : "outline"}
                       isLogIn={true}
                       /* showIcon={true} */
                       onPress={() => setLoginAs("Supervisor")}
@@ -137,7 +140,7 @@ const LoginScreen: React.FC = () => {
                   </Box>
                   <Box flex={1}>
                     <CommonButton
-                      variant={loginAs === "Worker" ? "outline" : "rounded"}
+                      variant={loginAs === "Worker" ? "rounded" : "outline"}
                       isLogIn={true}
                       onPress={() => setLoginAs("Worker")}
                     >
@@ -158,8 +161,10 @@ const LoginScreen: React.FC = () => {
                 </HStack>
               </Box>
 
+              {/* SELECT A SITE */}
               <Dropdown />
 
+              {/* USER & PASSWORD */}
               <FormControl size="md" isRequired>
                 <FormControlLabel>
                   <FormControlLabelText fontWeight="$bold">
@@ -210,6 +215,7 @@ const LoginScreen: React.FC = () => {
                 </Input>
               </FormControl>
 
+              {/* LOGIN BUTTON */}
               <Box mx="$5" mt="$5">
                 <CommonButton variant="rounded" onPress={handleLogin}>
                   <ButtonText>
