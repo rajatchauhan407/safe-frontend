@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonText,
-  Card,
-  HStack,
-  Heading,
-  Text,
-} from "@gluestack-ui/themed";
+import { Card, HStack, Heading } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
+import Typography from "./typography";
+import CommonButton from "./button";
 
 interface NumOfWorkersProps {
   // totalCheckedIn and totalExpected are received as props
@@ -30,7 +24,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = () => {
         };
         const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
           method: "POST",
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify(siteId),
           headers: {
             "Content-type": "application/json",
@@ -53,36 +47,38 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = () => {
   };
 
   return (
-    <Card size="md" variant="filled" bgColor="$highlight" borderRadius="$3xl">
+    <Card size="md" variant="elevated" bgColor="$highlight" borderRadius="$3xl">
       <Heading mb="$1" size="md">
         Total Checked-in Workers
       </Heading>
       <HStack sx={{ justifyContent: "space-between", alignItems: "center" }}>
-        <HStack>
-          <Text>{totalCheckedIn}</Text>
-          <Text>/</Text>
-          <Text>{totalExpected}</Text>
+        <HStack alignItems="center">
+          <Typography style={styles.countIn}>{totalCheckedIn}</Typography>
+          <Typography style={styles.countExpected}> / </Typography>
+          <Typography style={styles.countExpected}>{totalExpected}</Typography>
         </HStack>
 
-        <Button
-          size="md"
-          variant="link"
-          action="primary"
-          onPress={handleSeeAll}
-        >
-          <ButtonText sx={{ textDecorationLine: "underline" }}>
+        <CommonButton variant="underline" onPress={handleSeeAll}>
+          <Typography bold style={styles.linkBnt}>
             See All
-          </ButtonText>
-        </Button>
+          </Typography>
+        </CommonButton>
       </HStack>
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  count: {
+  countIn: {
+    fontSize: 32,
+    fontWeight: "bold",
+  },
+  countExpected: {
     fontSize: 22,
     fontWeight: "bold",
+  },
+  linkBnt: {
+    fontSize: 20,
   },
 });
 
