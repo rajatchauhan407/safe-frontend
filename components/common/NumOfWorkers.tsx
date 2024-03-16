@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  ButtonText,
-  Card,
-  HStack,
-  Heading,
-  Text,
-} from "@gluestack-ui/themed";
+import { Card, HStack, Heading } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Typography from "./typography";
