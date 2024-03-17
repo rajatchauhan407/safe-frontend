@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { IAuth } from "../../shared/interfaces/auth.interface";
-import * as Keychain from 'react-native-keychain';
 import { BACKEND_BASE_URL,BACKEND_ORIGIN } from "../../config/api";
 
 const initialState:IAuth = {
@@ -10,41 +9,6 @@ const initialState:IAuth = {
     status:'idle',
     user:null
 }
-
-
-const saveToken = async (token:string) => {
-  try {
-    await Keychain.setGenericPassword('token', token);
-    console.log('Token saved successfully!');
-  } catch (error) {
-    console.log('Could not save token', error);
-  }
-};
-
-const getToken = async () => {
-    try {
-      const credentials = await Keychain.getGenericPassword();
-      if (credentials) {
-        console.log('Token retrieved successfully!', credentials.password);
-        return credentials.password; // The token is stored as the password
-      } else {
-        console.log('No token found');
-        return null;
-      }
-    } catch (error) {
-      console.log('Could not retrieve token', error);
-      return null;
-    }
-  };
-
-  const removeToken = async () => {
-    try {
-      await Keychain.resetGenericPassword();
-      console.log('Token removed successfully!');
-    } catch (error) {
-      console.log('Could not remove token', error);
-    }
-  };
 
 export const login = createAsyncThunk('auth/login', async (payload:{userId:string,password:string}, { rejectWithValue }) => {
     try {
@@ -99,7 +63,6 @@ const authSlice = createSlice({
             state.token = action.payload.token;
             state.user = action.payload.user;
             state.error = null;
-            saveToken(action.payload.token);
             console.log(state)
         });
         builder.addCase(login.rejected, (state, action) => {
@@ -107,7 +70,7 @@ const authSlice = createSlice({
             state.error = action.payload;
             console.log(action.payload);
             console.log(state)
-            removeToken();
+           
         });
     }
 });

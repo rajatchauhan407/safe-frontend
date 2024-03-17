@@ -59,7 +59,7 @@ const Dashboard: React.FC = () => {
 
         {/* WORKERS CHECKED IN */}
         {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-        <NumOfWorkers totalCheckedIn={0} totalExpected={0} />
+        <NumOfWorkers />
 
         {/* CARDS */}
         <HStack space="md" mt={"$5"}>
