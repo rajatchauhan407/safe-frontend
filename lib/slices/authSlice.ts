@@ -1,6 +1,41 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { IAuth } from "../../shared/interfaces/auth.interface";
 import { BACKEND_BASE_URL,BACKEND_ORIGIN } from "../../config/api";
+import * as SecureStore from 'expo-secure-store';
+
+export async function saveItem(key:string,value:string){
+  await SecureStore.setItemAsync(key, value);
+
+}
+
+export async function getItem(key:string){
+  return await SecureStore.getItemAsync(key);
+}
+
+export async function deleteItem(key:string){
+  await SecureStore.deleteItemAsync(key);
+}
+
+const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { rejectWithValue }) => {
+  try{
+    const response = await fetch(`${BACKEND_BASE_URL}/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+  })
+  const data = await response.json();
+  if (!response.ok) {
+    return rejectWithValue(data);
+  }
+}catch(error){
+      return rejectWithValue({
+        message:'Could not verify credentials'
+      })
+  }
+})
+
 
 const initialState:IAuth = {
     isAuthenticated:false,
@@ -21,7 +56,10 @@ export const login = createAsyncThunk('auth/login', async (payload:{userId:strin
       });
   
       const data = await response.json();
-  
+      
+      // Save the token to SecureStore
+      await saveItem('token',data.token);
+      await saveItem('user',JSON.stringify(data.user));
       // Check if the response status code indicates an error or if your application sends a specific error flag in the JSON.
       // Adjust the condition based on your API's specification.
       if (!response.ok) {
@@ -72,6 +110,25 @@ const authSlice = createSlice({
             console.log(state)
            
         });
+      builder.addCase(verifyToken.pending, (state, action) => {
+          state.status = 'loading';
+          console.log(state)
+      });
+      builder.addCase(verifyToken.fulfilled, (state, action) => {
+          state.status = 'succeed';
+          state.isAuthenticated = true;
+          state.error = null;
+          console.log(state)
+      });
+      builder.addCase(verifyToken.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action.payload;
+          console.log(action.payload);
+          console.log(state)
+          state.isAuthenticated = false;
+          state.token = null;
+          
+      });
     }
 });
  
