@@ -32,7 +32,7 @@ export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:str
   if (!response.ok) {
     return rejectWithValue("Invalid token");
   }
-  console.log(data);
+  // console.log(data);
  if(data.isAuthed === true){
    const token = await getItem('token');
     const user = await getItem('user');
@@ -100,6 +100,12 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         // state.isAuthenticated = !state.isAuthenticated;
         // console.log(state);
+      },
+      logout(state){
+        state.isAuthenticated = false;
+        state.token = null;
+        state.user = null;
+        state.error = null;
       }
     },
     extraReducers:(builder)=>{
@@ -119,7 +125,7 @@ const authSlice = createSlice({
             state.status = 'failed';
             state.error = action.payload;
             console.log(action.payload);
-            console.log(state)
+            // console.log(state)
            
         });
       builder.addCase(verifyToken.pending, (state, action) => {
@@ -151,7 +157,7 @@ const authSlice = createSlice({
     }
 });
  
-export const {changeAuth} = authSlice.actions;
+export const {changeAuth,logout} = authSlice.actions;
 export default authSlice.reducer;
 
 

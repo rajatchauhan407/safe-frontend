@@ -8,12 +8,14 @@ import { useSelector,useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../lib/store";
 import { verifyToken } from "../lib/slices/authSlice";
 import { getItem } from "../lib/slices/authSlice";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Text } from "@gluestack-ui/themed";
+import { RootStackParamList } from "../types/navigationTypes";
 // import { IUser } from "../shared/interfaces/user.interface";
 const Stack = createStackNavigator();
 
 const MainNavigator: React.FC = () => {
-  
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     const retrieveToken = async () => {
@@ -29,38 +31,48 @@ const MainNavigator: React.FC = () => {
     }
     retrieveToken();
   }, [dispatch]);
-  const {isAuthenticated,status} = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, status, user } = useSelector((state: RootState) => state.auth);
+  useEffect(() => {
+    console.log(status)
 
-  const getInitialRoute = () => {
-    console.log(isAuthenticated)
-    if(isAuthenticated){
-      // console.log('getting rendered')
-      return 'Main'
+    if (isAuthenticated) {
+      // Navigate to the Main screen if authenticated
+      if (user && user.role === 'worker') {
+        navigation.navigate("Main", {
+          screen: "Worker",
+          params: { screen: "Dashboard" },
+        });
+      }
+      if (user && user.role === 'supervisor') {
+        navigation.navigate("Main", {
+          screen: "Supervisor",
+          params: { screen: "Dashboard" },
+        });
+      }
     }
-    // console.log('getting rendered login with login')
-    return 'Login'
-  }
-  // if (status === 'loading') {
-  //   return <>
-  //     <Text>Loading...</Text>
-  //   </>;
+  }, [isAuthenticated, navigation]);
+  // if(status === 'loading' || 'idle'){
+  //   return <Text>Loading...</Text>
   // }
-  return (
-    <Stack.Navigator initialRouteName={getInitialRoute()}>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Main"
-        component={MainTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="AlertDetails" component={AlertReport} />
-      <Stack.Screen name="Checked In" component={CheckedIn} />
-    </Stack.Navigator>
-  );
-};
+  // if(status === 'succeed'){
+    return (
+      <Stack.Navigator initialRouteName={isAuthenticated ? 'Main' : 'Login'}>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainTabNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="AlertDetails" component={AlertReport} />
+        <Stack.Screen name="Checked In" component={CheckedIn} />
+      </Stack.Navigator>
+    );
+  }
+  
+// };
 
 export default MainNavigator;

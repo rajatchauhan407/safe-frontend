@@ -6,14 +6,20 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useSelector,useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../lib/store";
 import { IUser } from "../shared/interfaces/user.interface";
-
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../types/navigationTypes";
 // const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
 const MainTabNavigator: React.FC = () => {
   const {user} = useSelector((state: RootState) => state.auth);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  console.log(user)
+  if(!user){
+    navigation.navigate('Login');
+  }
   const getInitialRoute = () =>{
+    
     if((user as IUser).role === 'supervisor'){
       
       return 'Supervisor'

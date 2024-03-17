@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import ScreenLayout from "../../components/layout/screenLayout";
 import AlertMessage from "../../components/common/alertMessage";
-
+import { Button, ButtonText } from "@gluestack-ui/themed";
 const Profile: React.FC = () => {
   return (
   <>  
@@ -10,6 +10,9 @@ const Profile: React.FC = () => {
   <ScreenLayout>
     <View>
       <Text>Profile</Text>
+      <Button onPress={() => {}}>
+        <ButtonText>Logout</ButtonText>
+      </Button>
     </View>
   </ScreenLayout>
   </>
