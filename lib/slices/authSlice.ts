@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { IAuth } from "../../shared/interfaces/auth.interface";
-import { BACKEND_BASE_URL,BACKEND_ORIGIN } from "../../config/api";
+import { BACKEND_BASE_URL,BACKEND_ORIGIN, LOCAL_BASE_URL } from "../../config/api";
 import * as SecureStore from 'expo-secure-store';
 
 export async function saveItem(key:string,value:string){
@@ -9,17 +9,20 @@ export async function saveItem(key:string,value:string){
 }
 
 export async function getItem(key:string){
-  return await SecureStore.getItemAsync(key);
+  const item = await SecureStore.getItemAsync(key);
+  return item;
 }
 
 export async function deleteItem(key:string){
   await SecureStore.deleteItemAsync(key);
 }
 
-const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { rejectWithValue }) => {
+
+export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { rejectWithValue }) => {
+  
   try{
-    const response = await fetch(`${BACKEND_BASE_URL}/verify`, {
-      method: 'POST',
+    const response = await fetch(`${LOCAL_BASE_URL}/verify-token`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -27,12 +30,21 @@ const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { 
   })
   const data = await response.json();
   if (!response.ok) {
-    return rejectWithValue(data);
+    return rejectWithValue("Invalid token");
   }
+  console.log(data);
+ if(data.isAuthed === true){
+   const token = await getItem('token');
+    const user = await getItem('user');
+    // console.log(user)
+    return {
+      token,
+      user
+   }
+ }
 }catch(error){
-      return rejectWithValue({
-        message:'Could not verify credentials'
-      })
+  console.log('error',error);
+      // return rejectWithValue('Network or parsing error')
   }
 })
 
@@ -112,19 +124,26 @@ const authSlice = createSlice({
         });
       builder.addCase(verifyToken.pending, (state, action) => {
           state.status = 'loading';
-          console.log(state)
+          // console.log(state)
       });
       builder.addCase(verifyToken.fulfilled, (state, action) => {
           state.status = 'succeed';
           state.isAuthenticated = true;
           state.error = null;
+          // console.log(action.payload);
+          if(action.payload){
+            state.token = action.payload.token;
+            state.user = action.payload.user ? JSON.parse(action.payload.user) : null;
+          }
+          // state.user = action.payload.user;
+          // console.log(action.payload);
           console.log(state)
       });
       builder.addCase(verifyToken.rejected, (state, action) => {
           state.status = 'failed';
           state.error = action.payload;
           console.log(action.payload);
-          console.log(state)
+          // console.log(state)
           state.isAuthenticated = false;
           state.token = null;
           
