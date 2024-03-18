@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
@@ -34,8 +34,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeAuth } from "../lib/slices/authSlice";
 import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
-import Push from "../push";
-import { dismissNotificationAsync } from "expo-notifications";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
@@ -51,7 +49,7 @@ const LoginScreen: React.FC = () => {
     setShowPassword((showState) => !showState);
   };
 
-  const authState = useSelector((state: RootState) => state.auth);
+  // const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   // console.log(authState);
@@ -87,14 +85,8 @@ const LoginScreen: React.FC = () => {
       console.error("An error occurred during login:", error);
     }
   };
-  // ================== Redux ==================
-  const handleRedux = () => {
-    console.log(authState);
-    // dispatch(changeAuth);
-    dispatch(changeAuth());
-    // console.log(authState);
-  };
-  // =========================================
+
+  // checking if the user is already logged in
 
   return (
     <ScreenLayout>

@@ -1,7 +1,7 @@
 // navigationTypes.ts
 export type RootStackParamList = {
-    Main: {};
-    Login: {};
+    Main: {screen: string, params: {screen: string}};
+    Login: undefined;
     AlertDetails:undefined;
     // Add other routes here
   };
