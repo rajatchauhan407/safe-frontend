@@ -35,6 +35,10 @@ const Dropdown = () => {
               <SelectDragIndicator />
             </SelectDragIndicatorWrapper>
             <SelectItem
+              label="Langara College 49th Ave"
+              value="LangaraCollege49thAve"
+            />
+            <SelectItem
               label="Cascade Heights Development"
               value="CascadeHeightsDevelopment"
             />
@@ -43,17 +47,13 @@ const Dropdown = () => {
               value="PacificHarborConstructionZone"
             />
             <SelectItem
-              label="Mountview Estates Project Area"
-              value="MountviewEstatesProjectArea"
-            />
-            <SelectItem
               label="Emerald City Building Site"
               value="EmeraldCityBuildingSite"
               isDisabled={true}
             />
             <SelectItem
-              label="Langara College 49th Ave"
-              value="LangaraCollege49thAve"
+              label="Mountview Estates Project Area"
+              value="MountviewEstatesProjectArea"
             />
           </SelectContent>
         </SelectPortal>
