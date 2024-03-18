@@ -21,7 +21,8 @@ export async function deleteItem(key:string){
 export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { rejectWithValue }) => {
   
   try{
-    const response = await fetch(`${LOCAL_BASE_URL}/verify-token`, {
+
+    const response = await fetch(`${BACKEND_BASE_URL}/verify-token`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +48,6 @@ export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:str
       // return rejectWithValue('Network or parsing error')
   }
 })
-
 
 const initialState:IAuth = {
     isAuthenticated:false,

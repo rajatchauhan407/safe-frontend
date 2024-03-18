@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import CommonButton from '../../components/common/button';
 import useFetch from '../../hooks/useFetch';
-import { BACKEND_BASE_URL } from '../../config/api';
+import { BACKEND_BASE_URL, LOCAL_BASE_URL } from '../../config/api';
 import ScreenLayout from '../../components/layout/screenLayout';
+import{useSelector} from 'react-redux';
+import { RootState } from '../../lib/store';
 interface EmergencyFormProps {
   // Add any necessary props for database connection here
 }
@@ -27,9 +29,9 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
   const [needAssistance, setNeedAssistance] = useState<boolean>(false);
   
   const urgencyColors = ['yellow', 'orange', 'red'];
+  const user = useSelector((state: RootState) => state.auth.user);
   
-  
-  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}alert`, 'POST');
+  const { data, isLoading, error, fetchData } = useFetch(`${LOCAL_BASE_URL}/alert`, 'POST');
   const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
     setReportingFor(option);
   };
@@ -77,7 +79,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
           styles.reportButton,
           reportType === button.type && styles.reportButtonSelected,
         ]}
-        onPress={() => handleReportType(button.type)}
+        onPress={() => handleReportType(button.text)}
       >
         <Text
           style={[
@@ -169,6 +171,7 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
 
 /*** send alert for the app ****/
   const sendAlert = async () => {
+
     console.log('Sending alert');
     console.log('Reporting for:', reportingFor);
     console.log('Number of workers injured:', numWorkersInjured);
@@ -176,13 +179,23 @@ const EmergencyForm: React.FC<EmergencyFormProps> = () => {
     console.log('Other emergency type:', otherEmergencyType);
     console.log('Urgency level:', urgencyLevel);
     console.log('Need assistance:', needAssistance);
+
     const alertData = {
+      role: user ? user.role : null,
+      userId: user ? user.userId : null,
       reportingFor,
-      numWorkersInjured,
+      emergencyType: reportType,
+      alertLocation: {
+        type: 'Point',
+        coordinates: [0, 0], // to be updated
+      }, // to be updated
+      // reportingFor,
+      workersInjured:numWorkersInjured,
       reportType,
-      otherEmergencyType,
-      urgencyLevel,
+      degreeOfEmergency:urgencyLevel,
       needAssistance,
+      emergencyText: otherEmergencyType,
+      assistance: needAssistance
     };
     const options = {
       headers: {
