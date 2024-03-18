@@ -15,11 +15,11 @@ const MainTabNavigator: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   console.log(user)
-  if(!user){
-    navigation.navigate('Login');
-  }
+  
   const getInitialRoute = () =>{
-    
+    if(!user){
+      return 'Login'
+    }
     if((user as IUser).role === 'supervisor'){
       
       return 'Supervisor'

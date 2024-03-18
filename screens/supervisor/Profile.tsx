@@ -21,10 +21,10 @@ const Profile: React.FC = () => {
   };
 
   const handleLogout = async() => {
-      dispatch(logout());
-      await deleteItem('token');
-      await deleteItem('user');
-      navigation.navigate('Login');
+    await deleteItem('token');
+    await deleteItem('user');  
+    dispatch(logout());
+    navigation.navigate('Login');
   };
   return (
     <View>
