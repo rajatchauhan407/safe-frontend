@@ -4,8 +4,10 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import DrawerUpIcon from "../../assets/icons/drawerUp";
 import AlertButton from "./alertButton";
 import Typography from "./typography";
+import { Swipeable } from "react-native-gesture-handler";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
@@ -30,7 +32,7 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
   };
 
   const handleIncidentPress = () => {
-    navigation.navigate("AlertDetails");
+    // navigation.navigate("AlertDetails");
   };
 
   const getAlertColor = (): string => {
@@ -49,8 +51,9 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
         disabled={alertType === "none"}
       >
         <View style={styles.contentWrapper}>
-          <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
-          <Typography style={styles.drawerText}>
+          {/* <MaterialIcons name="keyboard-arrow-up" size={24} color="black" /> */}
+          <DrawerUpIcon color='#000' size={40} focussed={false}/>
+          <Typography style={styles.drawerText} pt="$4">
             {alertType === "none"
               ? "Great! There's no alert to report"
               : "You have received 01 Alert."}

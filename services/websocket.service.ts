@@ -1,10 +1,10 @@
 import io,{Socket} from 'socket.io-client';
-import { BACKEND_BASE_URL, BACKEND_ORIGIN } from '../config/api';
+import { BACKEND_BASE_URL, BACKEND_ORIGIN, LOCAL_BASE_URL } from '../config/api';
 
 class WebSocketService{
     private socket: Socket;
     constructor(){
-        this.socket = io(BACKEND_ORIGIN,{autoConnect: false});
+        this.socket = io(LOCAL_BASE_URL,{autoConnect: false});
 
         this.socket.on('connect',()=>{
             console.log("connected to websocket server");

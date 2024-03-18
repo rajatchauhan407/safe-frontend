@@ -10,7 +10,7 @@ import Drawer from "../../components/common/Drawer";
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
-
+// import ActSheet from "../../components/common/actionSheet";
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
@@ -76,6 +76,8 @@ const Dashboard: React.FC = () => {
       {/* DRAWER */}
       <View style={styles.drawer}>
         <Drawer alertType={currentAlertType} />
+        {/* <ActSheet /> */}
+      
       </View>
     </Box>
   );
