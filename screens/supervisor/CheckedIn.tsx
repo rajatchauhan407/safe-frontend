@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, HStack, ScrollView, Text } from "@gluestack-ui/themed";
 import ScreenLayout from "../../components/layout/screenLayout";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
 import CheckedInList from "../../components/supervisor/CheckedInList";
+import LocationIcon from "../../assets/icons/location";
+import Typography from "../../components/common/typography";
+import LocationComponent from "../../components/supervisor/Location";
 
 const CheckedIn: React.FC = () => {
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
-  const [currentAlertText, setCurrentAlertText] = useState(
-    "Great! There’s no alert report."
-  );
-
-  /* Use this for alert texts different than default */
-  /* useEffect(() => {
-    setCurrentAlertText("Hi");
-  }, []); */
+  const [currentAlertType, setCurrentAlertType] = useState<
+    "none" | "accident" | "evacuation" | "sos"
+  >("none");
 
   return (
     <ScreenLayout>
       <ScrollView>
         {/* LOCATION */}
-        <Box mx="$3" mb="$3">
-          {/* Icon missing here */}
-          <Text>{siteLocation}</Text>
-        </Box>
+        <LocationComponent siteLocation={siteLocation} />
 
         {/* WORKERS CHECKED IN */}
-        <NumOfWorkers totalCheckedIn={30} totalExpected={34} />
+        <NumOfWorkers />
 
         {/* LIST OF WORKERS */}
         <CheckedInList />
       </ScrollView>
-      {/* <Box style={styles.drawer}>
-        <Drawer alertText={currentAlertText} />
-      </Box> */}
+
+      {/* DRAWER */}
+      <Box style={styles.drawer}>
+        <Drawer alertType={currentAlertType} />
+      </Box>
     </ScreenLayout>
   );
 };
