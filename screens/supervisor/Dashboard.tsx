@@ -10,7 +10,9 @@ import Drawer from "../../components/common/Drawer";
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
-// import ActSheet from "../../components/common/actionSheet";
+import LocationComponent from "../../components/supervisor/Location";
+import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
+
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
@@ -50,16 +52,16 @@ const Dashboard: React.FC = () => {
         </Text>
 
         {/* LOCATION */}
-        <HStack mt="$2" mb="$3" alignItems="center">
-          <LocationIcon size={13} color={""} focussed={false} />
-          <Typography size="md" pl={5}>
-            {siteLocation}
-          </Typography>
-        </HStack>
+        <LocationComponent siteLocation={siteLocation} />
 
         {/* WORKERS CHECKED IN */}
         {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-        <NumOfWorkers />
+        <NumOfWorkers seeAll={true} />
+
+        {/* IN SAFE ZONE */}
+        <Box mt="$5">
+          <SafeZoneWorkers seeAll={true} />
+        </Box>
 
         {/* CARDS */}
         <HStack space="md" mt={"$5"}>
@@ -74,11 +76,9 @@ const Dashboard: React.FC = () => {
       {/* </ScrollView> */}
 
       {/* DRAWER */}
-      <View style={styles.drawer}>
+      <Box style={styles.drawer}>
         <Drawer alertType={currentAlertType} />
-        {/* <ActSheet /> */}
-      
-      </View>
+      </Box>
     </Box>
   );
 };

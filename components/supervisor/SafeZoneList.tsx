@@ -10,11 +10,11 @@ import {
   ButtonIcon,
 } from "@gluestack-ui/themed";
 import { BACKEND_BASE_URL } from "../../config/api";
-import CheckedInIcon from "../../assets/icons/checkedIn";
-import NotCheckedInIcon from "../../assets/icons/notCheckedIn";
 import Typography from "../common/typography";
 import CommonButton from "../common/button";
 import SortIcon from "../../assets/icons/sort";
+import SafeWorkerIcon from "../../assets/icons/safeWorker";
+import NotSafeWorkerIcon from "../../assets/icons/notSafeWorker";
 
 interface Worker {
   id: number;
@@ -24,9 +24,9 @@ interface Worker {
   checkedIn: boolean;
 }
 
-const CheckedInList: React.FC = () => {
+const SafeZoneList: React.FC = () => {
   const [workers, setWorkers] = useState<Worker[]>([]);
-  const [sortCheckedFirst, setSortCheckedFirst] = useState<boolean>(true);
+  const [sortOnZoneFirst, setSortOnZoneFirst] = useState<boolean>(true);
   const [buttonText, setButtonText] = useState<string>("Sort");
 
   /* Fetch Workers Info */
@@ -55,10 +55,10 @@ const CheckedInList: React.FC = () => {
         for (const worker of data.data.workersData) {
           console.log("Worker Name:", worker.firstName);
           console.log("Worker Role:", worker.lastName);
-          let checkedIn = false;
-          for (const workerCheckedIn of data.data.workersCheckedIn) {
-            if (worker._id === workerCheckedIn.userId) {
-              checkedIn = true;
+          let onSite = false;
+          for (const workerOnSite of data.data.workersCheckedIn) {
+            if (worker._id === workerOnSite.userId) {
+              onSite = true;
               console.log("checked - in " + worker._id);
               break;
             }
@@ -69,7 +69,7 @@ const CheckedInList: React.FC = () => {
             name: `${worker.firstName} ${worker.lastName}`,
             role: worker.jobPosition,
             avatar: "avatar-link-5",
-            checkedIn: checkedIn,
+            onSite: onSite,
           });
         }
         setWorkers(updatedSiteWorkers);
@@ -83,28 +83,28 @@ const CheckedInList: React.FC = () => {
   /* Sorting function */
   const sortWorkers = () => {
     const sortedWorkers = [...workers].sort((a, b) => {
-      if (sortCheckedFirst) {
-        if (a.checkedIn === b.checkedIn) {
+      if (sortOnZoneFirst) {
+        if (a.onSite === b.onSite) {
           return a.name.localeCompare(b.name);
         } else {
-          return a.checkedIn ? -1 : 1;
+          return a.onSite ? -1 : 1;
         }
       } else {
-        if (a.checkedIn === b.checkedIn) {
+        if (a.onSite === b.onSite) {
           return a.name.localeCompare(b.name);
         } else {
-          return a.checkedIn ? 1 : -1;
+          return a.onSite ? 1 : -1;
         }
       }
     });
     setWorkers(sortedWorkers);
-    setSortCheckedFirst((prevState) => !prevState);
+    setSortOnZoneFirst((prevState) => !prevState);
 
     // Update button text based on sorting state
-    if (sortCheckedFirst) {
-      setButtonText("Checked In");
+    if (sortOnZoneFirst) {
+      setButtonText("On-Site");
     } else {
-      setButtonText("Checked Out");
+      setButtonText("Off-Site");
     }
   };
 
@@ -156,10 +156,10 @@ const CheckedInList: React.FC = () => {
               </Box>
             </HStack>
             <Box>
-              {worker.checkedIn ? (
-                <CheckedInIcon size={30} color="" focussed={false} />
+              {worker.onSite ? (
+                <SafeWorkerIcon size={30} color="" focussed={false} />
               ) : (
-                <NotCheckedInIcon size={30} color="" focussed={false} />
+                <NotSafeWorkerIcon size={30} color="" focussed={false} />
               )}
             </Box>
           </HStack>
@@ -169,4 +169,4 @@ const CheckedInList: React.FC = () => {
   );
 };
 
-export default CheckedInList;
+export default SafeZoneList;
