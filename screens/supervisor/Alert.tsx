@@ -8,8 +8,8 @@ const Alert: React.FC = () => {
       const retrieveToken = async () => {
           const token = await getItem('token');
           const userData = await getItem('user');
-          console.log(token);
-          console.log(userData);
+          // console.log(token);
+          // console.log(userData);
       }
       retrieveToken();
   }, []);

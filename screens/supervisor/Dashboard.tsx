@@ -16,6 +16,7 @@ import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
+  const [data, setData] = useState(null);
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
@@ -25,14 +26,14 @@ const Dashboard: React.FC = () => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alert", (data) => {
-      console.log(data);
+      console.log("Alert received", data);
       setCurrentAlertType(data.alertType);
     });
 
     return () => {
       websocketService.disconnect();
     };
-  });
+  },[]);
 
   /* Use this to change alert type */
   useEffect(() => {
@@ -77,7 +78,10 @@ const Dashboard: React.FC = () => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        <Drawer alertType={currentAlertType} />
+        <Drawer 
+          alertType={currentAlertType}
+          alertData={data}
+          />
       </Box>
     </Box>
   );

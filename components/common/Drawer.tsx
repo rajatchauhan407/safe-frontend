@@ -11,6 +11,7 @@ import { Swipeable } from "react-native-gesture-handler";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
+  alertData?: any;
 }
 
 const Drawer: React.FC<DrawerProps> = ({ alertType }) => {

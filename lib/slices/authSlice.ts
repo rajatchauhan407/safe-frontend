@@ -111,7 +111,7 @@ const authSlice = createSlice({
     extraReducers:(builder)=>{
         builder.addCase(login.pending, (state, action) => {
             state.status = 'loading';
-            console.log(state)
+            // console.log(state)
         });
         builder.addCase(login.fulfilled, (state, action) => {
             state.status = 'succeed';
@@ -119,7 +119,7 @@ const authSlice = createSlice({
             state.token = action.payload.token;
             state.user = action.payload.user;
             state.error = null;
-            console.log(state)
+            // console.log(state)
         });
         builder.addCase(login.rejected, (state, action) => {
             state.status = 'failed';
@@ -143,7 +143,7 @@ const authSlice = createSlice({
           }
           // state.user = action.payload.user;
           // console.log(action.payload);
-          console.log(state)
+          // console.log(state)
       });
       builder.addCase(verifyToken.rejected, (state, action) => {
           state.status = 'failed';

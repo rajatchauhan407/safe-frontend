@@ -14,7 +14,7 @@ const MainTabNavigator: React.FC = () => {
   const {user} = useSelector((state: RootState) => state.auth);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  console.log(user)
+  // console.log(user)
   
   const getInitialRoute = () =>{
     if(!user){
