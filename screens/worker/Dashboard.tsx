@@ -14,14 +14,28 @@ import AlertMessage from "../../components/common/alertMessage";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [userName, setUserName] = useState("Prinkle Gagarin");
+  // const [userName, setUserName] = useState("");
   const [siteLocation, setSiteLocation] = useState("Langara College 49th Ave");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteId = "";
+  let userId  = "";
+  let userName = "";
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    userId=user._id;
+    siteId = user.constructionSiteId || ""; 
+    userName = user.userName;
+  } 
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -59,8 +73,8 @@ const Dashboard: React.FC = () => {
 
           //Actual Location of the device
           // const checkInInfo = {
-          //   siteId: "65f4145c0c71a29f15263723",
-          //   workerId: "65f419da6035b412f72c869c",
+          //   siteId: siteId,
+          //   workerId: userId,
           //   location: {
           //     latitude: location.coords.latitude,
           //     longitude: location.coords.longitude
@@ -69,8 +83,8 @@ const Dashboard: React.FC = () => {
 
           //To simulate check-in successful during demo
           const checkInInfo = {
-            siteId: "65f4145c0c71a29f15263723",
-            workerId: "65f419da6035b412f72c869c",
+            siteId: siteId,
+            workerId: userId,
             location: {
               latitude: 49.16196980896502,
               longitude: -123.14712911446713
@@ -129,8 +143,8 @@ const Dashboard: React.FC = () => {
       // Check-out process
       setIsCheckedIn(false);
       const checkOutInfo = {
-        siteId: "65f4145c0c71a29f15263723",
-        workerId: "65f419da6035b412f72c869c",
+        siteId: siteId,
+        workerId: userId,
       };
       try {
         const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {
