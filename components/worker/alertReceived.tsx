@@ -37,12 +37,12 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, location, level, wo
       </VStack>
 
       {type === 'accident' && (
-        <Typography style={{ marginBottom: 10 }}>Please continue your work with caution until further notice.</Typography>
+        <Typography textAlign="center" bold>Please continue your work with caution until further notice.</Typography>
       )}
 
       {type === 'evacuation' && (
-        <CommonButton variant="underline" onPress={navigateToSafeZone} buttonTextSize={24} >
-            Go to Safe Zone
+        <CommonButton variant="underline" onPress={navigateToSafeZone} buttonTextSize={18} >
+            <Typography>Go to Safe Zone</Typography> 
         </CommonButton>
       )}
     </VStack>
