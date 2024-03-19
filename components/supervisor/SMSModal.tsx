@@ -41,6 +41,7 @@ const emergencyContacts = [
   { id: "2", name: "BC Workers", phoneNumber: "+16729998362" },
   { id: "3", name: "FireFighter", phoneNumber: "+16043633286" },
   { id: "4", name: "Manager", phoneNumber: "+16047206967" },
+  { id: "5", name: "First Aid Team", phoneNumber: "+16726736640" },
 ];
 
 const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {

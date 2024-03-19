@@ -6,8 +6,10 @@ import NumOfWorkers from "../../components/common/NumOfWorkers";
 import Drawer from "../../components/common/Drawer";
 import CheckedInList from "../../components/supervisor/CheckedInList";
 import LocationComponent from "../../components/supervisor/Location";
+import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
+import SafeZoneList from "../../components/supervisor/SafeZoneList";
 
-const CheckedIn: React.FC = () => {
+const SafeZone: React.FC = () => {
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
@@ -20,10 +22,10 @@ const CheckedIn: React.FC = () => {
         <LocationComponent siteLocation={siteLocation} />
 
         {/* WORKERS CHECKED IN */}
-        <NumOfWorkers seeAll={false} />
+        <SafeZoneWorkers seeAll={false} />
 
         {/* LIST OF WORKERS */}
-        <CheckedInList />
+        <SafeZoneList />
       </ScrollView>
 
       {/* DRAWER */}
@@ -44,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckedIn;
+export default SafeZone;

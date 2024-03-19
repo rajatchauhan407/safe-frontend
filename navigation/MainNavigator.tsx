@@ -1,10 +1,11 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainTabNavigator from "./MainTabNavigator";
 import LoginScreen from "../screens/Login";
 import AlertReport from "../screens/worker/AlertReport";
 import CheckedIn from "../screens/supervisor/CheckedIn";
-import { useSelector,useDispatch } from "react-redux";
+import SafeZone from "../screens/supervisor/SafeZone";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../lib/store";
 import { verifyToken } from "../lib/slices/authSlice";
 import { getItem } from "../lib/slices/authSlice";
@@ -19,31 +20,33 @@ const MainNavigator: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     const retrieveToken = async () => {
-      try{
-        const token = await getItem('token');
+      try {
+        const token = await getItem("token");
         console.log(token);
-        if(token){
+        if (token) {
           dispatch(verifyToken(token));
         }
-      }catch(error){
+      } catch (error) {
         console.log(error);
-      }  
-    }
+      }
+    };
     retrieveToken();
   }, [dispatch]);
-  const { isAuthenticated, status, user } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
   useEffect(() => {
-    console.log(status)
+    console.log(status);
 
     if (isAuthenticated) {
       // Navigate to the Main screen if authenticated
-      if (user && user.role === 'worker') {
+      if (user && user.role === "worker") {
         navigation.navigate("Main", {
           screen: "Worker",
           params: { screen: "Dashboard" },
         });
       }
-      if (user && user.role === 'supervisor') {
+      if (user && user.role === "supervisor") {
         navigation.navigate("Main", {
           screen: "Supervisor",
           params: { screen: "Dashboard" },
@@ -55,24 +58,25 @@ const MainNavigator: React.FC = () => {
   //   return <Text>Loading...</Text>
   // }
   // if(status === 'succeed'){
-    return (
-      <Stack.Navigator initialRouteName={isAuthenticated ? 'Main' : 'Login'}>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Main"
-          component={MainTabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="AlertDetails" component={AlertReport} />
-        <Stack.Screen name="Checked In" component={CheckedIn} />
-      </Stack.Navigator>
-    );
-  }
-  
+  return (
+    <Stack.Navigator initialRouteName={isAuthenticated ? "Main" : "Login"}>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Main"
+        component={MainTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="AlertDetails" component={AlertReport} />
+      <Stack.Screen name="Checked In" component={CheckedIn} />
+      <Stack.Screen name="Safe Zone" component={SafeZone} />
+    </Stack.Navigator>
+  );
+};
+
 // };
 
 export default MainNavigator;
