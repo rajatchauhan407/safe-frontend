@@ -176,19 +176,22 @@ const AlertButton: React.FC<AlertButtonProps> = ({
           >
             {title}
           </Typography>
-          <Typography
-            size="lg"
-            style={{
-              color: isDisabled
-                ? textStyles.disabled.color
-                : textStyles[emergency]
-                ? textStyles[emergency].color
-                : textStyles.default.color,
-              //display: description ? "block" : "none",
-            }}
-          >
-            {description}
-          </Typography>
+          {description && (
+          <>
+            <Typography
+              size="lg"
+              style={{
+                color: isDisabled
+                  ? textStyles.disabled.color
+                  : textStyles[emergency]
+                  ? textStyles[emergency].color
+                  : textStyles.default.color,
+              }}
+            >
+              {description}
+            </Typography>
+          </>
+          )}
         </VStack>
       </Button>
     </Card>
