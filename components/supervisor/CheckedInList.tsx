@@ -15,6 +15,8 @@ import NotCheckedInIcon from "../../assets/icons/notCheckedIn";
 import Typography from "../common/typography";
 import CommonButton from "../common/button";
 import SortIcon from "../../assets/icons/sort";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 interface Worker {
   id: number;
@@ -28,13 +30,22 @@ const CheckedInList: React.FC = () => {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [sortCheckedFirst, setSortCheckedFirst] = useState<boolean>(true);
   const [buttonText, setButtonText] = useState<string>("Sort");
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteID = "";
+
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    siteID = user.constructionSiteId || "";     
+  } 
 
   /* Fetch Workers Info */
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
         const siteId = {
-          siteId: "65f4145c0c71a29f15263723",
+          siteId: siteID,
         };
         const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
           method: "POST",
