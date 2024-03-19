@@ -188,6 +188,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                   : textStyles.default.color,
               }}
             >
+              {description}
             </Typography>
           </>
           )}
