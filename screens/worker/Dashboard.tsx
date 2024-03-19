@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
     console.log("logged in user>> " + user._id);
     userId=user._id;
     siteId = user.constructionSiteId || ""; 
-    userName = user.userName;
+    userName = `${user.firstName} ${user.lastName}`;
   } 
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

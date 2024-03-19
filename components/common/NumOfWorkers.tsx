@@ -4,6 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
 import Typography from "./typography";
 import CommonButton from "./button";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -15,12 +17,21 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   const navigation = useNavigation();
   const [totalCheckedIn, setTotalCheckedIn] = useState<number>(0);
   const [totalExpected, setTotalExpected] = useState<number>(0);
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteID = "";
+
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    siteID = user.constructionSiteId || "";     
+  } 
 
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
         const siteId = {
-          siteId: "65f4145c0c71a29f15263723",
+          siteId: siteID,
         };
         const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
           method: "POST",
