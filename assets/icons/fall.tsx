@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { Circle, Path, G, ClipPath, Defs, Rect } from "react-native-svg";
 import { IIconProps } from "../../shared/interfaces/IIconProps.interface";
 
-const WorkerFellIcon: React.FC<IIconProps> = ({ color, size }) => {
+const FallIcon: React.FC<IIconProps> = ({ color, size }) => {
   
   return (
     <Svg 
@@ -28,6 +28,6 @@ const WorkerFellIcon: React.FC<IIconProps> = ({ color, size }) => {
   );
 };
 
-export default WorkerFellIcon;
+export default FallIcon;
 
 

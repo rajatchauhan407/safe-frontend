@@ -4,8 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import Typography from '../common/typography';
 import AlertButton from '../common/alertButton';
 import CommonButton from '../common/button';
-import WorkerFellIcon from '../../assets/icons/workerFell';
+import FallIcon from '../../assets/icons/fall';
 import FireHazardIcon from '../../assets/icons/fireHazard';
+import ElectricIcon from '../../assets/icons/electric';
+import InjuredIcon from '../../assets/icons/injured';
+import SpaceIcon from '../../assets/icons/space';
+import DangerIcon from '../../assets/icons/danger';
 
 interface AlertReceivedProps {
   type: 'accident' | 'evacuation';
@@ -33,8 +37,12 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
   };
 
   const emergencies: EmergencyItem[] = [
-    { text: 'A worker fell', icon: WorkerFellIcon },
+    { text: 'A worker fell', icon: FallIcon },
     { text: 'Fire hazard', icon: FireHazardIcon },
+    { text: 'Electrical hazard', icon: ElectricIcon },
+    { text: 'Injury', icon: InjuredIcon },
+    { text: 'Confined spaces', icon: SpaceIcon },
+    { text: 'Struck by hazard', icon: DangerIcon },
   ];
 
   const selectedEmergency = emergencies.find(item => item.text === emergency);
@@ -45,7 +53,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
       <AlertButton user="worker" emergency={type} onPress={handleIncidentPress} />
 
       <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-        <BoxWithIcon icon={selectedEmergency?.icon || WorkerFellIcon} text={emergency} type={type}  />
+        <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />
         <BoxWithNumber number={level} text={`Level`} type={type} />
         <BoxWithNumber number={workersInjured} text={`Workers Injured`} type={type} />
       </VStack>
