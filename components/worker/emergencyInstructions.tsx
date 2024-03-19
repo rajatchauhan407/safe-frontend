@@ -43,7 +43,7 @@ const EmergencyInstructions: React.FC<EmergencyInstructionsProps> = ({ emergency
   const instructions: Instruction[] = renderInstructions(emergency);
 
   return (
-    <VStack space='md' bg='white'>
+    <VStack space='md'>
       <Typography size={"xl"} textAlign="center" bold>
         {emergency}
       </Typography>
