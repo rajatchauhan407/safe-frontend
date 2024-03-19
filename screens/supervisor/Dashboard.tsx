@@ -11,6 +11,7 @@ import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
 import LocationComponent from "../../components/supervisor/Location";
+import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 
 const Dashboard: React.FC = () => {
   const [userName, setUserName] = useState("David");
@@ -55,7 +56,12 @@ const Dashboard: React.FC = () => {
 
         {/* WORKERS CHECKED IN */}
         {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
-        <NumOfWorkers />
+        <NumOfWorkers seeAll={true} />
+
+        {/* IN SAFE ZONE */}
+        <Box mt="$5">
+          <SafeZoneWorkers seeAll={true} />
+        </Box>
 
         {/* CARDS */}
         <HStack space="md" mt={"$5"}>

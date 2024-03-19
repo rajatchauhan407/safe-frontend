@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, HStack, Heading } from "@gluestack-ui/themed";
+import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
 import Typography from "./typography";
@@ -11,9 +12,9 @@ interface NumOfWorkersProps {
   // but we'll use state to manage their values
 }
 
-const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
+const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   const navigation = useNavigation();
-  const [totalCheckedIn, setTotalCheckedIn] = useState<number>(0);
+  const [totalOnSite, setTotalOnSite] = useState<number>(0);
   const [totalExpected, setTotalExpected] = useState<number>(0);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
         });
         const data = await res.json();
         // Update state with the fetched values
-        setTotalCheckedIn(data.data.workersCheckedIn.length);
+        setTotalOnSite(data.data.workersCheckedIn.length);
         setTotalExpected(data.data.workersData.length);
       } catch (error) {
         console.error("Error fetching workers:", error);
@@ -43,20 +44,20 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   }, []);
 
   const handleSeeAll = () => {
-    navigation.navigate("Checked In" as never);
+    navigation.navigate("Safe Zone" as never);
   };
 
   return (
-    <Card size="md" variant="elevated" bgColor="$highlight" borderRadius="$3xl">
+    <Card size="md" variant="elevated" bgColor="$success" borderRadius="$3xl">
       <Heading mb="$1">
         <Typography size="lg" bold>
-          Total Checked-in Workers
+          Workers at Safe Zone
         </Typography>
       </Heading>
       <HStack sx={{ justifyContent: "space-between", alignItems: "center" }}>
         <HStack alignItems="center">
           <Typography size="3xl" bold>
-            {totalCheckedIn}
+            {totalOnSite}
           </Typography>
           <Typography size="xl" bold>
             {" "}
@@ -79,4 +80,18 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   );
 };
 
-export default NumOfWorkers;
+const styles = StyleSheet.create({
+  countIn: {
+    fontSize: 32,
+    fontWeight: "bold",
+  },
+  countExpected: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  linkBnt: {
+    fontSize: 20,
+  },
+});
+
+export default SafeZoneWorkers;
