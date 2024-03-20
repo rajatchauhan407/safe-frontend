@@ -3,6 +3,7 @@ import { TouchableOpacityProps } from "react-native";
 import { Button, ButtonIcon, VStack, Card } from "@gluestack-ui/themed";
 import SosIcon from "../../assets/icons/sosButton";
 import HazardIcon from "../../assets/icons/hazard";
+import HazardWIcon from "../../assets/icons/hazardW";
 import WhistleIcon from "../../assets/icons/whistle";
 import WhistlesIcon from "../../assets/icons/3whistles";
 import Typography from "./typography";
@@ -14,7 +15,8 @@ interface AlertButtonProps extends TouchableOpacityProps {
   isDisabled?: boolean;
   showIcon?: boolean;
   iconSize?: number;
-  color?: string;
+  iconColor?: string;
+  textColor?: string;
 }
 
 const AlertButton: React.FC<AlertButtonProps> = ({
@@ -25,7 +27,8 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   children,
   showIcon = true,
   iconSize = 64,
-  color = "#ffffff",
+  iconColor = "#ffffff",
+  textColor = "#ffffff",
   ...props
 }) => {
   const buttonStyles = {
@@ -58,21 +61,21 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       report: {
         icon: SosIcon,
         iconSize: 64,
-        color: color,
+        iconColor: "#000000",
         title: "Report Incident",
         description: "Click to report an incident",
       },
       accident: {
         icon: WhistleIcon,
         iconSize: 64,
-        color: color,
+        iconColor: "#000000",
         title: "Accident Reported",
         description: null,
       },
       evacuation: {
         icon: WhistlesIcon,
         iconSize: 176,
-        color: color,
+        iconColor: "#000000",
         title: "Active Evacuation",
         description: null,
       },
@@ -81,21 +84,21 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       accident: {
         icon: HazardIcon,
         iconSize: 64,
-        color: color,
+        iconColor: "#000000",
         title: "Accident Reported",
         description: "Go to emergency details",
       },
       evacuation: {
-        icon: HazardIcon,
+        icon: HazardWIcon,
         iconSize: 64,
-        color: color,
+        iconColor: "#000000",
         title: "Hazard Reported",
         description: "Go to emergency details",
       },
       sos: {
         icon: SosIcon,
         iconSize: 64,
-        color: color,
+        iconColor: "#000000",
         title: "SOS Reported",
         description: "Go to SOS details",
       },
@@ -103,12 +106,12 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   };
 
   const textStyles = {
-    report: { color: "#1E1E1E" },
-    accident: { color: "#1E1E1E" },
-    evacuation: { color: "#ffffff" },
-    sos: { color: "#ffffff" },
-    default: { color: "#000000" },
-    disabled: { color: "#1E1E1E" },
+    report: { textColor: "#1E1E1E" },
+    accident: { textColor: "#1E1E1E" },
+    evacuation: { textColor: "#ffffff" },
+    sos: { textColor: "#ffffff" },
+    default: { textColor: "#000000" },
+    disabled: { textColor: "#1E1E1E" },
   };
 
   const getButtonStyle = () => {
@@ -117,7 +120,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         emergency as keyof (typeof buttonStyles)[keyof typeof buttonStyles]
       ] || {};
     const disabledStyle = isDisabled ? { backgroundColor: "#C0C0C0" } : {};
-    const textColorStyle = showIcon ? { color: color } : {};
+    const textColorStyle = showIcon ? { color: textColor } : {};
     return { ...baseStyle, ...disabledStyle, ...textColorStyle };
   };
 
@@ -159,17 +162,17 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                   | "2xs"
                   | undefined
               }
-              style={{ fontSize: Number(adjustedIconSize), color: color }}
+              style={{ fontSize: Number(adjustedIconSize), color: iconColor }}
             />
           )}
           <Typography
             size="2xl"
             style={{
               color: isDisabled
-                ? textStyles.disabled.color
+                ? textStyles.disabled.textColor
                 : textStyles[emergency]
-                ? textStyles[emergency].color
-                : textStyles.default.color,
+                ? textStyles[emergency].textColor
+                : textStyles.default.textColor,
               textTransform: "uppercase",
               fontFamily: "NunitoSans_700Bold",
             }}
@@ -182,10 +185,10 @@ const AlertButton: React.FC<AlertButtonProps> = ({
               size="lg"
               style={{
                 color: isDisabled
-                  ? textStyles.disabled.color
+                  ? textStyles.disabled.textColor
                   : textStyles[emergency]
-                  ? textStyles[emergency].color
-                  : textStyles.default.color,
+                  ? textStyles[emergency].textColor
+                  : textStyles.default.textColor,
               }}
             >
               {description}

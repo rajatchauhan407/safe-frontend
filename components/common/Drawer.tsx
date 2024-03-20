@@ -88,7 +88,7 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
             <AlertButton
               user="supervisor"
               emergency={alertType}
-              color={getAlertColor()}
+              // color={getAlertColor()}
               onPress={handleIncidentPress}
             />
           )}
