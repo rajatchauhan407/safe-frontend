@@ -40,12 +40,33 @@ const Dashboard: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
-    // Simulating data fetching from the backend
     const fetchData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+        const workerInfo = {
+          workerId : userId
+        }
+        const res = await fetch(`${BACKEND_BASE_URL}/workerstatus`, {
+          method: "POST",
+          credentials: 'include',
+          body: JSON.stringify(workerInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.data) {
+          if (data.data[0].checkType === 'check-in') { 
+            console.log("user is already checked in")            
+            let formattedTime = new Date(data.data[0].timeStamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            console.log(formattedTime);
+            setIsCheckedIn(true);
+            setCheckInTime(formattedTime);
+          }          
+        } 
+      } 
+      catch (error) {
+        //Error while connecting with backend
+        console.error('Error:', error);
       }
     };
 
