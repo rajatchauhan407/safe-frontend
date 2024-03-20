@@ -1,8 +1,10 @@
-import React, { useState} from "react";
+import React, { useState } from 'react';
 import { VStack, Box } from '@gluestack-ui/themed';
 import { useNavigation } from '@react-navigation/native';
 import Typography from '../common/typography';
 import CommonButton from '../common/button';
+import ScreenLayout from '../layout/screenLayout';
+import AlertMessage from '../common/alertMessage'; // Import AlertMessage
 import FallIcon from '../../assets/icons/fall';
 import FireHazardIcon from '../../assets/icons/fireHazard';
 import ElectricIcon from '../../assets/icons/electric';
@@ -10,14 +12,14 @@ import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import LocationIcon from '../../assets/icons/location';
-import ScreenLayout from '../layout/screenLayout';
 
-interface AlertReceivedProps {
-  type: 'accident' | 'evacuation';
-  emergency: string;
-  location: string;
-  level: number;
-  workersInjured: number;
+interface WorkerSafeZoneProps {
+    onSafeConfirmation: () => void;
+    type?: 'accident' | 'evacuation';
+    emergency?: string;
+    location?: string;
+    level?: number;
+    workersInjured?: number;
 }
 
 interface EmergencyItem {
@@ -25,7 +27,14 @@ interface EmergencyItem {
   icon: React.FC<any>; 
 }
 
-const WorkerSafeZone: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
+const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({ 
+    onSafeConfirmation, 
+    type = 'accident', 
+    emergency = 'A worker fell', 
+    location, 
+    level = 0, 
+    workersInjured = 0
+}) => {
   const navigation = useNavigation();
   const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
 
@@ -45,10 +54,11 @@ const WorkerSafeZone: React.FC<AlertReceivedProps> = ({ type, emergency, locatio
       <LocationIcon size={18} color={''} focussed={false} />
       <Typography size="xl" pl={5} bold>{safeZoneLocation}</Typography>
     </Box>
-    );
+  );
 
   const handleIncidentPress = () => {
-    // Handle incident press
+    onSafeConfirmation(); // Callback to notify parent component (Dashboard)
+    navigation.navigate('Dashboard' as never);
   };
 
   return (

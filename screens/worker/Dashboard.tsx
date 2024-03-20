@@ -6,6 +6,7 @@ import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
 import DrawerWorker from "../../components/worker/drawer";
+import WorkerSafeZone from "../../components/worker/safeZone";
 import * as Location from 'expo-location';
 import { BACKEND_BASE_URL } from "../../config/api";
 import { NavigationProp } from "@react-navigation/native";
@@ -28,6 +29,8 @@ const Dashboard: React.FC = () => {
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState
   <"none" | "accident" | "evacuation">("none");
+  const [showAlert, setShowAlert] = useState(false);
+
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -231,6 +234,13 @@ const Dashboard: React.FC = () => {
     navigation.navigate('AlertDetails');
   };
 
+  const handleSafeConfirmation = () => {
+    setShowAlert(true); // Show the alert message
+    setTimeout(() => {
+      setShowAlert(false); // Hide the alert after a delay (e.g., 5 seconds)
+    }, 5000);
+  };
+
   const GreetingSection = () => (
   <Text>
     <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
@@ -322,6 +332,15 @@ const TooltipSOS = () => {
       <Box style={styles.drawer}>
         <DrawerWorker alertType={currentAlertType} />
       </Box>
+      <WorkerSafeZone onSafeConfirmation={handleSafeConfirmation} />
+      {showAlert && (
+        <AlertMessage
+          backgroundColor="#00AE8C"
+          textColor="#fff"
+          iconColor="#fff"
+          text="Thanks for confirming that you are at the safe zone. Stay alert!"
+        />
+      )}
       </ScreenLayout> 
   </>
   );
