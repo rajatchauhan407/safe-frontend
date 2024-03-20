@@ -5,6 +5,8 @@ import CommonButton from "../../components/common/button";
 import CommonCard from "../../components/common/card";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertButton from "../../components/common/alertButton";
+import DrawerWorker from "../../components/worker/drawer";
+import WorkerSafeZone from "../../components/worker/safeZone";
 import * as Location from 'expo-location';
 import { BACKEND_BASE_URL } from "../../config/api";
 import { NavigationProp } from "@react-navigation/native";
@@ -16,6 +18,7 @@ import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
 import { useSelector} from "react-redux";
 import { RootState} from "../../lib/store";
+import websocketService from "../../services/websocket.service";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
@@ -24,6 +27,10 @@ const Dashboard: React.FC = () => {
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
+  const [currentAlertType, setCurrentAlertType] = useState
+  <"none" | "accident" | "evacuation">("none");
+
+
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
@@ -36,6 +43,25 @@ const Dashboard: React.FC = () => {
     siteId = user.constructionSiteId || ""; 
     userName = `${user.firstName} ${user.lastName}`;
   } 
+
+  useEffect(() => {
+    websocketService.connect();
+
+    console.log("Connected to websocket");
+    websocketService.subscribeToEvent("alert", (data) => {
+      console.log(data);
+      setCurrentAlertType(data.alertType);
+    });
+
+    return () => {
+      websocketService.disconnect();
+    };
+  });
+
+  /* Use this to change alert type */
+  useEffect(() => {
+    setCurrentAlertType("evacuation");
+  }, []);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -230,8 +256,9 @@ const Dashboard: React.FC = () => {
 );
 
   const handleIncidentPress = () => {
-    navigation.navigate('AlertDetails');
+    navigation.navigate('Alert Details' as never);
   };
+
 
   const GreetingSection = () => (
   <Text>
@@ -317,10 +344,13 @@ const TooltipSOS = () => {
             <CommonDaysAccidentCard layout={'row'} daysWithoutAccident={0} />
           </Box>
             <AlertButton user="worker" emergency="report" isDisabled={!isCheckedIn} onPress={handleIncidentPress} />
-          {/* <AlertButton user="worker" emergency="report" onPress={handleIncidentPress} /> */} 
           </VStack>
         </VStack>
         <TooltipSOS /> 
+        {/* DRAWER */}
+      <Box style={styles.drawer}>
+        <DrawerWorker alertType={currentAlertType} />
+      </Box>
       </ScreenLayout> 
   </>
   );
@@ -344,6 +374,17 @@ height: 2,
 shadowOpacity: 0.2,
 shadowRadius: 3,
 elevation: 3,
+},
+drawer: {
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  zIndex: 999,
+},
+overlay: {
+  ...StyleSheet.absoluteFillObject,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the color and opacity as needed
 },
 });
 

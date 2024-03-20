@@ -6,7 +6,7 @@ import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
-import Drawer from "../../components/common/Drawer";
+import DrawerSupervisor from "../../components/supervisor/Drawer";
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        <Drawer alertType={currentAlertType} />
+        <DrawerSupervisor alertType={currentAlertType} />
       </Box>
     </Box>
   );

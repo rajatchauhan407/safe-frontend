@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Box, ScrollView, Text } from "@gluestack-ui/themed";
 import ScreenLayout from "../../components/layout/screenLayout";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
-import Drawer from "../../components/common/Drawer";
+import Drawer from "../../components/supervisor/Drawer";
 import CheckedInList from "../../components/supervisor/CheckedInList";
 import LocationComponent from "../../components/supervisor/Location";
 import { useSelector} from "react-redux";
