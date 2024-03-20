@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacityProps } from "react-native";
 import { Button, ButtonIcon, VStack, Card } from "@gluestack-ui/themed";
 import SosIcon from "../../assets/icons/sosButton";
+import SosRIcon from "../../assets/icons/sosRButton";
 import HazardIcon from "../../assets/icons/hazard";
 import HazardWIcon from "../../assets/icons/hazardW";
 import WhistleIcon from "../../assets/icons/whistle";
@@ -59,7 +60,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
   const iconMapping = {
     worker: {
       report: {
-        icon: SosIcon,
+        icon: SosRIcon,
         iconSize: 64,
         iconColor: "#000000",
         title: "Report Incident",

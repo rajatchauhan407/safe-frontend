@@ -4,14 +4,14 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { View, Text, TouchableOpacity, StyleSheet, PanResponder, Animated } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import AlertButton from "./alertButton";
-import Typography from "./typography";
+import AlertButton from "../common/alertButton";
+import Typography from "../common/typography";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
 }
 
-const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
+const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
@@ -128,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Drawer;
+export default DrawerSupervisor;
