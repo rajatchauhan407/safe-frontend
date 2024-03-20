@@ -10,11 +10,46 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../lib/slices/authSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
+import { BACKEND_BASE_URL } from "../../config/api";
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteId = "";
+  let userId  = "";
+   if (user) {
+    console.log("logged in user>> " + user._id);
+    userId=user._id;
+    siteId = user.constructionSiteId || ""; 
+  } 
+  const handleCheckout = async() =>
+  {
+    try{
+      const checkOutInfo = {
+        siteId: siteId,
+        workerId: userId,
+      };
+      const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify(checkOutInfo),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      console.log("worker checked out during logout - "+userId);
+    }
+    catch{
+    }
+  }
+
   const handleLogout = async() => {
+    await handleCheckout();
     await deleteItem('token');
     await deleteItem('user');  
     dispatch(logout());

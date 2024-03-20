@@ -20,7 +20,7 @@ import { RootState} from "../../lib/store";
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   // const [userName, setUserName] = useState("");
-  const [siteLocation, setSiteLocation] = useState("Langara College 49th Ave");
+  const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
@@ -70,7 +70,33 @@ const Dashboard: React.FC = () => {
       }
     };
 
+    const getSite = async () => {
+      try {
+        const siteInfo = {
+          siteId : siteId
+        }
+        const res = await fetch(`${BACKEND_BASE_URL}/sitename`, {
+          method: "POST",
+          credentials: 'include',
+          body: JSON.stringify(siteInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log("site name data>> "+data)
+        if (data) {
+          setSiteLocation(data)    
+        } 
+      } 
+      catch (error) {
+        //Error while connecting with backend
+        console.error('Error:', error);
+      }
+    };
+
     fetchData();
+    getSite();
   }, []);
 
   const getLocation = async (): Promise<Location.LocationObject | null> => {
