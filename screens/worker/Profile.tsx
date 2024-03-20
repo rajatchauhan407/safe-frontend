@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import ScreenLayout from "../../components/layout/screenLayout";
 import AlertMessage from "../../components/common/alertMessage";
 import EmergencyInstructions from "../../components/worker/emergencyInstructions";
+import AlertReceived from "../../components/worker/alertReceived";
 import { Button, ButtonText } from "@gluestack-ui/themed";
 import { deleteItem } from "../../lib/slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -24,7 +25,8 @@ const Profile: React.FC = () => {
   <>  
   <AlertMessage backgroundColor="#00AE8C" text="Your incident has been reported" />
   <ScreenLayout>
-      <EmergencyInstructions emergency="A worker fell" />
+      <AlertReceived type="evacuation" location="Zone 3 - Building B" emergency={"Struck by hazard"} level={2} workersInjured={5} />
+      {/* <EmergencyInstructions emergency="A worker fell" /> */}
       <Button onPress={handleLogout}>
         <ButtonText>Logout</ButtonText>
       </Button>

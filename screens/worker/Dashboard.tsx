@@ -14,24 +14,59 @@ import AlertMessage from "../../components/common/alertMessage";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [userName, setUserName] = useState("Prinkle Gagarin");
+  // const [userName, setUserName] = useState("");
   const [siteLocation, setSiteLocation] = useState("Langara College 49th Ave");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteId = "";
+  let userId  = "";
+  let userName = "";
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    userId=user._id;
+    siteId = user.constructionSiteId || ""; 
+    userName = `${user.firstName} ${user.lastName}`;
+  } 
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
-    // Simulating data fetching from the backend
     const fetchData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+        const workerInfo = {
+          workerId : userId
+        }
+        const res = await fetch(`${BACKEND_BASE_URL}/workerstatus`, {
+          method: "POST",
+          credentials: 'include',
+          body: JSON.stringify(workerInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.data) {
+          if (data.data[0].checkType === 'check-in') { 
+            console.log("user is already checked in")            
+            let formattedTime = new Date(data.data[0].timeStamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            console.log(formattedTime);
+            setIsCheckedIn(true);
+            setCheckInTime(formattedTime);
+          }          
+        } 
+      } 
+      catch (error) {
+        //Error while connecting with backend
+        console.error('Error:', error);
       }
     };
 
@@ -59,8 +94,8 @@ const Dashboard: React.FC = () => {
 
           //Actual Location of the device
           // const checkInInfo = {
-          //   siteId: "65f4145c0c71a29f15263723",
-          //   workerId: "65f419da6035b412f72c869c",
+          //   siteId: siteId,
+          //   workerId: userId,
           //   location: {
           //     latitude: location.coords.latitude,
           //     longitude: location.coords.longitude
@@ -69,8 +104,8 @@ const Dashboard: React.FC = () => {
 
           //To simulate check-in successful during demo
           const checkInInfo = {
-            siteId: "65f4145c0c71a29f15263723",
-            workerId: "65f419da6035b412f72c869c",
+            siteId: siteId,
+            workerId: userId,
             location: {
               latitude: 49.16196980896502,
               longitude: -123.14712911446713
@@ -129,8 +164,8 @@ const Dashboard: React.FC = () => {
       // Check-out process
       setIsCheckedIn(false);
       const checkOutInfo = {
-        siteId: "65f4145c0c71a29f15263723",
-        workerId: "65f419da6035b412f72c869c",
+        siteId: siteId,
+        workerId: userId,
       };
       try {
         const res = await fetch(`${BACKEND_BASE_URL}/checkout`, {

@@ -12,14 +12,25 @@ import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
 import LocationComponent from "../../components/supervisor/Location";
 import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 const Dashboard: React.FC = () => {
-  const [userName, setUserName] = useState("David");
+  // const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("Richmond, BC");
   const [data, setData] = useState(null);
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
+
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let userName = "";
+  if (user) {
+    console.log("logged in user>> " + user._id);   
+    userName = `${user.firstName} ${user.lastName}`;
+  } 
 
   useEffect(() => {
     websocketService.connect();
