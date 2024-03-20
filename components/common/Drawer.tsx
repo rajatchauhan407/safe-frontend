@@ -29,8 +29,12 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
     setAutoOpen(false);
   };
 
-  const handleIncidentPress = () => {
+  /* const handleIncidentPress = () => {
     navigation.navigate("AlertDetails");
+  }; */
+
+  const handleReceivedDetailsPress = () => {
+    navigation.navigate("Received Alert" as never);
   };
 
   const getAlertColor = (): string => {
@@ -65,7 +69,8 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
               user="supervisor"
               emergency={alertType}
               color={getAlertColor()}
-              onPress={handleIncidentPress}
+              /* onPress={handleIncidentPress} */
+              onPress={handleReceivedDetailsPress}
             />
           )}
         </View>
