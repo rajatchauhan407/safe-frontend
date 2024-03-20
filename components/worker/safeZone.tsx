@@ -57,7 +57,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
   );
 
   const handleIncidentPress = () => {
-    onSafeConfirmation(); // Callback to notify parent component (Dashboard)
+    // onSafeConfirmation(); // Callback to notify parent component (Dashboard)
     navigation.navigate('Dashboard' as never);
   };
 

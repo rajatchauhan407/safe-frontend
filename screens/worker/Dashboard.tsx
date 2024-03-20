@@ -29,7 +29,6 @@ const Dashboard: React.FC = () => {
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState
   <"none" | "accident" | "evacuation">("none");
-  const [showAlert, setShowAlert] = useState(false);
 
 
   const { isAuthenticated, status, user } = useSelector(
@@ -231,15 +230,9 @@ const Dashboard: React.FC = () => {
 );
 
   const handleIncidentPress = () => {
-    navigation.navigate('AlertDetails');
+    navigation.navigate('Alert Details' as never);
   };
 
-  const handleSafeConfirmation = () => {
-    setShowAlert(true); // Show the alert message
-    setTimeout(() => {
-      setShowAlert(false); // Hide the alert after a delay (e.g., 5 seconds)
-    }, 5000);
-  };
 
   const GreetingSection = () => (
   <Text>
@@ -332,15 +325,6 @@ const TooltipSOS = () => {
       <Box style={styles.drawer}>
         <DrawerWorker alertType={currentAlertType} />
       </Box>
-      <WorkerSafeZone onSafeConfirmation={handleSafeConfirmation} />
-      {showAlert && (
-        <AlertMessage
-          backgroundColor="#00AE8C"
-          textColor="#fff"
-          iconColor="#fff"
-          text="Thanks for confirming that you are at the safe zone. Stay alert!"
-        />
-      )}
       </ScreenLayout> 
   </>
   );
