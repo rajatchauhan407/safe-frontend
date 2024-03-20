@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState} from "react";
 import { VStack, Box } from '@gluestack-ui/themed';
 import { useNavigation } from '@react-navigation/native';
 import Typography from '../common/typography';
-import AlertButton from '../common/alertButton';
 import CommonButton from '../common/button';
 import FallIcon from '../../assets/icons/fall';
 import FireHazardIcon from '../../assets/icons/fireHazard';
@@ -10,6 +9,8 @@ import ElectricIcon from '../../assets/icons/electric';
 import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
+import LocationIcon from '../../assets/icons/location';
+import ScreenLayout from '../layout/screenLayout';
 
 interface AlertReceivedProps {
   type: 'accident' | 'evacuation';
@@ -21,19 +22,12 @@ interface AlertReceivedProps {
 
 interface EmergencyItem {
   text: string;
-  icon: React.FC<any>; // Change iconName to icon
+  icon: React.FC<any>; 
 }
 
-const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
+const WorkerSafeZone: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
   const navigation = useNavigation();
-
-  const handleIncidentPress = () => {
-    // Handle incident press
-  };
-
-  const navigateToSafeZone = () => {
-    navigation.navigate('Evacuation Alert' as never);
-  };
+  const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
 
   const emergencies: EmergencyItem[] = [
     { text: 'A worker fell', icon: FallIcon },
@@ -46,27 +40,37 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
 
   const selectedEmergency = emergencies.find(item => item.text === emergency);
 
+  const LocationSafeZone = () => (
+    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'center' }}>
+      <LocationIcon size={18} color={''} focussed={false} />
+      <Typography size="xl" pl={5} bold>{safeZoneLocation}</Typography>
+    </Box>
+    );
+
+  const handleIncidentPress = () => {
+    // Handle incident press
+  };
+
   return (
-    <VStack space="md">
-      <Typography textAlign="center" bold>Incident on {location}</Typography>
-      <AlertButton user="worker" emergency={type} onPress={handleIncidentPress} />
+    <ScreenLayout>
+        <VStack space="md">
+            <Typography textAlign="center" bold>Remain calm and proceed to safe zone</Typography>
 
-      <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-        <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />
-        <BoxWithNumber number={level} text={`Level`} type={type} />
-        <BoxWithNumber number={workersInjured} text={`Workers Injured`} type={type} />
-      </VStack>
+            <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />
+                <BoxWithNumber number={level} text={`Level`} type={type} />
+                <BoxWithNumber number={workersInjured} text={`Workers Injured`} type={type} />
+            </VStack>
 
-      {type === 'accident' && (
-        <Typography textAlign="center" bold>Please continue your work with caution until further notice.</Typography>
-      )}
+            <LocationSafeZone />
+            
+            {/* ADD IMAGE OF THE SAFE ZONE - HARDCODED FROM S3 BUCKET */}
 
-      {type === 'evacuation' && (
-        <CommonButton variant="underline" onPress={navigateToSafeZone} buttonTextSize={18} >
-          <Typography>Go to Safe Zone</Typography> 
-        </CommonButton>
-      )}
-    </VStack>
+            <CommonButton variant="rounded" action='secondary'  onPress={handleIncidentPress} buttonTextSize={24} >
+                I am safe
+            </CommonButton>
+        </VStack>
+    </ScreenLayout>
   );
 };
 
@@ -104,4 +108,4 @@ const BoxWithNumber: React.FC<BoxWithNumberProps> = ({ number, text, type }) => 
   );
 };
 
-export default AlertReceived;
+export default WorkerSafeZone;

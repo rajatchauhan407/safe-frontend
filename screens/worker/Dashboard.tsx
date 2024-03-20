@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
 
   /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertType("accident");
+    setCurrentAlertType("evacuation");
   }, []);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

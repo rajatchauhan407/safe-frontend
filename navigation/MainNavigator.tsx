@@ -5,6 +5,7 @@ import LoginScreen from "../screens/Login";
 import AlertReport from "../screens/worker/AlertReport";
 import CheckedIn from "../screens/supervisor/CheckedIn";
 import SafeZone from "../screens/supervisor/SafeZone";
+import WorkerSafeZone from "../components/worker/safeZone";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../lib/store";
 import { verifyToken } from "../lib/slices/authSlice";
@@ -73,6 +74,7 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="AlertDetails" component={AlertReport} />
       <Stack.Screen name="Checked In" component={CheckedIn} />
       <Stack.Screen name="Safe Zone" component={SafeZone} />
+      <Stack.Screen name="Evacuation Alert" component={WorkerSafeZone} />
     </Stack.Navigator>
   );
 };
