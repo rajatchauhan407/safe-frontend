@@ -163,6 +163,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         onPress={handleIncidentPress}
       /> */}
 
+      {/* CANCEL ALERT */}
       <CommonButton variant="text" onPress={handleCancel}>
         <ButtonText textDecorationLine="underline" size="md">
           <Typography size="lg">Cancel Alert</Typography>
