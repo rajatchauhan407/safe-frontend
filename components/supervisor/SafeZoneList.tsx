@@ -15,15 +15,15 @@ import CommonButton from "../common/button";
 import SortIcon from "../../assets/icons/sort";
 import SafeWorkerIcon from "../../assets/icons/safeWorker";
 import NotSafeWorkerIcon from "../../assets/icons/notSafeWorker";
-import { useSelector} from "react-redux";
-import { RootState} from "../../lib/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
 
 interface Worker {
   id: number;
   name: string;
   role: string;
   avatar: string;
-  checkedIn: boolean;
+  onSite: boolean;
 }
 
 const SafeZoneList: React.FC = () => {
@@ -37,8 +37,8 @@ const SafeZoneList: React.FC = () => {
 
   if (user) {
     console.log("logged in user>> " + user._id);
-    siteID = user.constructionSiteId || "";     
-  } 
+    siteID = user.constructionSiteId || "";
+  }
 
   /* Fetch Workers Info */
   useEffect(() => {
