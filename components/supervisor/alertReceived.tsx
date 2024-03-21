@@ -12,6 +12,7 @@ import SpaceIcon from "../../assets/icons/space";
 import DangerIcon from "../../assets/icons/danger";
 import LocationComponent from "./Location";
 import GroupButton from "../common/groupButton";
+import SMSModal from "./SMSModal";
 
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
@@ -55,8 +56,10 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
 
   const navigation = useNavigation();
 
+  const [openSMS, setOpenSMS] = useState(false);
+
   const handleIncidentPress = () => {
-    // Handle incident press
+    setOpenSMS(true);
   };
 
   const navigateToSafeZone = () => {
@@ -155,6 +158,9 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           />
         )}
       </Box>
+
+      {/* SMS MODAL */}
+      <SMSModal showModal={openSMS} setShowModal={setOpenSMS} />
 
       {/* testing */}
       {/* <AlertButton
