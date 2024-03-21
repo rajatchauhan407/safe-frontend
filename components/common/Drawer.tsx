@@ -8,13 +8,15 @@ import DrawerUpIcon from "../../assets/icons/drawerUp";
 import AlertButton from "./alertButton";
 import Typography from "./typography";
 import { Swipeable } from "react-native-gesture-handler";
+import { Box, HStack } from "@gluestack-ui/themed";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
   alertData?: any;
+  isAlert?: boolean;
 }
 
-const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
+const Drawer: React.FC<DrawerProps> = ({ alertType,alertData,isAlert }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [autoOpen, setAutoOpen] = useState(false);
 
@@ -26,7 +28,7 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
       setAutoOpen(true);
     }
   }, [alertType]);
-
+console.log(alertData)
   const handleDrawerToggle = () => {
     setIsOpen(!isOpen);
     setAutoOpen(false);
@@ -61,18 +63,25 @@ const Drawer: React.FC<DrawerProps> = ({ alertType }) => {
           </Typography>
         </View>
       </TouchableOpacity>
-      {isOpen && (
-        <View style={styles.content}>
+      
+      {isAlert && alertData && (
+        <Box style={styles.content}>
+          <HStack>
+              <Text>Alert Type: {alertType}</Text>
+              <Text>Reporting For: {alertData.reportingFor}</Text>
+              <Text>Workers Injured: {alertData.workersInjured}</Text>
+          </HStack>
           {/* Content of the drawer based on the alert text */}
-          {alertType !== "none" && (
+          {/* {alertType !== "none" && (
             <AlertButton
               user="supervisor"
               emergency={alertType}
               color={getAlertColor()}
               onPress={handleIncidentPress}
             />
-          )}
-        </View>
+          )} */}
+          
+        </Box>
       )}
     </View>
   );

@@ -22,6 +22,7 @@ const Dashboard: React.FC = () => {
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
+  const [isAlert, setIsAlert] = useState(false);
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -38,12 +39,14 @@ const Dashboard: React.FC = () => {
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alert", (data) => {
       console.log("Alert received", data);
-      setCurrentAlertType(data.alertType);
+      setIsAlert(true);
+      setData(data);
+      // setCurrentAlertType(data.alertType);
     });
 
-    return () => {
-      websocketService.disconnect();
-    };
+    // return () => {
+    //   websocketService.disconnect();
+    // };
   },[]);
 
   /* Use this to change alert type */
@@ -92,6 +95,7 @@ const Dashboard: React.FC = () => {
         <Drawer 
           alertType={currentAlertType}
           alertData={data}
+          isAlert={isAlert}
           />
       </Box>
     </Box>
