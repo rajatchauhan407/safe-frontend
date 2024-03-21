@@ -15,6 +15,7 @@ import AlertReport from "../screens/worker/AlertReport";
 import CheckedIn from "../screens/supervisor/CheckedIn";
 import SafeZone from "../screens/supervisor/SafeZone";
 import ReceivedAlertDetails from "../screens/supervisor/ReceivedAlert";
+import WorkerSafeZone from "../components/worker/safeZone";
 
 const Stack = createStackNavigator();
 
@@ -78,7 +79,9 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="Checked In" component={CheckedIn} />
       {/* Supervisor - In Safe Zone Workers Screen */}
       <Stack.Screen name="Safe Zone" component={SafeZone} />
-      {/* Supervisor - In Safe Zone Workers Screen */}
+      {/* Worker - Evacuation Alert */}
+      <Stack.Screen name="Evacuation Alert" component={WorkerSafeZone} />
+      {/* Supervisor - Alert Details Screen */}
       <Stack.Screen name="Received Alert" component={ReceivedAlertDetails} />
     </Stack.Navigator>
   );

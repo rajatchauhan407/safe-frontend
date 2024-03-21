@@ -46,7 +46,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       borderRadius: isLogIn ? 100 : 4,
     },
     rounded: {
-      backgroundColor: action === "primary" ? "#FD9201" : "#6C757D",
+      backgroundColor: action === "primary" ? "#FD9201" : "#00AE8C",
       borderRadius: 100,
     },
     text: {
@@ -72,7 +72,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     },
     rounded: {
       fontFamily: "NunitoSans_700Bold",
-      color: action === "primary" ? "#1E1E1E" : "#6C757D",
+      color: action === "primary" ? "#1E1E1E" : "#1E1E1E",
       fontSize: buttonTextSize,
       fontWeight: "bold",
     },

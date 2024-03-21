@@ -6,7 +6,7 @@ import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
-import Drawer from "../../components/common/Drawer";
+import DrawerSupervisor from "../../components/supervisor/Drawer";
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import websocketService from "../../services/websocket.service";
@@ -14,10 +14,11 @@ import LocationComponent from "../../components/supervisor/Location";
 import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
+import { BACKEND_BASE_URL } from "../../config/api";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
-  const [siteLocation, setSiteLocation] = useState("Richmond, BC");
+  const [siteLocation, setSiteLocation] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
@@ -26,10 +27,40 @@ const Dashboard: React.FC = () => {
     (state: RootState) => state.auth
   );
   let userName = "";
+  let siteId = "";
   if (user) {
+    siteId = user.constructionSiteId || "";
     console.log("logged in user>> " + user._id);
     userName = `${user.firstName} ${user.lastName}`;
   }
+
+  useEffect(() => {
+    const getSite = async () => {
+      try {
+        const siteInfo = {
+          siteId: siteId,
+        };
+        const res = await fetch(`${BACKEND_BASE_URL}/sitename`, {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(siteInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log("site name data>> " + data);
+        if (data) {
+          setSiteLocation(data);
+        }
+      } catch (error) {
+        //Error while connecting with backend
+        console.error("Error:", error);
+      }
+    };
+
+    getSite();
+  }, []);
 
   useEffect(() => {
     websocketService.connect();
@@ -91,7 +122,7 @@ const Dashboard: React.FC = () => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        <Drawer alertType={currentAlertType} />
+        <DrawerSupervisor alertType={currentAlertType} />
       </Box>
     </Box>
   );
