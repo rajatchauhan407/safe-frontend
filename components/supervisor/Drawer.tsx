@@ -65,7 +65,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType }) => {
   }; */
 
   const handleReceivedDetailsPress = () => {
-    navigation.navigate("Received Alert" as never);
+    navigation.navigate("Received Alert", { alertType });
   };
 
   const getAlertColor = (): string => {
