@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,Link } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Box, HStack, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, HStack, ScrollView, Text, get } from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
@@ -14,7 +14,10 @@ import LocationComponent from "../../components/supervisor/Location";
 import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
-import { BACKEND_BASE_URL } from "../../config/api";
+import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
+import useFetch from "../../hooks/useFetch";
+import {IAlert} from '../../shared/interfaces/alert.interface';
+
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -34,6 +37,21 @@ const Dashboard: React.FC = () => {
     console.log("logged in user>> " + user._id);
     userName = `${user.firstName} ${user.lastName}`;
   }
+
+const {data, isLoading, error, fetchData}:any = useFetch(`${LOCAL_BASE_URL}/alert?constructionSiteId=${siteId}`, 'GET');
+const getAlert = async () => {
+  await fetchData({
+   credentials: "include",
+   headers: {
+     "Content-type": "application/json",
+   }
+  });
+}
+useEffect(() => {
+
+  getAlert();
+  
+},[])
 
   useEffect(() => {
     const getSite = async () => {
@@ -81,8 +99,17 @@ const Dashboard: React.FC = () => {
 
   /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertType("sos");
-  }, []);
+    console.log("Alert data>> ",data);
+    if (data){
+      if(data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2){
+        setCurrentAlertType("accident");
+    }else if(data.degreeOfEmergency === 3){
+        setCurrentAlertType("evacuation");
+    }else{
+      setCurrentAlertType("sos");
+    }
+  }
+  }, [data]);
 
   return (
     <Box w="$full" h="$full">
@@ -125,7 +152,7 @@ const Dashboard: React.FC = () => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        <DrawerSupervisor alertType={currentAlertType} />
+       { data && <DrawerSupervisor alertType={currentAlertType} alertData={data}/>}
       </Box>
     </Box>
   );

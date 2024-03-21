@@ -4,11 +4,11 @@ import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import AlertReceived from "../../components/supervisor/alertReceived";
 
-const ReceivedAlertDetails: React.FC = () => {
+const ReceivedAlertDetails: React.FC<any> = ({route}) => {
   const [accidentLocation, setAccidentLocation] = useState(
     "Zone 3 - Building B"
   );
-
+    const {alertData} = route.params;
   return (
     <ScreenLayout>
       <ScrollView h="100%" w="100%">
@@ -20,13 +20,13 @@ const ReceivedAlertDetails: React.FC = () => {
 
         {/* EMERGENCY DETAILS */}
         <AlertReceived
-          type="accident" /* "evacuation" */ //testing
-          location={accidentLocation}
-          emergency={"Struck by hazard"}
-          level={2}
-          workersInjured={3}
-          reportedFor={"Other"}
-          needAssistance={true}
+          type={alertData.degreeOfEmergency === 1 || alertData.degreeOfEmergency === 2 ? 'accident' : 'evacuation'} /* "evacuation" */ //testing
+          location={alertData.location}
+          emergency={alertData.emergencyType}
+          level={alertData.degreeOfEmergency}
+          workersInjured={alertData.workersInjured}
+          reportedFor={alertData.reportingFor}
+          needAssistance={alertData.assistance}
         />
       </ScrollView>
     </ScreenLayout>
