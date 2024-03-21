@@ -179,25 +179,26 @@ const AlertReport: React.FC = () => {
     return (
       <FormControl>
         <VStack space="md">
-        <Typography bold>Photo of Incident Location (Optional)</Typography>
-        <CommonButton variant="rounded" action="positive" showIcon={true} buttonTextSize={18} onPress={() => setShowCamera(true)}>
-          Take a Photo
-        </CommonButton>
-        {/* Render camera if showCamera state is true */}
-        {showCamera && (
-          <Camera style={{ flex: 1 }} ref={cameraRef} type={cameraType}>
-            <TouchableOpacity onPress={handleCameraClose} style={{ alignSelf: 'flex-end', marginRight: 16 }}>
-              <Typography bold style={{ color: 'white' }}>Close Camera</Typography>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleTakePhoto} style={{ alignSelf: 'center', marginBottom: 16 }}>
-              <Typography bold style={{ color: 'white' }}>Take Picture</Typography>
-            </TouchableOpacity>
-          </Camera>
-        )}
+          <Typography bold>Photo of Incident Location (Optional)</Typography>
+          <CommonButton variant="rounded" action="positive" showIcon={true} buttonTextSize={18} onPress={() => setShowCamera(true)}>
+            Take a Photo
+          </CommonButton>
+          {/* Render camera if showCamera state is true */}
+          {showCamera && (
+            <Camera style={{ flex: 1 }} ref={cameraRef} type={cameraType}>
+              <TouchableOpacity onPress={handleCameraClose} style={{ alignSelf: 'flex-end', marginRight: 16 }}>
+                <Typography bold style={{ color: 'white' }}>Close Camera</Typography>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleTakePhoto} style={{ alignSelf: 'center', marginBottom: 16 }}>
+                <Typography bold style={{ color: 'white' }}>Take Picture</Typography>
+              </TouchableOpacity>
+            </Camera>
+          )}
         </VStack>
       </FormControl>
     );
   };
+  
 
   const handleCancelAlert = () => {
     navigation.navigate('Dashboard' as never);
@@ -218,13 +219,13 @@ const AlertReport: React.FC = () => {
                   <HStack space="2xl">
                     <Radio size='lg' value="Myself">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={CircleIcon}/>
                       </RadioIndicator>
                       <Typography>Myself</Typography>
                     </Radio>
                     <Radio size='lg' value="Other worker">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={CircleIcon}/>
                       </RadioIndicator>
                       <Typography>Other worker</Typography>
                     </Radio>
