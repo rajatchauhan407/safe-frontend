@@ -54,7 +54,7 @@ const AlertReport: React.FC = () => {
   const [showCamera, setShowCamera] = useState(false);
   const cameraRef = useRef<Camera>(null);
   const [emergencyText,setEmergencyText] = useState('');
-  const { data, isLoading, error, fetchData } = useFetch(`${LOCAL_BASE_URL}/alert`, 'POST');
+  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}/alert`, 'POST');
   const user = useSelector((state: RootState) => state.auth.user);
   // console.log('user>>', user);
   /*** send alert for the app ****/

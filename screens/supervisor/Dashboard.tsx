@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
     userName = `${user.firstName} ${user.lastName}`;
   }
 
-const {data, isLoading, error, fetchData}:any = useFetch(`${LOCAL_BASE_URL}/alert?constructionSiteId=${siteId}`, 'GET');
+const {data, isLoading, error, fetchData}:any = useFetch(`${BACKEND_BASE_URL}/alert?constructionSiteId=${siteId}`, 'GET');
 const getAlert = async () => {
   await fetchData({
    credentials: "include",
