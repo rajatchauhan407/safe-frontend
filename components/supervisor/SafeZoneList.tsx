@@ -15,28 +15,39 @@ import CommonButton from "../common/button";
 import SortIcon from "../../assets/icons/sort";
 import SafeWorkerIcon from "../../assets/icons/safeWorker";
 import NotSafeWorkerIcon from "../../assets/icons/notSafeWorker";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
 
 interface Worker {
   id: number;
   name: string;
   role: string;
   avatar: string;
-  checkedIn: boolean;
+  onSite: boolean;
 }
 
 const SafeZoneList: React.FC = () => {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [sortOnZoneFirst, setSortOnZoneFirst] = useState<boolean>(true);
   const [buttonText, setButtonText] = useState<string>("Sort");
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteID = "";
+
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    siteID = user.constructionSiteId || "";
+  }
 
   /* Fetch Workers Info */
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
         const siteId = {
-          siteId: "65f4145c0c71a29f15263723",
+          siteId: siteID,
         };
-        const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
+        const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
           method: "POST",
           credentials: "include",
           body: JSON.stringify(siteId),
@@ -47,7 +58,7 @@ const SafeZoneList: React.FC = () => {
         const data = await res.json();
         console.log("Data from backend >> WorkersData" + data.data.workersData);
         console.log(
-          "Data from backend >> WorkersCheckedIn " + data.data.workersCheckedIn
+          "Data from backend >> WorkersCheckedIn " + data.data.safeZoneWorkers
         );
 
         const updatedSiteWorkers: Worker[] = [];
@@ -56,7 +67,7 @@ const SafeZoneList: React.FC = () => {
           console.log("Worker Name:", worker.firstName);
           console.log("Worker Role:", worker.lastName);
           let onSite = false;
-          for (const workerOnSite of data.data.workersCheckedIn) {
+          for (const workerOnSite of data.data.safeZoneWorkers) {
             if (worker._id === workerOnSite.userId) {
               onSite = true;
               console.log("checked - in " + worker._id);

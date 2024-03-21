@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import {
   Select,
   SelectTrigger,
@@ -14,12 +14,48 @@ import {
 } from "@gluestack-ui/themed";
 import Typography from "./typography";
 import { Feather } from "@expo/vector-icons";
+import { BACKEND_BASE_URL } from "../../config/api";
+
+interface Site {
+  _id: string;
+  name: string;
+}
 
 const Dropdown = () => {
+  const [siteList, setSiteList] = useState<Site[]>([]);
+  const [selectedSite, setSelectedSite] = useState<string | undefined>("7100 Gilbert Rd, Richmond");;
+
+  useEffect(() => {
+    console.log("in useeffect")
+    const fetchData = async () => {
+      try {
+          const res = await fetch(`${BACKEND_BASE_URL}/sitelist`, {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        
+        if (data) {
+          setSiteList(data)
+          console.log(data)        
+        } 
+      } 
+      catch (error) {
+        //Error while connecting with backend
+        console.error('Error:', error);
+      }
+    };
+    fetchData();
+    
+  }, []);
+
   return (
     <Box>
       <Typography bold>Site</Typography>
-      <Select isRequired>
+      <Select isRequired defaultValue={selectedSite}>
         <SelectTrigger variant="outline" size="md">
           <SelectInput placeholder="Select option" />
           <Box>
@@ -34,7 +70,7 @@ const Dropdown = () => {
             <SelectDragIndicatorWrapper>
               <SelectDragIndicator />
             </SelectDragIndicatorWrapper>
-            <SelectItem
+            {/* <SelectItem
               label="Langara College 49th Ave"
               value="LangaraCollege49thAve"
             />
@@ -54,7 +90,14 @@ const Dropdown = () => {
             <SelectItem
               label="Mountview Estates Project Area"
               value="MountviewEstatesProjectArea"
-            />
+            /> */}
+             {siteList.map((site) => (
+              <SelectItem
+                key={site._id}
+                label={site.name}
+                value={site._id}
+              />
+            ))}
           </SelectContent>
         </SelectPortal>
       </Select>
