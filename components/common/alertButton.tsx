@@ -11,7 +11,7 @@ import Typography from "./typography";
 
 interface AlertButtonProps extends TouchableOpacityProps {
   user?: "worker" | "supervisor";
-  emergency?: "report" | "accident" | "evacuation" | "sos";
+  emergency?: "report" | "accident" | "evacuation" | "sos" | "oneWhistle";
   level?: number;
   isDisabled?: boolean;
   showIcon?: boolean;
@@ -53,6 +53,9 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       },
       sos: {
         backgroundColor: "#D0080F",
+      },
+      oneWhistle: {
+        backgroundColor: "#FD9201",
       },
     },
   };
@@ -102,6 +105,13 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         iconColor: "#000000",
         title: "SOS Reported",
         description: "Go to SOS details",
+      },
+      oneWhistle: {
+        icon: WhistleIcon,
+        iconSize: 64,
+        iconColor: "#000000",
+        title: "1 WHISTLE ALERT",
+        description: null,
       },
     },
   };
@@ -181,20 +191,20 @@ const AlertButton: React.FC<AlertButtonProps> = ({
             {title}
           </Typography>
           {description && (
-          <>
-            <Typography
-              size="lg"
-              style={{
-                color: isDisabled
-                  ? textStyles.disabled.textColor
-                  : textStyles[emergency]
-                  ? textStyles[emergency].textColor
-                  : textStyles.default.textColor,
-              }}
-            >
-              {description}
-            </Typography>
-          </>
+            <>
+              <Typography
+                size="lg"
+                style={{
+                  color: isDisabled
+                    ? textStyles.disabled.textColor
+                    : textStyles[emergency]
+                    ? textStyles[emergency].textColor
+                    : textStyles.default.textColor,
+                }}
+              >
+                {description}
+              </Typography>
+            </>
           )}
         </VStack>
       </Button>
