@@ -53,6 +53,8 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     setSelectedButton(action);
   };
 
+  const navigation = useNavigation();
+
   const handleIncidentPress = () => {
     // Handle incident press
   };
@@ -60,6 +62,10 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   const navigateToSafeZone = () => {
     // Navigate to safe zone screen
     // navigation.navigate('SafeZoneScreen');
+  };
+
+  const handleCancel = () => {
+    navigation.goBack(); // Navigate back to the previous screen (dashboard)
   };
 
   const emergencies: EmergencyItem[] = [
@@ -157,7 +163,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         onPress={handleIncidentPress}
       /> */}
 
-      <CommonButton variant="text">
+      <CommonButton variant="text" onPress={handleCancel}>
         <ButtonText textDecorationLine="underline" size="md">
           <Typography size="lg">Cancel Alert</Typography>
         </ButtonText>
