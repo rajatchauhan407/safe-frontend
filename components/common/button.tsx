@@ -2,10 +2,12 @@ import React from "react";
 import { TouchableOpacityProps, TextStyle, ViewStyle } from "react-native";
 import { Button, ButtonText, ButtonIcon, AddIcon } from "@gluestack-ui/themed";
 import Typography from "./typography";
+import { Camera } from 'lucide-react-native';
+
 
 interface CommonButtonProps extends TouchableOpacityProps {
   variant?: "fill" | "outline" | "rounded" | "text" | "underline";
-  action?: "primary" | "secondary";
+  action?: "primary" | "secondary" | "positive";
   isDisabled?: boolean;
   isCheckIn?: boolean;
   isLogIn?: boolean;
@@ -46,8 +48,8 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       borderRadius: isLogIn ? 100 : 4,
     },
     rounded: {
-      backgroundColor: action === "primary" ? "#FD9201" : "#00AE8C",
-      borderRadius: 100,
+        backgroundColor: action === "primary" ? "#FD9201" : action === "secondary" ? "#00AE8C" : action === "positive" ? "#1E1E1E" : "#FFFFFF",
+        borderRadius: 100,
     },
     text: {
       backgroundColor: "transparent",
@@ -72,7 +74,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     },
     rounded: {
       fontFamily: "NunitoSans_700Bold",
-      color: action === "primary" ? "#1E1E1E" : "#1E1E1E",
+      color: action === "primary" ? "#1E1E1E" : action === "positive" ? "#FFFFFF" : "#FFFFFF",
       fontSize: buttonTextSize,
       fontWeight: "bold",
     },
@@ -109,11 +111,14 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       {...props}
       style={getButtonStyle()}
     >
-      {showIcon && variant !== "text" && <ButtonIcon as={AddIcon} />}
+      {showIcon && variant !== "text" && <ButtonIcon as={Camera} size="xl" />}
       <Typography
-        size={buttonTextSize}
-        style={textStyles[variant as keyof typeof textStyles]}
-      >
+      size={buttonTextSize}
+      style={{
+        ...textStyles[variant as keyof typeof textStyles],
+        marginLeft: showIcon && variant !== "text" ? 8 : 0,
+      }}
+    >
         {children}
       </Typography>
     </Button>

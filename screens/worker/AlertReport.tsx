@@ -464,15 +464,14 @@ import {
   RadioGroup,
   RadioIcon,
   RadioIndicator,
-  RadioLabel,
   Textarea,
   TextareaInput,
-  Tooltip,
-  TooltipContent,
-  Center,
+  ScrollView,
+  Button,
 } from "@gluestack-ui/themed";
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Typography from '../../components/common/typography';
+import CommonButton from '../../components/common/button';
 import FallIcon from '../../assets/icons/fall';
 import FireHazardIcon from '../../assets/icons/fireHazard';
 import ElectricIcon from '../../assets/icons/electric';
@@ -492,6 +491,8 @@ const AlertReport: React.FC = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [selectedEmergency, setSelectedEmergency] = useState<string | null>(null);
   const [urgencyLevel, setUrgencyLevel] = useState(2);
+  const [needAssistance, setNeedAssistance] = useState<'Yes' | 'No'>('Yes');
+  const [showAssistanceForm, setShowAssistanceForm] = useState(false);
 
   const emergencies: EmergencyItem[] = [
     { text: 'A worker fell', icon: FallIcon },
@@ -556,101 +557,151 @@ const AlertReport: React.FC = () => {
     );
   };
 
+  const handleAssistanceSelection = (value: 'Yes' | 'No') => {
+    setNeedAssistance(value);
+    if (value === 'Yes') {
+      setShowAssistanceForm(true);
+    } else {
+      setShowAssistanceForm(false);
+    }
+  };
+
+  const AssistanceForm = () => {
+    return (
+      <FormControl>
+        <VStack space="md">
+        <Typography bold>Photo of Incident Location (Optional)</Typography>
+        <CommonButton variant="rounded" action="positive" showIcon={true} buttonTextSize={18} >   
+          Take a Photo
+        </CommonButton> 
+        </VStack>    
+      </FormControl>
+    );
+  };
 
   return (
-    <ScreenLayout>
-      <VStack space="2xl">
+    <>
+      <ScrollView>
+        <ScreenLayout>
+          <VStack space="2xl">
 
-        {/* FIELD 1 - REPORT FOR */}
-        <FormControl>
-          <RadioGroup value={reportingFor} onChange={setReportingFor}>
-            <VStack space="md">
-              <Typography bold>I am reporting for*</Typography>
-              <HStack space="2xl">
-                <Radio value="Myself">
-                  <RadioIndicator mr="$2">
-                    <RadioIcon as={CircleIcon} />
-                  </RadioIndicator>
-                  <RadioLabel>Myself</RadioLabel>
-                </Radio>
-                <Radio value="Other worker">
-                  <RadioIndicator mr="$2">
-                    <RadioIcon as={CircleIcon} />
-                  </RadioIndicator>
-                  <RadioLabel>Other worker</RadioLabel>
-                </Radio>
-              </HStack>
-            </VStack>
-          </RadioGroup>
-        </FormControl>
+            {/* FIELD 1 - REPORT FOR */}
+            <FormControl>
+              <RadioGroup value={reportingFor} onChange={setReportingFor}>
+                <VStack space="md">
+                  <Typography bold>I am reporting for*</Typography>
+                  <HStack space="2xl">
+                    <Radio size='lg' value="Myself">
+                      <RadioIndicator mr="$2">
+                        <RadioIcon as={CircleIcon} />
+                      </RadioIndicator>
+                      <Typography>Myself</Typography>
+                    </Radio>
+                    <Radio size='lg' value="Other worker">
+                      <RadioIndicator mr="$2">
+                        <RadioIcon as={CircleIcon} />
+                      </RadioIndicator>
+                      <Typography>Other worker</Typography>
+                    </Radio>
+                  </HStack>
+                </VStack>
+              </RadioGroup>
+            </FormControl>
 
-        {/* FIELD 2 - NUMBER OF WORKERS INJURED */}
-        <FormControl>
-          <VStack space="md">
-            <Typography bold>Number of workers injured*</Typography>
-            <View style={styles.numberInputContainer}>
-              <TouchableOpacity style={styles.circleButton} onPress={() => setNumWorkersInjured(numWorkersInjured - 1)}>
-                <Typography bold>-</Typography>
-              </TouchableOpacity>
-              <View style={styles.numberDisplay}>
-                <Typography bold>{numWorkersInjured}</Typography>
-              </View>
-              <TouchableOpacity style={styles.circleButton} onPress={() => setNumWorkersInjured(numWorkersInjured + 1)}>
-                <Typography bold>+</Typography>
-              </TouchableOpacity>
-            </View>
-          </VStack>
-        </FormControl>
+            {/* FIELD 2 - NUMBER OF WORKERS INJURED */}
+            <FormControl>
+              <VStack space="md">
+                <Typography bold>Number of workers injured*</Typography>
+                <View style={styles.numberInputContainer}>
+                  <TouchableOpacity style={styles.circleButton} onPress={() => setNumWorkersInjured(numWorkersInjured - 1)}>
+                    <Typography bold>-</Typography>
+                  </TouchableOpacity>
+                  <View style={styles.numberDisplay}>
+                    <Typography bold>{numWorkersInjured}</Typography>
+                  </View>
+                  <TouchableOpacity style={styles.circleButton} onPress={() => setNumWorkersInjured(numWorkersInjured + 1)}>
+                    <Typography bold>+</Typography>
+                  </TouchableOpacity>
+                </View>
+              </VStack>
+            </FormControl>
 
-        {/* FIELD 3 - REPORT TYPE */}
-        <FormControl>
-          <VStack space="md">
-            <Typography bold>I am reporting about*</Typography>
-            <VStack space="md">
-              {chunkedEmergencies.map((chunk: EmergencyItem[], index: number) => (
-                <HStack key={index} space="md">
-                  {chunk.map((emergency: EmergencyItem, innerIndex: number) => (
-                    <BoxIconWithText key={innerIndex} icon={emergency.icon} text={emergency.text} />
+            {/* FIELD 3 - REPORT TYPE */}
+            <FormControl>
+              <VStack space="md">
+                <Typography bold>I am reporting about*</Typography>
+                <VStack space="md">
+                  {chunkedEmergencies.map((chunk: EmergencyItem[], index: number) => (
+                    <HStack key={index} space="md">
+                      {chunk.map((emergency: EmergencyItem, innerIndex: number) => (
+                        <BoxIconWithText key={innerIndex} icon={emergency.icon} text={emergency.text} />
+                      ))}
+                    </HStack>
                   ))}
-                </HStack>
-              ))}
-              {/* Render Textarea if no emergency is selected */}
-              {selectedEmergency === null && (
-                <FormControl>
-                  <Typography bold>Describe the emergency*</Typography>
-                  <Textarea>
-                    <TextareaInput />
-                  </Textarea>
-                </FormControl>
-              )}
-            </VStack>
-          </VStack>
-        </FormControl>
+                  {/* Render Textarea if no emergency is selected */}
+                  {selectedEmergency === null && (
+                    <FormControl>
+                      <Typography bold>Describe the emergency*</Typography>
+                      <Textarea>
+                        <TextareaInput />
+                      </Textarea>
+                    </FormControl>
+                  )}
+                </VStack>
+              </VStack>
+            </FormControl>
 
-        {/* FIELD 4 - DEGREE OF URGENCY */}
-        <FormControl>
-          <Typography bold>Select degree of urgency*</Typography>
-          <HStack space="lg" p={25}>
-              <Slider
-                step={1}
-                maxValue={3}
-                minValue={1}
-                size='lg'
-                defaultValue={urgencyLevel} 
-                onChange={handleChangeUrgency}
-              >
-                <SliderTrack>
-                  <SliderFilledTrack bg={getTrackColor()} />
-                </SliderTrack>
-                <SliderThumb bg={getThumbColor()} p='$1' width={40} height={40} $active-outlineColor={getThumbColor()}>
-                  <Typography textAlign="center" color="white" size="2xl" bold>{urgencyLevel}</Typography>
-                </SliderThumb>
-              </Slider>
-          </HStack>
-        </FormControl>
-        
-      </VStack>
-    </ScreenLayout>
+            {/* FIELD 4 - DEGREE OF URGENCY */}
+            <FormControl>
+              <Typography bold>Select degree of urgency*</Typography>
+              <HStack space="lg" p={25}>
+                <Slider
+                  step={1}
+                  maxValue={3}
+                  minValue={1}
+                  size='lg'
+                  defaultValue={urgencyLevel}
+                  onChange={handleChangeUrgency}
+                >
+                  <SliderTrack>
+                    <SliderFilledTrack bg={getTrackColor()} />
+                  </SliderTrack>
+                  <SliderThumb bg={getThumbColor()} p='$1' width={40} height={40} $active-outlineColor={getThumbColor()}>
+                    <Typography textAlign="center" color="white" size="2xl" bold>{urgencyLevel}</Typography>
+                  </SliderThumb>
+                </Slider>
+              </HStack>
+            </FormControl>
+
+            {/* FIELD 5 - NEED ASSISTANCE */}
+            <FormControl>
+              <RadioGroup value={needAssistance} onChange={handleAssistanceSelection}>
+                <VStack space="md">
+                  <Typography bold>Do you need assistance on the spot?*</Typography>
+                  <HStack space="2xl">
+                    <Radio size='lg' value="Yes">
+                      <RadioIndicator mr="$2">
+                        <RadioIcon as={CircleIcon} />
+                      </RadioIndicator>
+                      <Typography>Yes</Typography>
+                    </Radio>
+                    <Radio size='lg' value="No">
+                      <RadioIndicator mr="$2">
+                        <RadioIcon as={CircleIcon} />
+                      </RadioIndicator>
+                      <Typography>No</Typography>
+                    </Radio>
+                  </HStack>
+                </VStack>
+              </RadioGroup>
+            </FormControl>
+
+            {showAssistanceForm && <AssistanceForm />}
+
+          </VStack>
+        </ScreenLayout>
+      </ScrollView>
+    </>
   );
 };
 
@@ -702,4 +753,3 @@ function chunkArray(arr: any[], size: number) {
 }
 
 export default AlertReport;
-
