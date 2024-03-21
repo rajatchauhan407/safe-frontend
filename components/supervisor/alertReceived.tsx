@@ -158,8 +158,8 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
 
       {/* testing */}
       {/* <AlertButton
-        user="supervisor"
-        emergency="oneWhistle"
+        user="supervisor" // "worker"
+        emergency="oneWhistle" // "evacuation"
         onPress={handleIncidentPress}
       /> */}
 
