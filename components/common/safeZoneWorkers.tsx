@@ -5,6 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
 import Typography from "./typography";
 import CommonButton from "./button";
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -16,14 +18,23 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   const navigation = useNavigation();
   const [totalOnSite, setTotalOnSite] = useState<number>(0);
   const [totalExpected, setTotalExpected] = useState<number>(0);
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteID = "";
+
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    siteID = user.constructionSiteId || "";     
+  } 
 
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
         const siteId = {
-          siteId: "65f4145c0c71a29f15263723",
+          siteId: siteID,
         };
-        const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
+        const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
           method: "POST",
           credentials: "include",
           body: JSON.stringify(siteId),
@@ -33,7 +44,7 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
         });
         const data = await res.json();
         // Update state with the fetched values
-        setTotalOnSite(data.data.workersCheckedIn.length);
+        setTotalOnSite(data.data.safeZoneWorkers.length);
         setTotalExpected(data.data.workersData.length);
       } catch (error) {
         console.error("Error fetching workers:", error);
