@@ -21,7 +21,8 @@ export async function deleteItem(key:string){
 export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:string, { rejectWithValue }) => {
   
   try{
-    const response = await fetch(`${LOCAL_BASE_URL}/verify-token`, {
+
+    const response = await fetch(`${BACKEND_BASE_URL}/verify-token`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +48,6 @@ export const verifyToken = createAsyncThunk('auth/verifyToken', async (token:str
       // return rejectWithValue('Network or parsing error')
   }
 })
-
 
 const initialState:IAuth = {
     isAuthenticated:false,
@@ -111,7 +111,7 @@ const authSlice = createSlice({
     extraReducers:(builder)=>{
         builder.addCase(login.pending, (state, action) => {
             state.status = 'loading';
-            console.log(state)
+            // console.log(state)
         });
         builder.addCase(login.fulfilled, (state, action) => {
             state.status = 'succeed';
@@ -119,7 +119,7 @@ const authSlice = createSlice({
             state.token = action.payload.token;
             state.user = action.payload.user;
             state.error = null;
-            console.log(state)
+            // console.log(state)
         });
         builder.addCase(login.rejected, (state, action) => {
             state.status = 'failed';
@@ -143,7 +143,7 @@ const authSlice = createSlice({
           }
           // state.user = action.payload.user;
           // console.log(action.payload);
-          console.log(state)
+          // console.log(state)
       });
       builder.addCase(verifyToken.rejected, (state, action) => {
           state.status = 'failed';

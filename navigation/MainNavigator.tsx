@@ -27,7 +27,7 @@ const MainNavigator: React.FC = () => {
     const retrieveToken = async () => {
       try {
         const token = await getItem("token");
-        console.log(token);
+        // console.log(token);
         if (token) {
           dispatch(verifyToken(token));
         }
@@ -41,10 +41,11 @@ const MainNavigator: React.FC = () => {
     (state: RootState) => state.auth
   );
   useEffect(() => {
-    console.log(status);
+    // console.log(status);
 
     if (isAuthenticated) {
       // Navigate to the Main screen if authenticated
+      
       if (user && user.role === "worker") {
         navigation.navigate("Main", {
           screen: "Worker",

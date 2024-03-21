@@ -30,10 +30,11 @@ import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import ScreenLayout from '../../components/layout/screenLayout';
-import { BACKEND_BASE_URL } from '../../config/api';
+import { BACKEND_BASE_URL, LOCAL_BASE_URL } from '../../config/api';
 import useFetch from '../../hooks/useFetch';
 import { Camera, CameraType } from 'expo-camera';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../lib/store';
 interface EmergencyItem {
   text: string;
   icon: React.FC<any>;
@@ -46,17 +47,19 @@ const AlertReport: React.FC = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [urgencyLevel, setUrgencyLevel] = useState(2);
-  const [needAssistance, setNeedAssistance] = useState<'Yes' | 'No' | undefined>(undefined);
+  const [needAssistance, setNeedAssistance] = useState<'true' | 'false' | undefined>(undefined);
   const [showAssistanceForm, setShowAssistanceForm] = useState(false);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraType, setCameraType] = useState(CameraType.back);
   const [showCamera, setShowCamera] = useState(false);
   const cameraRef = useRef<Camera>(null);
-
-  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}alert`, 'POST');
-
+  const [emergencyText,setEmergencyText] = useState('');
+  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}/alert`, 'POST');
+  const user = useSelector((state: RootState) => state.auth.user);
+  // console.log('user>>', user);
   /*** send alert for the app ****/
   const sendAlert = async () => {
+
     console.log('Sending alert');
     console.log('Reporting for:', reportingFor);
     console.log('Number of workers injured:', numWorkersInjured);
@@ -64,13 +67,22 @@ const AlertReport: React.FC = () => {
     // console.log('Other emergency type:', otherEmergencyType);
     console.log('Urgency level:', urgencyLevel);
     console.log('Need assistance:', needAssistance);
+
     const alertData = {
+      role: user ? user.role : null,
+      userId: user ? user.userId : null,
+      constructionSiteId: user ? user.constructionSiteId : null,
       reportingFor,
-      numWorkersInjured,
-      reportType,
-      // otherEmergencyType,
-      urgencyLevel,
-      needAssistance,
+      emergencyType: reportType,
+      alertLocation: {
+        type: 'Point',
+        coordinates: [0, 0], // to be updated
+      }, // to be updated
+      // reportingFor,
+      emergencyText:emergencyText,
+      workersInjured:numWorkersInjured,
+      degreeOfEmergency:urgencyLevel,
+      assistance: needAssistance
     };
     const options = {
       headers: {
@@ -166,9 +178,9 @@ const AlertReport: React.FC = () => {
     );
   };
 
-  const handleAssistanceSelection = (value: 'Yes' | 'No') => {
+  const handleAssistanceSelection = (value: 'true' | 'false') => {
     setNeedAssistance(value);
-    if (value === 'Yes') {
+    if (value === 'true') {
       setShowAssistanceForm(true);
     } else {
       setShowAssistanceForm(false);
@@ -269,7 +281,10 @@ const AlertReport: React.FC = () => {
                     <FormControl>
                       <Typography bold>Describe the emergency*</Typography>
                       <Textarea>
-                        <TextareaInput />
+                        <TextareaInput 
+                          value={emergencyText} 
+                          onChange={(e: any) => setEmergencyText(e.target.value)}
+                          />
                       </Textarea>
                     </FormControl>
                   )}
@@ -305,13 +320,13 @@ const AlertReport: React.FC = () => {
                 <VStack space="md">
                   <Typography bold>Do you need assistance on the spot?*</Typography>
                   <HStack space="2xl">
-                  <Radio size='lg' value="Yes">
+                  <Radio size='lg' value="true">
                   <RadioIndicator mr="$2">
                     <RadioIcon as={CircleIcon} />
                   </RadioIndicator>
                   <Typography>Yes</Typography>
                 </Radio>
-                <Radio size='lg' value="No">
+                <Radio size='lg' value="false">
                   <RadioIndicator mr="$2">
                     <RadioIcon as={CircleIcon} />
                   </RadioIndicator>
@@ -334,7 +349,7 @@ const AlertReport: React.FC = () => {
                         numWorkersInjured >= 0 &&
                         reportType &&
                         urgencyLevel !== null &&
-                        (needAssistance === 'Yes' || needAssistance === 'No')
+                        (needAssistance === 'true' || needAssistance === 'false')
                       )
                     }
                     onPress={sendAlert}

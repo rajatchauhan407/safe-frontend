@@ -139,7 +139,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <Box mb={"$3"}>
         <Typography bold>Select type of emergency</Typography>
       </Box>
-      <GroupButton onSelect={handleEmergencyTypeSelect} />
+      <GroupButton onSelect={handleEmergencyTypeSelect} action={"One Whistle"} />
 
       <Box mb="$4">
         {selectedButton === "One Whistle" && (

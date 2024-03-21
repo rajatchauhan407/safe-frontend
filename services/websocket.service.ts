@@ -1,10 +1,10 @@
 import io,{Socket} from 'socket.io-client';
-import { BACKEND_BASE_URL, BACKEND_ORIGIN } from '../config/api';
+import { BACKEND_BASE_URL, BACKEND_ORIGIN, LOCAL_BASE_URL,BACKEND_ORIGIN_LOCAL} from '../config/api';
 
 class WebSocketService{
     private socket: Socket;
     constructor(){
-        this.socket = io(BACKEND_ORIGIN,{autoConnect: false});
+        this.socket = io(BACKEND_ORIGIN_LOCAL);
 
         this.socket.on('connect',()=>{
             console.log("connected to websocket server");
@@ -13,12 +13,17 @@ class WebSocketService{
         this.socket.on('disconnect',()=>{
             console.log("disconnected from websocket server");
         });
+        this.socket.on('error', (error) => {
+            console.error("WebSocket Error:", error);
+        });
+        
 
     }
 
     
 
     connect(){
+        console.log("connecting to websocket server from connect method");
         this.socket.connect();
     }
 
