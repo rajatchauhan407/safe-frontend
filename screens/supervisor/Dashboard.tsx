@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Box, HStack, ScrollView, Text } from "@gluestack-ui/themed";
-import LocationIcon from "../../assets/icons/location";
+import { Box, Button, HStack, ScrollView, Text } from "@gluestack-ui/themed";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
@@ -15,6 +14,7 @@ import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { BACKEND_BASE_URL } from "../../config/api";
+import AddUserIcon from "../../assets/icons/addUser";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -81,10 +81,27 @@ const Dashboard: React.FC = () => {
     setCurrentAlertType("sos");
   }, []);
 
+  const navigation = useNavigation();
+  const hanldeAddNewUser = () => {
+    navigation.navigate("Checked In" as never);
+  };
+
   return (
     <Box w="$full" h="$full">
       <ScrollView>
         <ScreenLayout>
+          {/* TEMPORARY ADD USER BUTTON */}
+          <Button
+            borderRadius="$full"
+            w="$16"
+            h="$16"
+            bg="$transparent"
+            alignSelf="flex-end"
+            onPress={hanldeAddNewUser}
+          >
+            <AddUserIcon size={30} focussed={false} color="#FD9201" />
+          </Button>
+
           {/* GREETING */}
           <Text>
             <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
