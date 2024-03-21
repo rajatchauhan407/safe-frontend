@@ -32,7 +32,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({
         ? "#FFFFFF"
         : action === "primary"
         ? "#FD9201"
-        : "#6C757D",
+        : isDisabled
+        ? "#C7C7C7"
+        : "#C7C7C7",
       borderRadius: 16,
       borderWidth: 2,
       borderColor: isCheckIn
@@ -48,8 +50,8 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       borderRadius: isLogIn ? 100 : 4,
     },
     rounded: {
-        backgroundColor: action === "primary" ? "#FD9201" : action === "secondary" ? "#00AE8C" : action === "positive" ? "#1E1E1E" : "#FFFFFF",
-        borderRadius: 100,
+      backgroundColor: action === "primary" ? "#FD9201" : action === "secondary" ? "#00AE8C" : action === "positive" ? "#1E1E1E" : "#FFFFFF",
+      borderRadius: 100,
     },
     text: {
       backgroundColor: "transparent",
@@ -57,7 +59,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     underline: {
       backgroundColor: "transparent",
     },
-  } as const;
+  } as const;  
 
   const textStyles: Record<string, TextStyle | ViewStyle> = {
     fill: {
@@ -80,13 +82,13 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     },
     text: {
       fontFamily: "NunitoSans_600SemiBold",
-      color: action === "primary" ? "#007BFF" : "#6C757D",
+      color: action === "primary" ? "#1E1E1E" : "#6C757D",
       fontSize: buttonTextSize,
       fontWeight: "bold",
     },
     underline: {
       fontFamily: "NunitoSans_600SemiBold",
-      color: action === "primary" ? "#007BFF" : "#6C757D",
+      color: action === "primary" ? "#000000" : "#6C757D",
       textDecorationLine: "underline",
       fontSize: buttonTextSize,
       fontWeight: "bold",
@@ -94,14 +96,16 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   };
 
   const getButtonStyle = () => {
-    let style = { ...buttonStyles[variant] };
+    let style: ViewStyle = { ...buttonStyles[variant] };
     if (isDisabled) {
       style = {
         ...style,
+        backgroundColor: "#C7C7C7",
       };
     }
     return style;
   };
+  
 
   return (
     <Button

@@ -1,456 +1,4 @@
-// import React, { useState } from 'react';
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   StyleSheet,
-//   KeyboardAvoidingView,
-//   ScrollView,
-//   Platform,
-// } from 'react-native';
-// import CommonButton from '../../components/common/button';
-// import useFetch from '../../hooks/useFetch';
-// import { BACKEND_BASE_URL } from '../../config/api';
-// import ScreenLayout from '../../components/layout/screenLayout';
-// interface EmergencyFormProps {
-//   // Add any necessary props for database connection here
-// }
-
-// const EmergencyForm: React.FC<EmergencyFormProps> = () => {
-  
-//   const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
-//   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
-//   const [reportType, setReportType] = useState<string | null>(null);
-//   const [otherEmergencyType, setOtherEmergencyType] = useState('');
-//   const [urgencyLevel, setUrgencyLevel] = useState<number | null>(null);
-//   const [needAssistance, setNeedAssistance] = useState<boolean>(false);
-  
-//   const urgencyColors = ['yellow', 'orange', 'red'];
-  
-  
-//   const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}alert`, 'POST');
-//   const handleReportingChange = (option: 'Myself' | 'OtherWorker') => {
-//     setReportingFor(option);
-//   };
-
-//   const handleIncrement = () => {
-//     setNumWorkersInjured(numWorkersInjured + 1);
-//   };
-
-//   const handleDecrement = () => {
-//     if (numWorkersInjured > 0) {
-//       setNumWorkersInjured(numWorkersInjured - 1);
-//     }
-//   };
-
-//   const handleReportType = (type: string) => {
-//     setReportType(type);
-//   };
-
-//   const handleOtherEmergencyTypeChange = (text: string) => {
-//     setOtherEmergencyType(text);
-//   };
-
-//   const handleUrgencySelection = (level: number) => {
-//     setUrgencyLevel(level);
-//   };
-
-//   const handleAssistanceChange = (value: boolean) => {
-//     setNeedAssistance(value);
-//   };
-
-//   const renderReportButtons = () => {
-//     const reportButtonsData = [
-//       { type: 'Type1', icon: 'ios-alert', text: 'A worker fell' },
-//       { type: 'Type2', icon: 'ios-medical', text: 'Fire hazard' },
-//       { type: 'Type3', icon: 'ios-flame', text: 'Electrical hazard' },
-//       { type: 'Type4', icon: 'ios-car', text: 'An injury occurred' },
-//       { type: 'Type5', icon: 'ios-water', text: 'Confined spaces' },
-//       { type: 'Type6', icon: 'ios-nuclear', text: 'Struck by hazard' },
-//     ];
-
-//     return reportButtonsData.map((button) => (
-//       <TouchableOpacity
-//         key={button.type}
-//         style={[
-//           styles.reportButton,
-//           reportType === button.type && styles.reportButtonSelected,
-//         ]}
-//         onPress={() => handleReportType(button.type)}
-//       >
-//         <Text
-//           style={[
-//             styles.reportButtonText,
-//             reportType === button.type && styles.reportButtonTextSelected,
-//           ]}
-//         >
-//           {button.text}
-//         </Text>
-//       </TouchableOpacity>
-//     ));
-//   };
-
-//   const renderUrgencyCircles = () => {
-//     const levels = [1, 2, 3];
-
-//     return (
-//       <View style={styles.urgencySliderContainer}>
-//         {levels.map((level) => (
-//           <TouchableOpacity
-//           key={level}
-//           style={[
-//             styles.urgencyCircle,
-//             urgencyLevel === level && {
-//               borderColor: urgencyColors[level - 1],
-//               backgroundColor: urgencyColors[level - 1],
-//             },
-//             urgencyLevel !== level && {
-//               borderColor: urgencyColors[level - 1],
-//             },
-//             styles.selectedUrgencyCircle,
-//           ]}
-//           onPress={() => handleUrgencySelection(level)}
-//         >
-//           <Text style={styles.urgencyCircleText}>{level}</Text>
-//         </TouchableOpacity>        
-//         ))}
-//       </View>
-//     );
-//   };
-
-//   const renderAssistanceField = () => {
-//     return (
-//       <View style={styles.fieldContainer}>
-//         <Text style={styles.label}>Do you need assistance on the spot?</Text>
-//         <View style={styles.radioButtonContainerHorizontal}>
-//           <TouchableOpacity
-//             style={[
-//               styles.radioButton,
-//               needAssistance && styles.radioButtonSelected,
-//             ]}
-//             onPress={() => handleAssistanceChange(true)}
-//           >
-//             {needAssistance && <View style={styles.innerCircle} />}
-//           </TouchableOpacity>
-//           <Text style={styles.radioButtonLabel}>Yes</Text>
-
-//           <TouchableOpacity
-//             style={[
-//               styles.radioButton,
-//               !needAssistance && styles.radioButtonSelected,
-//             ]}
-//             onPress={() => handleAssistanceChange(false)}
-//           >
-//             {!needAssistance && <View style={styles.innerCircle} />}
-//           </TouchableOpacity>
-//           <Text style={styles.radioButtonLabel}>No</Text>
-//         </View>
-
-//         {needAssistance && renderPhotoField()}
-//       </View>
-//     );
-//   };
-
-//   const renderPhotoField = () => {
-//     return (
-//       <View style={styles.fieldContainer}>
-//         <Text style={styles.label}>Photo of the incident location</Text>
-//         <CommonButton
-//           // buttonType="whiteButton"
-//           onPress={() => {
-//           }}
-//         >
-//           <Text>Take Photo</Text>
-//         </CommonButton>
-//       </View>
-//     );
-//   };
-
-// /*** send alert for the app ****/
-//   const sendAlert = async () => {
-//     console.log('Sending alert');
-//     console.log('Reporting for:', reportingFor);
-//     console.log('Number of workers injured:', numWorkersInjured);
-//     console.log('Report type:', reportType);
-//     console.log('Other emergency type:', otherEmergencyType);
-//     console.log('Urgency level:', urgencyLevel);
-//     console.log('Need assistance:', needAssistance);
-//     const alertData = {
-//       reportingFor,
-//       numWorkersInjured,
-//       reportType,
-//       otherEmergencyType,
-//       urgencyLevel,
-//       needAssistance,
-//     };
-//     const options = {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(alertData),
-//     }
-//     await fetchData(options);
-//   };
-
-
-//   return (
-//   <ScreenLayout>
-//     <KeyboardAvoidingView
-//       style={{ flex: 1 }}
-//       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-//       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -50}
-//     >
-//       <ScrollView
-//         keyboardShouldPersistTaps="handled"
-//       >
-//         <View>
-//           {/* FIELD ONE - WHO IS REPORTING */}
-//           <View style={styles.fieldContainer}>
-//             <Text style={styles.label}>I am reporting for*</Text>
-//             <View style={styles.radioButtonContainerHorizontal}>
-//               <TouchableOpacity
-//                 style={[styles.radioButton, reportingFor === 'Myself' && styles.radioButtonSelected]}
-//                 onPress={() => handleReportingChange('Myself')}
-//               >
-//                 {reportingFor === 'Myself' && <View style={styles.innerCircle} />}
-//               </TouchableOpacity>
-//               <Text style={styles.radioButtonLabel}>Myself</Text>
-
-//               <TouchableOpacity
-//                 style={[styles.radioButton, reportingFor === 'OtherWorker' && styles.radioButtonSelected]}
-//                 onPress={() => handleReportingChange('OtherWorker')}
-//               >
-//                 {reportingFor === 'OtherWorker' && <View style={styles.innerCircle} />}
-//               </TouchableOpacity>
-//               <Text style={styles.radioButtonLabel}>Other worker</Text>
-//             </View>
-//           </View>
-
-//           {/* FIELD TWO - NUMBER OF WORKERS INJURED */}
-//           <View style={styles.fieldContainer}>
-//             <Text style={styles.label}>Number of workers injured*</Text>
-//             <View style={styles.numberInputContainer}>
-//               <TouchableOpacity style={styles.circleButton} onPress={handleDecrement}>
-//                 <Text style={styles.buttonText}>-</Text>
-//               </TouchableOpacity>
-//               <View style={styles.numberDisplay}>
-//                 <Text style={styles.numberText}>{numWorkersInjured}</Text>
-//               </View>
-//               <TouchableOpacity style={styles.circleButton} onPress={handleIncrement}>
-//                 <Text style={styles.buttonText}>+</Text>
-//               </TouchableOpacity>
-//             </View>
-//           </View>
-
-//           {/* FIELD THREE - REPORT TYPE */}
-//           <View style={styles.fieldContainer}>
-//             <Text style={styles.label}>I am reporting about*</Text>
-//             <View style={styles.reportButtonContainer}>{renderReportButtons()}</View>
-
-//             {/* Add other options with TextInput */}
-//             <Text style={styles.label}>Add other</Text>
-//             <TextInput
-//               style={styles.otherEmergencyInput}
-//               placeholder="Type the emergency here"
-//               value={otherEmergencyType}
-//               onChangeText={handleOtherEmergencyTypeChange}
-//             />
-//           </View>
-//           {/* FIELD FOUR - DEGREE OF URGENCY */}
-//           <View style={styles.fieldContainer}>
-//             <Text style={styles.label}>Select degree of urgency*</Text>
-//             {renderUrgencyCircles()}
-//           </View>
-//           {/* FIELD FIVE - NEED ASSISTANCE */}
-//           {renderAssistanceField()}
-//         </View>
-        
-//         {/* SEND REPORT */}
-//         <View style={styles.requiredTextContainer}>
-//           <Text style={styles.requiredText}>All the above fields are required</Text>
-//         </View>
-//         <View style={styles.buttonContainer}>
-//         <CommonButton
-//           // buttonType="default"
-//           disabled={
-//             !(
-//               numWorkersInjured >= 0 &&
-//               reportType &&
-//               (reportType !== 'Type7' || otherEmergencyType.trim() !== '') &&
-//               urgencyLevel !== null
-//             )
-//           }
-//           onPress={sendAlert}
-//         >
-//           <Text>Send Alert</Text>
-//         </CommonButton>
-//         </View>
-//         <View style={styles.buttonContainer}>
-//           <CommonButton 
-//             // buttonType="underline"
-//             >
-//             <Text>Cancel Alert</Text>
-//           </CommonButton>
-//         </View>
-
-//       </ScrollView>
-//     </KeyboardAvoidingView>
-//   </ScreenLayout>  
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   fieldContainer: {
-//     marginBottom: 24,
-//   },
-//   label: {
-//     fontSize: 16,
-//     marginBottom: 8,
-//     fontWeight: 'bold',
-//   },
-//   radioButtonContainerHorizontal: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginBottom: 16,
-//   },
-//   radioButton: {
-//     height: 24,
-//     width: 24,
-//     borderRadius: 12,
-//     borderWidth: 2,
-//     borderColor: '#000',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 8,
-//   },
-//   radioButtonSelected: {
-//     borderColor: '#000',
-//   },
-//   innerCircle: {
-//     height: 16,
-//     width: 16,
-//     borderRadius: 8,
-//     backgroundColor: '#000',
-//   },
-//   radioButtonLabel: {
-//     marginRight: 16,
-//   },
-//   numberInputContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   circleButton: {
-//     width: 40,
-//     height: 40,
-//     borderRadius: 20,
-//     borderWidth: 2,
-//     borderColor: '#000',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 8,
-//   },
-//   buttonText: {
-//     color: 'black',
-//     fontSize: 18,
-//   },
-//   numberDisplay: {
-//     minWidth: 80,
-//     height: 40,
-//     borderRadius: 20,
-//     borderWidth: 2,
-//     borderColor: '#000',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 8,
-//   },
-//   numberText: {
-//     fontSize: 16,
-//   },
-//   reportButtonContainer: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     justifyContent: 'space-between',
-//     marginTop: 8,
-//   },
-//   reportButton: {
-//     width: '30%',
-//     backgroundColor: 'white',
-//     aspectRatio: 1,
-//     borderRadius: 8,
-//     padding: 16,
-//     marginBottom: 16,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     shadowColor: '#000',
-//     shadowOffset: {
-//       width: 0,
-//       height: 2,
-//     },
-//     shadowOpacity: 0.25,
-//     shadowRadius: 3.84,
-//     elevation: 5,
-//   },
-//   reportButtonText: {
-//     marginTop: 8,
-//     color: 'black',
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//   },
-//   reportButtonSelected: {
-//     borderRadius: 8,
-//     overflow: 'hidden',
-//     backgroundColor: '#FD9201',
-//   },
-//   reportButtonTextSelected: {
-//     fontWeight: 'bold',
-//   },
-//   otherEmergencyInput: {
-//     height: 40,
-//     borderColor: '#000',
-//     borderWidth: 1,
-//     borderRadius: 8,
-//     padding: 8,
-//     marginBottom: 8,
-//   },
-//   urgencySliderContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     marginTop: 8,
-//   },
-//   urgencyCircle: {
-//     width: 40,
-//     height: 40,
-//     borderRadius: 20,
-//     borderWidth: 2,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   selectedUrgencyCircle: {
-//     borderWidth: 2,
-//   },
-//   urgencyCircleText: {
-//     fontSize: 16,
-//     color: 'black',
-//   },
-//   requiredTextContainer: {
-//     marginTop: 0,
-//   },
-//   requiredText: {
-//     color: 'red',
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//   },
-//   buttonContainer: {
-//     marginTop: 16,
-//   },
-// });
-
-// export default EmergencyForm;
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   VStack,
   HStack,
@@ -469,7 +17,10 @@ import {
   ScrollView,
   Button,
 } from "@gluestack-ui/themed";
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../types/navigationTypes';
+import { NavigationProp } from "@react-navigation/native";
 import Typography from '../../components/common/typography';
 import CommonButton from '../../components/common/button';
 import FallIcon from '../../assets/icons/fall';
@@ -480,6 +31,8 @@ import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import ScreenLayout from '../../components/layout/screenLayout';
 import { BACKEND_BASE_URL } from '../../config/api';
+import useFetch from '../../hooks/useFetch';
+import { Camera, CameraType } from 'expo-camera';
 
 interface EmergencyItem {
   text: string;
@@ -487,12 +40,66 @@ interface EmergencyItem {
 }
 
 const AlertReport: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [reportingFor, setReportingFor] = useState<'Myself' | 'OtherWorker'>('Myself');
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
-  const [selectedEmergency, setSelectedEmergency] = useState<string | null>(null);
+  const [reportType, setReportType] = useState<string | null>(null);
   const [urgencyLevel, setUrgencyLevel] = useState(2);
-  const [needAssistance, setNeedAssistance] = useState<'Yes' | 'No'>('Yes');
+  const [needAssistance, setNeedAssistance] = useState<'Yes' | 'No' | undefined>(undefined);
   const [showAssistanceForm, setShowAssistanceForm] = useState(false);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [cameraType, setCameraType] = useState(CameraType.back);
+  const [showCamera, setShowCamera] = useState(false);
+  const cameraRef = useRef<Camera>(null);
+
+  const { data, isLoading, error, fetchData } = useFetch(`${BACKEND_BASE_URL}alert`, 'POST');
+
+  /*** send alert for the app ****/
+  const sendAlert = async () => {
+    console.log('Sending alert');
+    console.log('Reporting for:', reportingFor);
+    console.log('Number of workers injured:', numWorkersInjured);
+    console.log('Report type:', reportType);
+    // console.log('Other emergency type:', otherEmergencyType);
+    console.log('Urgency level:', urgencyLevel);
+    console.log('Need assistance:', needAssistance);
+    const alertData = {
+      reportingFor,
+      numWorkersInjured,
+      reportType,
+      // otherEmergencyType,
+      urgencyLevel,
+      needAssistance,
+    };
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(alertData),
+    }
+    await fetchData(options);
+  };
+
+  useEffect(() => {
+    // Request camera permission on component mount
+    requestPermission();
+  }, []);
+
+  const handleTakePhoto = async () => {
+    if (cameraRef.current) {
+      const options = {
+        quality: 0.5, // Adjust quality as needed (0 to 1)
+        skipProcessing: false, // Skip processing rotation and scaling
+      };
+      const photo = await cameraRef.current.takePictureAsync(options);
+      console.log(photo);
+    }
+  };
+
+  const handleCameraClose = () => {
+    setShowCamera(false);
+  };
 
   const emergencies: EmergencyItem[] = [
     { text: 'A worker fell', icon: FallIcon },
@@ -506,7 +113,9 @@ const AlertReport: React.FC = () => {
   const chunkedEmergencies = chunkArray(emergencies, 3);
 
   const handleEmergencySelection = (text: string) => {
-    setSelectedEmergency(text === selectedEmergency ? null : text);
+    setReportType(prevReportType => {
+      return prevReportType === text ? null : text;
+    });
   };
 
   const handleChangeUrgency = (value: number) => {
@@ -540,7 +149,7 @@ const AlertReport: React.FC = () => {
   };
 
   const BoxIconWithText: React.FC<{ icon: React.FC<any>; text: string }> = ({ icon: IconComponent, text }) => {
-    const isSelected = selectedEmergency === text;
+    const isSelected = reportType === text;
     return (
       <TouchableOpacity
         onPress={() => handleEmergencySelection(text)}
@@ -571,13 +180,29 @@ const AlertReport: React.FC = () => {
       <FormControl>
         <VStack space="md">
         <Typography bold>Photo of Incident Location (Optional)</Typography>
-        <CommonButton variant="rounded" action="positive" showIcon={true} buttonTextSize={18} >   
+        <CommonButton variant="rounded" action="positive" showIcon={true} buttonTextSize={18} onPress={() => setShowCamera(true)}>
           Take a Photo
-        </CommonButton> 
-        </VStack>    
+        </CommonButton>
+        {/* Render camera if showCamera state is true */}
+        {showCamera && (
+          <Camera style={{ flex: 1 }} ref={cameraRef} type={cameraType}>
+            <TouchableOpacity onPress={handleCameraClose} style={{ alignSelf: 'flex-end', marginRight: 16 }}>
+              <Typography bold style={{ color: 'white' }}>Close Camera</Typography>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleTakePhoto} style={{ alignSelf: 'center', marginBottom: 16 }}>
+              <Typography bold style={{ color: 'white' }}>Take Picture</Typography>
+            </TouchableOpacity>
+          </Camera>
+        )}
+        </VStack>
       </FormControl>
     );
   };
+
+  const handleCancelAlert = () => {
+    navigation.navigate('Dashboard' as never);
+  };
+  
 
   return (
     <>
@@ -639,7 +264,7 @@ const AlertReport: React.FC = () => {
                     </HStack>
                   ))}
                   {/* Render Textarea if no emergency is selected */}
-                  {selectedEmergency === null && (
+                  {reportType === null && (
                     <FormControl>
                       <Typography bold>Describe the emergency*</Typography>
                       <Textarea>
@@ -679,25 +304,52 @@ const AlertReport: React.FC = () => {
                 <VStack space="md">
                   <Typography bold>Do you need assistance on the spot?*</Typography>
                   <HStack space="2xl">
-                    <Radio size='lg' value="Yes">
-                      <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
-                      </RadioIndicator>
-                      <Typography>Yes</Typography>
-                    </Radio>
-                    <Radio size='lg' value="No">
-                      <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
-                      </RadioIndicator>
-                      <Typography>No</Typography>
-                    </Radio>
+                  <Radio size='lg' value="Yes">
+                  <RadioIndicator mr="$2">
+                    <RadioIcon as={CircleIcon} />
+                  </RadioIndicator>
+                  <Typography>Yes</Typography>
+                </Radio>
+                <Radio size='lg' value="No">
+                  <RadioIndicator mr="$2">
+                    <RadioIcon as={CircleIcon} />
+                  </RadioIndicator>
+                  <Typography>No</Typography>
+                </Radio>
                   </HStack>
                 </VStack>
               </RadioGroup>
             </FormControl>
-
             {showAssistanceForm && <AssistanceForm />}
 
+            {/* SEND REPORT */}
+            <FormControl>
+              <VStack space='md'>
+                <Typography textAlign="center" color='#D0080F' bold>All the above fields are required</Typography>
+                  <CommonButton
+                    variant="rounded"
+                    isDisabled={
+                      !(
+                        numWorkersInjured >= 0 &&
+                        reportType &&
+                        urgencyLevel !== null &&
+                        (needAssistance === 'Yes' || needAssistance === 'No')
+                      )
+                    }
+                    onPress={sendAlert}
+                  >
+                  Send Alert
+                  </CommonButton>
+                  <CommonButton 
+                    variant="underline"
+                    action='primary'
+                    onPress={handleCancelAlert}
+                    >
+                    Cancel Alert
+                  </CommonButton>
+                </VStack>
+              </FormControl> 
+               
           </VStack>
         </ScreenLayout>
       </ScrollView>
