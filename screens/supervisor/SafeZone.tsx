@@ -13,7 +13,7 @@ import { RootState} from "../../lib/store";
 import { BACKEND_BASE_URL } from "../../config/api";
 
 const SafeZone: React.FC = () => {
-  const [siteLocation, setSiteLocation] = useState("Richmond, BC");
+  const [siteLocation, setSiteLocation] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
