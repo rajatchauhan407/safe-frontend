@@ -178,7 +178,7 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         description="The SMS Alert messages to on-site First Aid Workers have been sent."
         buttonText="Go to Dashboard"
         buttonAction={() => {
-          navigation.navigate("Dashboard" as never);
+          navigation.navigate("Main" as never); //DOUBLE-CHECK THIS
           setShowConfirmation(false);
         }}
       />

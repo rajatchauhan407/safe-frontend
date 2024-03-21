@@ -85,8 +85,6 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="Safe Zone" component={SafeZone} />
       {/* Supervisor - Alert Details Screen */}
       <Stack.Screen name="Received Alert" component={ReceivedAlertDetails} />
-      {/* Supervisor - Dashboard */}
-      <Stack.Screen name="Dashboard" component={Dashboard} />
     </Stack.Navigator>
   );
 };
