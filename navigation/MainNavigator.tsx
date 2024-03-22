@@ -16,7 +16,7 @@ import CheckedIn from "../screens/supervisor/CheckedIn";
 import SafeZone from "../screens/supervisor/SafeZone";
 import ReceivedAlertDetails from "../screens/supervisor/ReceivedAlert";
 import WorkerSafeZone from "../components/worker/safeZone";
-import Dashboard from "../screens/supervisor/Dashboard";
+import AddUser from "../screens/supervisor/AddUser";
 
 const Stack = createStackNavigator();
 
@@ -45,7 +45,7 @@ const MainNavigator: React.FC = () => {
 
     if (isAuthenticated) {
       // Navigate to the Main screen if authenticated
-      
+
       if (user && user.role === "worker") {
         navigation.navigate("Main", {
           screen: "Worker",
@@ -86,6 +86,8 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="Safe Zone" component={SafeZone} />
       {/* Supervisor - Alert Details Screen */}
       <Stack.Screen name="Received Alert" component={ReceivedAlertDetails} />
+      {/* Supervisor - Add User Screen */}
+      <Stack.Screen name="Add User" component={AddUser} />
     </Stack.Navigator>
   );
 };

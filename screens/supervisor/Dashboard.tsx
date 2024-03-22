@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation, Link } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Box, HStack, ScrollView, Text, get } from "@gluestack-ui/themed";
+import {
+  Box,
+  Button,
+  HStack,
+  ScrollView,
+  Text,
+  get,
+} from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
@@ -17,6 +24,7 @@ import { RootState } from "../../lib/store";
 import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import useFetch from "../../hooks/useFetch";
 import { IAlert } from "../../shared/interfaces/alert.interface";
+import AddUserIcon from "../../assets/icons/addUser";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -113,15 +121,15 @@ const Dashboard: React.FC = () => {
 
   const navigation = useNavigation();
   const hanldeAddNewUser = () => {
-    navigation.navigate("Checked In" as never);
+    navigation.navigate("Add User" as never);
   };
 
   return (
-    <Box w="$full" h="$full">
+    <>
       <ScrollView>
         <ScreenLayout>
-          {/* TEMPORARY ADD USER BUTTON */}
-          <Button
+          {/* TEMPORARY ADD USER BUTTON ---- DO NOT DELETE */}
+          {/* <Button
             borderRadius="$full"
             w="$16"
             h="$16"
@@ -130,7 +138,7 @@ const Dashboard: React.FC = () => {
             onPress={hanldeAddNewUser}
           >
             <AddUserIcon size={30} focussed={false} color="#FD9201" />
-          </Button>
+          </Button> */}
 
           {/* GREETING */}
           <Text>
@@ -173,7 +181,7 @@ const Dashboard: React.FC = () => {
           <DrawerSupervisor alertType={currentAlertType} alertData={data} />
         )}
       </Box>
-    </Box>
+    </>
   );
 };
 
