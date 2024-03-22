@@ -12,6 +12,9 @@ import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import LocationIcon from '../../assets/icons/location';
+import { useSelector} from "react-redux";
+import { RootState} from "../../lib/store";
+import { BACKEND_BASE_URL } from "../../config/api";
 
 interface WorkerSafeZoneProps {
     onSafeConfirmation: () => void;
@@ -37,6 +40,16 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
 }) => {
   const navigation = useNavigation();
   const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteId = "";
+  let userId  = "";
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    userId=user._id;
+    siteId = user.constructionSiteId || ""; 
+  } 
 
   const emergencies: EmergencyItem[] = [
     { text: 'A worker fell', icon: FallIcon },
@@ -56,8 +69,31 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     </Box>
   );
 
+  
   const handleIncidentPress = () => {
     // onSafeConfirmation(); // Callback to notify parent component (Dashboard)
+    const createSafeZoneWorker = async () => {
+      try {
+        const workerInfo = {
+          workerId : userId,
+          siteId : siteId
+        }
+        const res = await fetch(`${BACKEND_BASE_URL}/createsafezoneworker`, {
+          method: "POST",
+          credentials: 'include',
+          body: JSON.stringify(workerInfo),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log(data.data.message);    
+      } 
+      catch (error) {
+        console.error('Error while creating safe zone worker:', error);
+      }
+    };
+    createSafeZoneWorker();
     navigation.navigate('Dashboard' as never);
   };
 

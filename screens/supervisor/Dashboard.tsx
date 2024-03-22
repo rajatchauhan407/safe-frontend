@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, Link } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Box, Button, HStack, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, HStack, ScrollView, Text, get } from "@gluestack-ui/themed";
+import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
 import NumOfWorkers from "../../components/common/NumOfWorkers";
@@ -13,8 +14,9 @@ import LocationComponent from "../../components/supervisor/Location";
 import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
-import { BACKEND_BASE_URL } from "../../config/api";
-import AddUserIcon from "../../assets/icons/addUser";
+import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
+import useFetch from "../../hooks/useFetch";
+import { IAlert } from "../../shared/interfaces/alert.interface";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -22,6 +24,7 @@ const Dashboard: React.FC = () => {
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
+  const [isAlert, setIsAlert] = useState(false);
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -33,6 +36,22 @@ const Dashboard: React.FC = () => {
     console.log("logged in user>> " + user._id);
     userName = `${user.firstName} ${user.lastName}`;
   }
+
+  const { data, isLoading, error, fetchData }: any = useFetch(
+    `${BACKEND_BASE_URL}/alert?constructionSiteId=${siteId}`,
+    "GET"
+  );
+  const getAlert = async () => {
+    await fetchData({
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+  };
+  useEffect(() => {
+    getAlert();
+  }, []);
 
   useEffect(() => {
     const getSite = async () => {
@@ -67,19 +86,30 @@ const Dashboard: React.FC = () => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alert", (data) => {
-      console.log(data);
-      setCurrentAlertType(data.alertType);
+      console.log("Alert received", data);
+      setIsAlert(true);
+      // setData(data);
+      // setCurrentAlertType(data.alertType);
     });
 
-    return () => {
-      websocketService.disconnect();
-    };
-  });
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  }, []);
 
   /* Use this to change alert type */
   useEffect(() => {
-    setCurrentAlertType("sos");
-  }, []);
+    console.log("Alert data>> ", data);
+    if (data) {
+      if (data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2) {
+        setCurrentAlertType("accident");
+      } else if (data.degreeOfEmergency === 3) {
+        setCurrentAlertType("evacuation");
+      } else {
+        setCurrentAlertType("sos");
+      }
+    }
+  }, [data]);
 
   const navigation = useNavigation();
   const hanldeAddNewUser = () => {
@@ -139,7 +169,9 @@ const Dashboard: React.FC = () => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        <DrawerSupervisor alertType={currentAlertType} />
+        {data && (
+          <DrawerSupervisor alertType={currentAlertType} alertData={data} />
+        )}
       </Box>
     </Box>
   );

@@ -16,6 +16,7 @@ import CheckedIn from "../screens/supervisor/CheckedIn";
 import SafeZone from "../screens/supervisor/SafeZone";
 import ReceivedAlertDetails from "../screens/supervisor/ReceivedAlert";
 import WorkerSafeZone from "../components/worker/safeZone";
+import Dashboard from "../screens/supervisor/Dashboard";
 
 const Stack = createStackNavigator();
 
@@ -26,7 +27,7 @@ const MainNavigator: React.FC = () => {
     const retrieveToken = async () => {
       try {
         const token = await getItem("token");
-        console.log(token);
+        // console.log(token);
         if (token) {
           dispatch(verifyToken(token));
         }
@@ -40,10 +41,11 @@ const MainNavigator: React.FC = () => {
     (state: RootState) => state.auth
   );
   useEffect(() => {
-    console.log(status);
+    // console.log(status);
 
     if (isAuthenticated) {
       // Navigate to the Main screen if authenticated
+      
       if (user && user.role === "worker") {
         navigation.navigate("Main", {
           screen: "Worker",
@@ -74,13 +76,14 @@ const MainNavigator: React.FC = () => {
         component={MainTabNavigator}
         options={{ headerShown: false }}
       />
+      {/* Worker - Alert Details */}
       <Stack.Screen name="AlertDetails" component={AlertReport} />
+      {/* Worker - Evacuation Alert */}
+      <Stack.Screen name="Evacuation Alert" component={WorkerSafeZone} />
       {/* Supervisor - Checked In Workers Screen */}
       <Stack.Screen name="Checked In" component={CheckedIn} />
       {/* Supervisor - In Safe Zone Workers Screen */}
       <Stack.Screen name="Safe Zone" component={SafeZone} />
-      {/* Worker - Evacuation Alert */}
-      <Stack.Screen name="Evacuation Alert" component={WorkerSafeZone} />
       {/* Supervisor - Alert Details Screen */}
       <Stack.Screen name="Received Alert" component={ReceivedAlertDetails} />
     </Stack.Navigator>

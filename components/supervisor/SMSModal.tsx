@@ -1,5 +1,5 @@
 // Component Imports===============================================
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import {
   Box,
@@ -24,13 +24,17 @@ import {
 import SucessIcon from "../../assets/icons/sucess";
 import Typography from "../common/typography";
 import CommonButton from "../common/button";
+import CustomModal from "../common/modal";
 import { Checkbox } from "@gluestack-ui/themed";
 import { CheckboxIcon } from "@gluestack-ui/themed";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../types/navigationTypes";
 // Connection to backend Imports===============================================
 import axios from "axios";
 import { BACKEND_BASE_URL } from "../../config/api";
 // =================================================================
 // HardCoded Emergency Contacts
+
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
@@ -47,6 +51,10 @@ const emergencyContacts = [
 const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
   const [checkedContacts, setCheckedContacts] = React.useState<string[]>([]);
   const [message, setMessage] = React.useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   // =============================================
   // Emergency Contact Toggle Function:
   const toggleContact = (contactId: string) => {
@@ -91,11 +99,11 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         <ModalContent>
           <ModalHeader justifyContent="center">
             <VStack>
-              {/* Icon */}
+              {/* ICON */}
               <Center>
                 <SucessIcon size={60} color="#00AE8C" focussed={false} />
               </Center>
-              {/* Title */}
+              {/* TITLE */}
               <Heading mt="$4" textAlign="center">
                 <Typography bold size="xl">
                   Your emergency whistle has been triggered.
@@ -106,11 +114,11 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
 
           <Box borderWidth={1} borderRadius="$2xl" m="$4" mt="$2">
             <ModalBody width="$full" m="$0">
-              {/* Checklist title */}
+              {/* CHECKLIST TITLE */}
               <Text textAlign="center" py="$3" borderBottomWidth={1}>
                 <Typography bold>Choose SMS alert contacts</Typography>
               </Text>
-              {/* Checklist*/}
+              {/* CHECKLIST */}
               <VStack space="md" mt="$3">
                 {emergencyContacts.map((contact) => (
                   <Box key={contact.id} p="$3" pt="$0" borderBottomWidth={1}>
@@ -135,11 +143,13 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
 
             <ModalFooter justifyContent="center">
               <VStack>
+                {/* SEND SMS */}
                 <CommonButton
                   onPress={() => {
                     sendSMS();
                     setTimeout(() => {
                       setShowModal(false);
+                      setShowConfirmation(true);
                     }, 2000);
                   }}
                 >
@@ -147,6 +157,8 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
                     <Typography>Send</Typography>
                   </ButtonText>
                 </CommonButton>
+
+                {/* SKIP SMS  */}
                 <ModalCloseButton mt="$4" onPress={() => setShowModal(false)}>
                   <Typography textDecorationLine="underline">
                     Skip SMS Messages
@@ -157,6 +169,19 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
           </Box>
         </ModalContent>
       </Modal>
+
+      <CustomModal
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        icon={<SucessIcon size={40} color="#00AE8C" focussed={false} />}
+        title="Success"
+        description="The SMS Alert messages to on-site First Aid Workers have been sent."
+        buttonText="Go to Dashboard"
+        buttonAction={() => {
+          navigation.navigate("Main" as never); //DOUBLE-CHECK THIS
+          setShowConfirmation(false);
+        }}
+      />
     </Center>
   );
 };
