@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation,Link } from "@react-navigation/native";
+import { useNavigation, Link } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Box, HStack, ScrollView, Text, get } from "@gluestack-ui/themed";
+import {
+  Box,
+  Button,
+  HStack,
+  ScrollView,
+  Text,
+  get,
+} from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
 import AlertSimulationCard from "../../components/common/alertSimulation";
@@ -16,8 +23,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import useFetch from "../../hooks/useFetch";
-import {IAlert} from '../../shared/interfaces/alert.interface';
-
+import { IAlert } from "../../shared/interfaces/alert.interface";
+import AddUserIcon from "../../assets/icons/addUser";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -38,20 +45,21 @@ const Dashboard: React.FC = () => {
     userName = `${user.firstName} ${user.lastName}`;
   }
 
-const {data, isLoading, error, fetchData}:any = useFetch(`${BACKEND_BASE_URL}/alert?constructionSiteId=${siteId}`, 'GET');
-const getAlert = async () => {
-  await fetchData({
-   credentials: "include",
-   headers: {
-     "Content-type": "application/json",
-   }
-  });
-}
-useEffect(() => {
-
-  getAlert();
-  
-},[])
+  const { data, isLoading, error, fetchData }: any = useFetch(
+    `${BACKEND_BASE_URL}/alert?constructionSiteId=${siteId}`,
+    "GET"
+  );
+  const getAlert = async () => {
+    await fetchData({
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+  };
+  useEffect(() => {
+    getAlert();
+  }, []);
 
   useEffect(() => {
     const getSite = async () => {
@@ -95,26 +103,43 @@ useEffect(() => {
     // return () => {
     //   websocketService.disconnect();
     // };
-  },[]);
+  }, []);
 
   /* Use this to change alert type */
   useEffect(() => {
-    console.log("Alert data>> ",data);
-    if (data){
-      if(data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2){
+    console.log("Alert data>> ", data);
+    if (data) {
+      if (data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2) {
         setCurrentAlertType("accident");
-    }else if(data.degreeOfEmergency === 3){
+      } else if (data.degreeOfEmergency === 3) {
         setCurrentAlertType("evacuation");
-    }else{
-      setCurrentAlertType("sos");
+      } else {
+        setCurrentAlertType("sos");
+      }
     }
-  }
   }, [data]);
 
+  const navigation = useNavigation();
+  const hanldeAddNewUser = () => {
+    navigation.navigate("Add User" as never);
+  };
+
   return (
-    <Box w="$full" h="$full">
+    <>
       <ScrollView>
         <ScreenLayout>
+          {/* TEMPORARY ADD USER BUTTON ---- DO NOT DELETE */}
+          {/* <Button
+            borderRadius="$full"
+            w="$16"
+            h="$16"
+            bg="$transparent"
+            alignSelf="flex-end"
+            onPress={hanldeAddNewUser}
+          >
+            <AddUserIcon size={30} focussed={false} color="#FD9201" />
+          </Button> */}
+
           {/* GREETING */}
           <Text>
             <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
@@ -152,9 +177,11 @@ useEffect(() => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-       { data && <DrawerSupervisor alertType={currentAlertType} alertData={data}/>}
+        {data && (
+          <DrawerSupervisor alertType={currentAlertType} alertData={data} />
+        )}
       </Box>
-    </Box>
+    </>
   );
 };
 
