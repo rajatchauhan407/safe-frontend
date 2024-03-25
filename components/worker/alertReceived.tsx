@@ -30,6 +30,9 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
   const handleIncidentPress = () => {
     // Handle incident press
   };
+  console.log(
+    `AlertReceived: type: ${type}, emergency: ${emergency}, location: ${location}, level: ${level}, workersInjured: ${workersInjured}`
+  )
 
   const navigateToSafeZone = () => {
     navigation.navigate('Evacuation Alert' as never);
@@ -49,7 +52,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
   return (
     <VStack space="md">
       <Typography textAlign="center" bold>Incident on {location}</Typography>
-      <AlertButton user="worker" emergency={type} onPress={handleIncidentPress} />
+      {/* <AlertButton user="worker"  onPress={handleIncidentPress} /> */}
 
       <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
         <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />
