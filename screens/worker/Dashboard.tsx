@@ -53,9 +53,15 @@ const Dashboard: React.FC = () => {
     websocketService.connect();
 
     console.log("Connected to websocket");
-    websocketService.subscribeToEvent("alert", (data) => {
-      console.log(data);
-      setCurrentAlertType(data.alertType);
+    websocketService.subscribeToEvent("alertWorker", (data) => {
+      if(data===true){
+        fetchData({
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+      }
     });
     console.log(data);
     return () => {
