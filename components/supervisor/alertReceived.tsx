@@ -13,7 +13,11 @@ import DangerIcon from "../../assets/icons/danger";
 import LocationComponent from "./Location";
 import GroupButton from "../common/groupButton";
 import SMSModal from "./SMSModal";
-
+import { BACKEND_BASE_URL, BACKEND_ORIGIN_LOCAL, LOCAL_BASE_URL } from "../../config/api";
+import useFetch from "../../hooks/useFetch";
+import { useSelector,useDispatch } from "react-redux";
+import { RootState, AppDispatch} from "../../lib/store";
+import { IUser } from "../../shared/interfaces/user.interface";
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
   emergency: string;
@@ -22,6 +26,7 @@ interface AlertReceivedProps {
   workersInjured: number;
   reportedFor: string;
   needAssistance: boolean;
+  constructionSiteId: string;
 }
 
 interface EmergencyItem {
@@ -37,11 +42,19 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   workersInjured,
   reportedFor,
   needAssistance,
+  constructionSiteId
 }) => {
+
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
   >(null);
-
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { data, isLoading, error, fetchData }: any = useFetch(
+    `${LOCAL_BASE_URL}/alert-worker`,
+    "POST"
+  );
+  // console.log(type);
+  // console.log(user);
   useEffect(() => {
     if (type === "accident") {
       setSelectedButton("One Whistle");
@@ -53,12 +66,28 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   const handleEmergencyTypeSelect = (action: "One Whistle" | "Evacuation") => {
     setSelectedButton(action);
   };
-
+  console.log(data);
   const navigation = useNavigation();
 
   const [openSMS, setOpenSMS] = useState(false);
 
-  const handleIncidentPress = () => {
+  const handleIncidentPress = async () => {
+    const options={
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+      body: JSON.stringify(
+        {   constructionSiteId,
+            supervisorId: (user as IUser)._id,
+            action: selectedButton
+        }
+        ),
+  }
+   console.log(options)
+  await fetchData(options);
+ 
+
     setOpenSMS(true);
   };
 

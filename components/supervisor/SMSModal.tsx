@@ -126,12 +126,14 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
                       justifyContent="space-between"
                       value={contact.id}
                       onPress={() => toggleContact(contact.id)}
+                      accessibilityLabel={contact.name}
                     >
                       <CheckboxLabel>
                         <Typography>{contact.name}</Typography>
                       </CheckboxLabel>
                       <CheckboxIndicator
                         $checked={checkedContacts.includes(contact.id)}
+                        // $checked={{ backgroundColor: checkedContacts.includes(contact.id) ? 'blue' : 'white' }}
                       >
                         <CheckboxIcon bg="$neutral" as={CheckIcon} />
                       </CheckboxIndicator>

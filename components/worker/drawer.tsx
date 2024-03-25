@@ -9,11 +9,15 @@ import Typography from "../common/typography";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation";
+  emergencyType: string;
+  level: number;
+  workersInjured: number;
 }
 
-const DrawerWorker: React.FC<DrawerProps> = ({ alertType }) => {
+const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,workersInjured }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
+  console.log(`DrawerWorker: alertType: ${alertType}, emergencyType: ${emergencyType}, level: ${level}, workersInjured: ${workersInjured}`)
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
@@ -77,10 +81,10 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType }) => {
             {alertType !== "none" && (
               <AlertReceived 
                 type={alertType}
-                location="Zone 3 - Building B" 
-                emergency={"Struck by hazard"} 
-                level={2} 
-                workersInjured={5} />
+                location={"Zone 3 - Building B"}
+                emergency={emergencyType} 
+                level={level} 
+                workersInjured={workersInjured} />
             )}
           </View>
         )}

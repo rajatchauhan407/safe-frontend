@@ -27,6 +27,7 @@ const ReceivedAlertDetails: React.FC<any> = ({route}) => {
           workersInjured={alertData.workersInjured}
           reportedFor={alertData.reportingFor}
           needAssistance={alertData.assistance}
+          constructionSiteId={alertData.constructionSiteId}
         />
       </ScrollView>
     </ScreenLayout>
