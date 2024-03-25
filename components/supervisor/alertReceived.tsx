@@ -50,7 +50,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   >(null);
   const { user } = useSelector((state: RootState) => state.auth);
   const { data, isLoading, error, fetchData }: any = useFetch(
-    `${LOCAL_BASE_URL}/alert-worker`,
+    `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
   );
   // console.log(type);

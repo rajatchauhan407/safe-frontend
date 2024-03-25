@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
   }
 
   const { data, isLoading, error, fetchData }: any = useFetch(
-    `${LOCAL_BASE_URL}/alert-worker?constructionSiteId=${siteId}`,
+    `${BACKEND_BASE_URL}/alert-worker?constructionSiteId=${siteId}`,
     "GET"
   );
 
