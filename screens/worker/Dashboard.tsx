@@ -177,8 +177,8 @@ const Dashboard: React.FC = () => {
               siteId: siteId,
               workerId: userId,
               location: {
-                latitude: 49.16196980896502,
-                longitude: -123.14712911446713,
+                latitude: 49.28300315023338,
+                longitude: -123.12037620096916,
               },
             };
 
