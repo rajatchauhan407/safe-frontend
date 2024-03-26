@@ -12,18 +12,21 @@ import {
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import GroupButton from "../../components/common/groupButton";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, ViewStyle } from "react-native";
 import FallIcon from "../../assets/icons/fall";
 import FireHazardIcon from "../../assets/icons/fireHazard";
 import ElectricIcon from "../../assets/icons/electric";
 import InjuredIcon from "../../assets/icons/injured";
 import SpaceIcon from "../../assets/icons/space";
 import DangerIcon from "../../assets/icons/danger";
+import ExplosionIcon from "../../assets/icons/explosion";
+import WeatherIcon from "../../assets/icons/weather";
 import CommonButton from "../../components/common/button";
+import AlertButton from "../../components/common/alertButton";
+import SMSModal from "../../components/supervisor/SMSModal";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
-import { Camera, CameraType } from "expo-camera";
 import { getItem } from "../../lib/slices/authSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
@@ -53,6 +56,7 @@ const Alert: React.FC = () => {
     `${BACKEND_BASE_URL}/alert`,
     "POST"
   );
+  const [openSMS, setOpenSMS] = useState(false);
 
   useEffect(() => {
     const retrieveToken = async () => {
@@ -66,16 +70,9 @@ const Alert: React.FC = () => {
 
   /* Report for button variables---------------------- */
 
-  /* useEffect(() => {
-    if (type === "accident") {
-      setSelectedButton("One Whistle");
-    } else if (type === "evacuation") {
-      setSelectedButton("Evacuation");
-    }
-  }, [type]); */
-
   const handleEmergencyTypeSelect = (action: "One Whistle" | "Evacuation") => {
     setSelectedButton(action);
+    setReportType(null);
   };
 
   /* Type of alert to report variables ----------------*/
@@ -89,7 +86,14 @@ const Alert: React.FC = () => {
     { text: "Struck by hazard", icon: DangerIcon },
   ];
 
+  const evacuationEmergencies: EmergencyItem[] = [
+    { text: "Fire hazard", icon: FireHazardIcon },
+    { text: "Gas explosion", icon: ExplosionIcon },
+    { text: "Weather", icon: WeatherIcon },
+  ];
+
   const chunkedEmergencies = chunkArray(emergencies, 3);
+  const chunkedEvacuationEmergencies = chunkArray(evacuationEmergencies, 3);
 
   const handleEmergencySelection = (text: string) => {
     setReportType((prevReportType) => {
@@ -102,10 +106,22 @@ const Alert: React.FC = () => {
     text,
   }) => {
     const isSelected = reportType === text;
+    const selectedStyle: ViewStyle = {
+      backgroundColor: isSelected
+        ? selectedButton === "One Whistle"
+          ? "#FD9201"
+          : "#D0080F"
+        : "transparent",
+      borderColor: isSelected
+        ? selectedButton === "One Whistle"
+          ? "#FD9201"
+          : "#D0080F"
+        : "transparent",
+    };
     return (
       <TouchableOpacity
         onPress={() => handleEmergencySelection(text)}
-        style={[styles.boxContainer, isSelected ? styles.selectedBox : null]}
+        style={[styles.boxContainer, isSelected ? selectedStyle : null]}
       >
         <VStack
           space="sm"
@@ -116,7 +132,16 @@ const Alert: React.FC = () => {
           borderRadius={22}
         >
           <IconComponent size={34} color="#1E1E1E" />
-          <Typography textAlign="center" bold>
+          <Typography
+            textAlign="center"
+            bold
+            style={{
+              color:
+                isSelected && selectedButton === "Evacuation"
+                  ? "#ffffff"
+                  : "#1E1E1E",
+            }}
+          >
             {text}
           </Typography>
         </VStack>
@@ -154,12 +179,16 @@ const Alert: React.FC = () => {
       body: JSON.stringify(alertData),
     };
     await fetchData(options);
+
+    setOpenSMS(true);
   };
 
   /* Cancel Alert -------------------------- */
 
   const handleCancelAlert = () => {
     navigation.navigate("Dashboard" as never);
+    setNumWorkersInjured(0);
+    setReportType(null);
   };
 
   return (
@@ -172,7 +201,7 @@ const Alert: React.FC = () => {
               <Typography bold>Select type of emergency</Typography>
               <GroupButton
                 onSelect={handleEmergencyTypeSelect}
-                action={"One Whistle"}
+                action={selectedButton || "One Whistle"}
               />
             </VStack>
 
@@ -180,14 +209,23 @@ const Alert: React.FC = () => {
             <FormControl>
               <VStack space="md">
                 <Typography bold>Number of workers injured*</Typography>
-                <View style={styles.numberInputContainer}>
+                <View flexDirection="row" alignItems="center">
                   <TouchableOpacity
                     style={styles.circleButton}
                     onPress={() => setNumWorkersInjured(numWorkersInjured - 1)}
                   >
                     <Typography bold>-</Typography>
                   </TouchableOpacity>
-                  <View style={styles.numberDisplay}>
+                  <View
+                    minWidth={80}
+                    h={40}
+                    borderRadius={"$full"}
+                    borderWidth={2}
+                    borderColor="#000"
+                    alignItems="center"
+                    justifyContent="center"
+                    mr={8}
+                  >
                     <Typography bold>{numWorkersInjured}</Typography>
                   </View>
                   <TouchableOpacity
@@ -205,27 +243,52 @@ const Alert: React.FC = () => {
               <VStack space="md">
                 <Typography bold>I am reporting about*</Typography>
                 <VStack space="xs">
-                  {chunkedEmergencies.map(
-                    (chunk: EmergencyItem[], index: number) => (
-                      <HStack key={index} space="lg">
-                        {chunk.map(
-                          (emergency: EmergencyItem, innerIndex: number) => (
-                            <Box
-                              flex={1}
-                              justifyContent="center"
-                              alignItems="center"
-                            >
-                              <BoxIconWithText
-                                key={innerIndex}
-                                icon={emergency.icon}
-                                text={emergency.text}
-                              />
-                            </Box>
-                          )
-                        )}
-                      </HStack>
-                    )
-                  )}
+                  {selectedButton === "One Whistle" &&
+                    // Render chunkedEmergencies if "One Whistle" is selected
+                    chunkedEmergencies.map(
+                      (chunk: EmergencyItem[], index: number) => (
+                        <HStack key={index} space="lg">
+                          {chunk.map(
+                            (emergency: EmergencyItem, innerIndex: number) => (
+                              <Box
+                                flex={1}
+                                justifyContent="center"
+                                alignItems="center"
+                              >
+                                <BoxIconWithText
+                                  key={innerIndex}
+                                  icon={emergency.icon}
+                                  text={emergency.text}
+                                />
+                              </Box>
+                            )
+                          )}
+                        </HStack>
+                      )
+                    )}
+                  {selectedButton === "Evacuation" &&
+                    // Render chunkedEvacuationEmergencies if "Evacuation" is selected
+                    chunkedEvacuationEmergencies.map(
+                      (chunk: EmergencyItem[], index: number) => (
+                        <HStack key={index} space="lg">
+                          {chunk.map(
+                            (emergency: EmergencyItem, innerIndex: number) => (
+                              <Box
+                                flex={1}
+                                justifyContent="center"
+                                alignItems="center"
+                              >
+                                <BoxIconWithText
+                                  key={innerIndex}
+                                  icon={emergency.icon}
+                                  text={emergency.text}
+                                />
+                              </Box>
+                            )
+                          )}
+                        </HStack>
+                      )
+                    )}
                   {/* Render Textarea if no emergency is selected */}
                   {reportType === null && (
                     <FormControl mt={"$2"}>
@@ -248,15 +311,25 @@ const Alert: React.FC = () => {
             <FormControl>
               <VStack space="md">
                 <Typography textAlign="center" color="#D0080F" bold>
-                  All the above fields are required
+                  All the above fields are required*
                 </Typography>
-                <CommonButton
-                  variant="rounded"
-                  isDisabled={!(numWorkersInjured >= 0 && reportType)}
-                  onPress={sendAlert}
-                >
-                  Send Alert
-                </CommonButton>
+                {selectedButton === "Evacuation" && (
+                  <AlertButton
+                    user="worker"
+                    emergency={"evacuation"}
+                    isDisabled={!(numWorkersInjured >= 0 && reportType)}
+                    onPress={sendAlert}
+                  />
+                )}
+                {selectedButton === "One Whistle" && (
+                  <AlertButton
+                    user="supervisor"
+                    emergency={"oneWhistle"}
+                    isDisabled={!(numWorkersInjured >= 0 && reportType)}
+                    onPress={sendAlert}
+                  />
+                )}
+
                 <CommonButton
                   variant="underline"
                   action="primary"
@@ -266,6 +339,9 @@ const Alert: React.FC = () => {
                 </CommonButton>
               </VStack>
             </FormControl>
+
+            {/* SMS MODAL */}
+            <SMSModal showModal={openSMS} setShowModal={setOpenSMS} />
           </VStack>
         </ScreenLayout>
       </ScrollView>
@@ -274,10 +350,6 @@ const Alert: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  numberInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   circleButton: {
     width: 40,
     height: 40,
@@ -288,31 +360,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 8,
   },
-  buttonText: {
-    color: "black",
-    fontSize: 18,
-  },
-  numberDisplay: {
-    minWidth: 80,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 8,
-  },
-  numberText: {
-    fontSize: 16,
-  },
+
   boxContainer: {
     borderWidth: 2,
     borderColor: "#C7C7C7",
     borderRadius: 22,
-  },
-  selectedBox: {
-    backgroundColor: "orange",
-    borderColor: "orange",
   },
 });
 

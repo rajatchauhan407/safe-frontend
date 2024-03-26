@@ -94,9 +94,9 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
   // Renderin the Component:======================
   return (
     <Center>
-      <Modal borderRadius="$2xl" isOpen={showModal}>
+      <Modal isOpen={showModal}>
         <ModalBackdrop />
-        <ModalContent>
+        <ModalContent borderRadius="$3xl">
           <ModalHeader justifyContent="center">
             <VStack>
               {/* ICON */}
@@ -180,7 +180,7 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         description="The SMS Alert messages to on-site First Aid Workers have been sent."
         buttonText="Go to Dashboard"
         buttonAction={() => {
-          navigation.navigate("Main" as never); //DOUBLE-CHECK THIS
+          navigation.navigate("Dashboard" as never);
           setShowConfirmation(false);
         }}
       />
