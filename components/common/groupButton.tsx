@@ -62,7 +62,17 @@ const GroupButton: React.FC<ButtonProps> = ({ onSelect }) => {
             borderRightWidth={index === buttons.length - 1 ? "$0" : undefined}
           >
             <ButtonText>
-              <Typography bold>{button.label}</Typography>
+              <Typography
+                bold
+                color={
+                  selectedButtonIndex === index &&
+                  button.action === "Evacuation"
+                    ? "#ffffff"
+                    : undefined
+                }
+              >
+                {button.label}
+              </Typography>
             </ButtonText>
           </Button>
         ))}
