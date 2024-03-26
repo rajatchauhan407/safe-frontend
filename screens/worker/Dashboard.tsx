@@ -54,13 +54,13 @@ const Dashboard: React.FC = () => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alertWorker", (data) => {
-      if(data===true){
+      if (data === true) {
         fetchData({
           credentials: "include",
           headers: {
             "Content-type": "application/json",
           },
-        })
+        });
       }
     });
     console.log(data);
@@ -400,12 +400,14 @@ const Dashboard: React.FC = () => {
         <TooltipSOS />
         {/* DRAWER */}
         <Box style={styles.drawer}>
-          {data && <DrawerWorker 
-            alertType={data.responseAction.actionType} 
-            emergencyType={data.emergencyType}
-            level={data.degreeOfEmergency}
-            workersInjured={data.workersInjured}
-            />}
+          {data && (
+            <DrawerWorker
+              alertType={data.responseAction.actionType}
+              emergencyType={data.emergencyType}
+              level={data.degreeOfEmergency}
+              workersInjured={data.workersInjured}
+            />
+          )}
         </Box>
       </ScreenLayout>
     </>
