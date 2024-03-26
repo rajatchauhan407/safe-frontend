@@ -1,13 +1,15 @@
+import React, { useState, useEffect } from "react";
 import { Box, HStack, ScrollView, VStack } from "@gluestack-ui/themed";
-import React, { useState } from "react";
 import ScreenLayout from "../../components/layout/screenLayout";
 import Typography from "../../components/common/typography";
 import LocationComponent from "../../components/supervisor/Location";
 import CommonButton from "../../components/common/button";
 import SMSModal from "../../components/supervisor/SMSModal";
+import MapComponent, { LatLng } from "../../components/common/map";
 
 const SOSDetails: React.FC = () => {
-  const [siteLocation, setSiteLocation] = useState("");
+  const [siteLocation, setSiteLocation] = useState("100 W 49th Ave, Vancouver");
+  const SOSLocation: LatLng = { latitude: 12.345, longitude: 67.89 }; // Set type for SOSLocation
   const [openSMS, setOpenSMS] = useState(false);
 
   const handleSMS = () => {
@@ -19,11 +21,11 @@ const SOSDetails: React.FC = () => {
       <ScrollView>
         <ScreenLayout>
           <VStack space="lg">
-            <Typography>Hi from SOS Det</Typography>
             {/* LOCATION */}
             <LocationComponent siteLocation={siteLocation} />
 
             {/* MAP */}
+            <MapComponent location={SOSLocation} />
 
             {/* TIME STAMP */}
             <HStack>
