@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "@gluestack-ui/themed";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import { StyleSheet } from "react-native";
 
 export interface LatLng {
   latitude: number;
@@ -13,18 +14,35 @@ interface MapComponentProps {
 
 const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
   return (
-    <View flex={1}>
+    <View flex={1} borderRadius={20}>
       <MapView
-        style={{ flex: 1 /* width: "100%", height: "50vh" */ }}
+        style={styles.map}
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.01, // Adjust to zoom in or out
+          longitudeDelta: 0.01, // Adjust to zoom in or out
         }}
-      />
+      >
+        {/* Marker to show the specified location */}
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          title="Your Location"
+          description="This is the specified location"
+        />
+      </MapView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default MapComponent;
