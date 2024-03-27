@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
       <Box style={styles.drawer}>
         {data && (
           <DrawerSupervisor
-            /* alertType={currentAlertType} */ alertType="sos"
+            alertType={currentAlertType} /* alertType="sos" */
             alertData={data}
           />
         )}
