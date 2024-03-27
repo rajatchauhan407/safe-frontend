@@ -2,14 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  PanResponder,
-  Animated,
-} from "react-native";
+import { View, StyleSheet, PanResponder, Animated } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertButton from "../common/alertButton";
 import Typography from "../common/typography";
@@ -19,7 +12,7 @@ interface DrawerProps {
   alertData?: any;
 }
 
-const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType,alertData }) => {
+const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
@@ -62,12 +55,13 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType,alertData }) => {
     }).start();
   }, [isOpen]);
 
-  /* const handleIncidentPress = () => {
-    navigation.navigate("AlertDetails");
-  }; */
-
   const handleReceivedDetailsPress = () => {
-    navigation.navigate("Received Alert", { alertData: alertData });
+    /* navigation.navigate("Received Alert", { alertData: alertData }); */
+    if (alertType === "sos") {
+      navigation.navigate("SOS Details" as never);
+    } else {
+      navigation.navigate("Received Alert", { alertData: alertData });
+    }
   };
 
   const getAlertColor = (): string => {

@@ -17,6 +17,7 @@ import SafeZone from "../screens/supervisor/SafeZone";
 import ReceivedAlertDetails from "../screens/supervisor/ReceivedAlert";
 import WorkerSafeZone from "../components/worker/safeZone";
 import AddUser from "../screens/supervisor/AddUser";
+import SOSDetails from "../screens/supervisor/SOSDetails";
 
 const Stack = createStackNavigator();
 
@@ -88,6 +89,8 @@ const MainNavigator: React.FC = () => {
       <Stack.Screen name="Received Alert" component={ReceivedAlertDetails} />
       {/* Supervisor - Add User Screen */}
       <Stack.Screen name="Add User" component={AddUser} />
+      {/* Supervisor - SOS Details Screen */}
+      <Stack.Screen name="SOS Details" component={SOSDetails} />
     </Stack.Navigator>
   );
 };
