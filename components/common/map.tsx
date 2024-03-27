@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "@gluestack-ui/themed";
+import { SafeAreaView } from "@gluestack-ui/themed";
 import MapView, { Marker } from "react-native-maps";
 import { StyleSheet } from "react-native";
 
@@ -14,27 +14,27 @@ interface MapComponentProps {
 
 const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
   return (
-    <View flex={1} borderRadius={20}>
+    <SafeAreaView flex={1} borderRadius={20}>
       <MapView
         style={styles.map}
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.01, // Adjust to zoom in or out
-          longitudeDelta: 0.01, // Adjust to zoom in or out
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         }}
       >
-        {/* Marker to show the specified location */}
         <Marker
           coordinate={{
             latitude: location.latitude,
             longitude: location.longitude,
           }}
-          title="Your Location"
-          description="This is the specified location"
+          title="Workers Location"
+          description="Someone needs help at this location"
+          image={require("../../assets/icons/marker.png")}
         />
       </MapView>
-    </View>
+    </SafeAreaView>
   );
 };
 
