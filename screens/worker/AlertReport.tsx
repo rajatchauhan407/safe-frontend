@@ -37,6 +37,7 @@ import { Camera, CameraType } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import * as FileSystem from 'expo-file-system';
+import useRequest from "../../hooks/useRequest";
 
 interface EmergencyItem {
   text: string;
@@ -63,8 +64,8 @@ const AlertReport: React.FC = () => {
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
 
-  const { data, isLoading, error, fetchData } = useFetch(
-    `${BACKEND_BASE_URL}/alert`,
+  const { data, isLoading, error, fetchData } = useRequest(
+    `${LOCAL_BASE_URL}/alert`,
     "POST"
   );
   const user = useSelector((state: RootState) => state.auth.user);
@@ -336,6 +337,7 @@ const AlertReport: React.FC = () => {
                               flex={1}
                               justifyContent="center"
                               alignItems="center"
+                              key={innerIndex}
                             >
                               <BoxIconWithText
                                 key={innerIndex}
