@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 
-const useFetch = (url:string, method:string = 'GET') => {
+const useRequest = (url:string, method:string = 'GET') => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,12 +26,12 @@ const useFetch = (url:string, method:string = 'GET') => {
     }
   };
 //   fetchData();
-console.log(url)
-  useEffect(() => {
-    fetchData();
-  }, [url,method]);
+// console.log(url)
+//   useEffect(() => {
+//     fetchData();
+//   }, [url,method]);
 
   return { data, isLoading, error, fetchData };
 };
 
-export default useFetch;
+export default useRequest;
