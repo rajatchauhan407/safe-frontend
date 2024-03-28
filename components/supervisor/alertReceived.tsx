@@ -31,6 +31,7 @@ interface AlertReceivedProps {
   reportedFor: string;
   needAssistance: boolean;
   constructionSiteId: string;
+  imageUrl?: string;
 }
 
 interface EmergencyItem {
@@ -47,6 +48,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   reportedFor,
   needAssistance,
   constructionSiteId,
+  imageUrl
 }) => {
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
@@ -57,7 +59,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     "POST"
   );
   // console.log(type);
-  // console.log(user);
+  // console.log(imageUrl);
   useEffect(() => {
     if (type === "accident") {
       setSelectedButton("One Whistle");
@@ -155,15 +157,15 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      <Image
+      {imageUrl && <Image
         size="2xl"
         w={"$full"}
         borderRadius={10}
         source={{
-          uri: "https://images.pexels.com/photos/15961832/pexels-photo-15961832/free-photo-of-a-bonfire-at-night.jpeg",
+          uri: imageUrl,
         }}
         alt={`${emergency} example`}
-      />
+      />}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>

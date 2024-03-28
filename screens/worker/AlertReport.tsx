@@ -36,6 +36,8 @@ import useFetch from "../../hooks/useFetch";
 import { Camera, CameraType } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
+import * as FileSystem from 'expo-file-system';
+
 interface EmergencyItem {
   text: string;
   icon: React.FC<any>;
@@ -59,6 +61,8 @@ const AlertReport: React.FC = () => {
   const [showCamera, setShowCamera] = useState(false);
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
+  const [photo, setPhoto] = useState<any>("");
+
   const { data, isLoading, error, fetchData } = useFetch(
     `${BACKEND_BASE_URL}/alert`,
     "POST"
@@ -74,6 +78,8 @@ const AlertReport: React.FC = () => {
     // console.log('Other emergency type:', otherEmergencyType);
     console.log("Urgency level:", urgencyLevel);
     console.log("Need assistance:", needAssistance);
+
+    let imageData;
 
     const alertData = {
       role: user ? user.role : null,
@@ -91,11 +97,27 @@ const AlertReport: React.FC = () => {
       degreeOfEmergency: urgencyLevel,
       assistance: needAssistance,
     };
+    // Object.keys(alertData).forEach((key) => {
+    //   formData.append(key, (alertData as any)[key] as string);
+    // });
+    if (photo) {
+      const uriParts = photo.split(".");
+      const fileType = uriParts[uriParts.length - 1];
+
+      const fileData = await FileSystem.readAsStringAsync(photo, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const base64Image = `data:image/${fileType};base64,${fileData}`;
+      // console.log("fileData>>", fileData);
+      imageData = base64Image;
+      
+    }
+    console.log("formdata>>", alertData);
     const options = {
-      headers: {
+      headers:{
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(alertData),
+      body: JSON.stringify({...alertData, photo: photo?imageData:null}),
     };
     await fetchData(options);
   };
@@ -112,6 +134,7 @@ const AlertReport: React.FC = () => {
         skipProcessing: false, // Skip processing rotation and scaling
       };
       const photo = await cameraRef.current.takePictureAsync(options);
+      setPhoto(photo.uri);
       console.log(photo);
     }
   };
