@@ -16,6 +16,7 @@ import {
   TextareaInput,
   ScrollView,
   Button,
+  Box,
 } from "@gluestack-ui/themed";
 import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -36,7 +37,6 @@ import { Camera, CameraType } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import * as FileSystem from 'expo-file-system';
-
 
 interface EmergencyItem {
   text: string;
@@ -62,16 +62,15 @@ const AlertReport: React.FC = () => {
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
+
   const { data, isLoading, error, fetchData } = useFetch(
-    `${LOCAL_BASE_URL}/alert`,
+    `${BACKEND_BASE_URL}/alert`,
     "POST"
   );
   const user = useSelector((state: RootState) => state.auth.user);
   // console.log('user>>', user);
   /*** send alert for the app ****/
   const sendAlert = async () => {
-    // const formData = new FormData();
-
     console.log("Sending alert");
     console.log("Reporting for:", reportingFor);
     console.log("Number of workers injured:", numWorkersInjured);
@@ -79,8 +78,10 @@ const AlertReport: React.FC = () => {
     // console.log('Other emergency type:', otherEmergencyType);
     console.log("Urgency level:", urgencyLevel);
     console.log("Need assistance:", needAssistance);
+
     let imageData;
-    let alertData = {
+
+    const alertData = {
       role: user ? user.role : null,
       userId: user ? user.userId : null,
       constructionSiteId: user ? user.constructionSiteId : null,
@@ -325,17 +326,23 @@ const AlertReport: React.FC = () => {
             <FormControl>
               <VStack space="md">
                 <Typography bold>I am reporting about*</Typography>
-                <VStack space="md">
+                <VStack space="xs">
                   {chunkedEmergencies.map(
                     (chunk: EmergencyItem[], index: number) => (
-                      <HStack key={index} space="md">
+                      <HStack key={index} space="lg">
                         {chunk.map(
                           (emergency: EmergencyItem, innerIndex: number) => (
-                            <BoxIconWithText
-                              key={innerIndex}
-                              icon={emergency.icon}
-                              text={emergency.text}
-                            />
+                            <Box
+                              flex={1}
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <BoxIconWithText
+                                key={innerIndex}
+                                icon={emergency.icon}
+                                text={emergency.text}
+                              />
+                            </Box>
                           )
                         )}
                       </HStack>

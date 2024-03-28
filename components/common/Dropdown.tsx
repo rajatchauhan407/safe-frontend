@@ -23,7 +23,7 @@ interface Site {
 
 const Dropdown = () => {
   const [siteList, setSiteList] = useState<Site[]>([]);
-  const [selectedSite, setSelectedSite] = useState<string | undefined>("7100 Gilbert Rd, Richmond");;
+  const [selectedSite, setSelectedSite] = useState<string | undefined>("800 Robson Street, Vancouver");;
 
   useEffect(() => {
     console.log("in useeffect")

@@ -44,6 +44,10 @@ import CustomModal from "../components/common/modal";
 import SucessIcon from "../assets/icons/sucess";
 import { useToken } from "@gluestack-style/react";
 import { IIconProps } from "../shared/interfaces/IIconProps.interface";
+import { BACKEND_BASE_URL} from "../config/api";
+import * as Location from "expo-location";
+import { useSelector } from "react-redux";
+import { RootState } from "../lib/store";
 
 const Tab = createBottomTabNavigator();
 
@@ -51,7 +55,18 @@ const WorkerNavigator: React.FC = () => {
   const successColor = useToken("colors", "success");
   const [isOpen, setIsOpen] = useState(false);
   const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const { isAuthenticated, status, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  let siteId = "";
+  let userId = "";
+  let userName = "";
+  if (user) {
+    console.log("logged in user>> " + user._id);
+    userId = user._id;
+    siteId = user.constructionSiteId || "";
+    userName = `${user.firstName} ${user.lastName}`;
+  }
   const openModal = () => {
     setIsOpen(true);
   };
@@ -64,7 +79,72 @@ const WorkerNavigator: React.FC = () => {
     closeModal();
   };
 
+  const getLocation = async (): Promise<Location.LocationObject | null> => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        return null;
+      }
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Lowest,
+      });
+      return location;
+    } catch (error) {
+      return null;
+    }
+  };
+
   const handleSOSLongPress = () => {
+    const createSOSAlert = async () => {
+      try {
+        getLocation()
+        .then(async (location) => {
+          if (location) {
+            console.log("Received location:", location);
+            //Actual Location of the device
+            // const sosAlertInfo = {
+            //   siteId: siteId,
+            //   workerId: userId,
+            //   location: {
+            //     latitude: location.coords.latitude,
+            //     longitude: location.coords.longitude
+            //   }
+            // };
+
+            //To simulate check-in successful during demo
+            const sosAlertInfo = {
+              siteId: siteId,
+              workerId: userId,
+              location: {
+                latitude: 49.28300315023338,
+                longitude: -123.12037620096916,
+              },
+            };
+            const res = await fetch(`${BACKEND_BASE_URL}/sosalert`, {
+              method: "POST",
+              credentials: "include",
+              body: JSON.stringify(sosAlertInfo),
+              headers: {
+                "Content-type": "application/json",
+              },
+            });
+            const data = await res.json();
+            console.log("sos alert data>> " + data);             
+          } else
+          {
+            //Show error message that worker didn't give permission to access his location 
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+               
+      } catch (error) {
+        //Error while connecting with backend
+        console.error("Error:", error);
+      }
+    };
+    createSOSAlert();
     holdTimeoutRef.current = setTimeout(openModal, 300);
   };
 

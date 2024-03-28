@@ -93,14 +93,14 @@ const Dashboard: React.FC = () => {
     websocketService.connect();
 
     console.log("Connected to websocket");
-    
+
     websocketService.subscribeToEvent("alert", (data) => {
       fetchData({
         credentials: "include",
         headers: {
           "Content-type": "application/json",
         },
-      })
+      });
       // setData(data);
       // setCurrentAlertType(data.alertType);
     });
@@ -183,7 +183,10 @@ const Dashboard: React.FC = () => {
       {/* DRAWER */}
       <Box style={styles.drawer}>
         {data && (
-          <DrawerSupervisor alertType={currentAlertType} alertData={data} />
+          <DrawerSupervisor
+            alertType={currentAlertType} /* alertType="sos" */
+            alertData={data}
+          />
         )}
       </Box>
     </>

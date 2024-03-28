@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
   }
 
   const { data, isLoading, error, fetchData }: any = useFetch(
-    `${BACKEND_BASE_URL}/alert-worker?constructionSiteId=${siteId}`,
+    `${LOCAL_BASE_URL}/alert-worker?constructionSiteId=${siteId}`,
     "GET"
   );
 
@@ -54,13 +54,13 @@ const Dashboard: React.FC = () => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alertWorker", (data) => {
-      if(data===true){
+      if (data === true) {
         fetchData({
           credentials: "include",
           headers: {
             "Content-type": "application/json",
           },
-        })
+        });
       }
     });
     console.log(data);
@@ -177,8 +177,8 @@ const Dashboard: React.FC = () => {
               siteId: siteId,
               workerId: userId,
               location: {
-                latitude: 49.16196980896502,
-                longitude: -123.14712911446713,
+                latitude: 49.28300315023338,
+                longitude: -123.12037620096916,
               },
             };
 
@@ -400,12 +400,14 @@ const Dashboard: React.FC = () => {
         <TooltipSOS />
         {/* DRAWER */}
         <Box style={styles.drawer}>
-          {data && <DrawerWorker 
-            alertType={data.responseAction.actionType} 
-            emergencyType={data.emergencyType}
-            level={data.degreeOfEmergency}
-            workersInjured={data.workersInjured}
-            />}
+          {data && (
+            <DrawerWorker
+              alertType={data.responseAction.actionType}
+              emergencyType={data.emergencyType}
+              level={data.degreeOfEmergency}
+              workersInjured={data.workersInjured}
+            />
+          )}
         </Box>
       </ScreenLayout>
     </>

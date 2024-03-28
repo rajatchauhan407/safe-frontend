@@ -2,12 +2,11 @@ import React from "react";
 import { TouchableOpacityProps, TextStyle, ViewStyle } from "react-native";
 import { Button, ButtonText, ButtonIcon, AddIcon } from "@gluestack-ui/themed";
 import Typography from "./typography";
-import { Camera } from 'lucide-react-native';
-
+import { Camera } from "lucide-react-native";
 
 interface CommonButtonProps extends TouchableOpacityProps {
   variant?: "fill" | "outline" | "rounded" | "text" | "underline";
-  action?: "primary" | "secondary" | "positive";
+  action?: "primary" | "secondary" | "positive" | "sos";
   isDisabled?: boolean;
   isCheckIn?: boolean;
   isLogIn?: boolean;
@@ -50,7 +49,16 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       borderRadius: isLogIn ? 100 : 4,
     },
     rounded: {
-      backgroundColor: action === "primary" ? "#FD9201" : action === "secondary" ? "#00AE8C" : action === "positive" ? "#1E1E1E" : "#FFFFFF",
+      backgroundColor:
+        action === "primary"
+          ? "#FD9201"
+          : action === "secondary"
+          ? "#00AE8C"
+          : action === "positive"
+          ? "#1E1E1E"
+          : action === "sos"
+          ? "#D0080F"
+          : "#FFFFFF",
       borderRadius: 100,
     },
     text: {
@@ -59,7 +67,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     underline: {
       backgroundColor: "transparent",
     },
-  } as const;  
+  } as const;
 
   const textStyles: Record<string, TextStyle | ViewStyle> = {
     fill: {
@@ -76,7 +84,12 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     },
     rounded: {
       fontFamily: "NunitoSans_700Bold",
-      color: action === "primary" ? "#1E1E1E" : action === "positive" ? "#FFFFFF" : "#FFFFFF",
+      color:
+        action === "primary"
+          ? "#1E1E1E"
+          : action === "positive"
+          ? "#FFFFFF"
+          : "#FFFFFF",
       fontSize: buttonTextSize,
       fontWeight: "bold",
     },
@@ -105,7 +118,6 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     }
     return style;
   };
-  
 
   return (
     <Button
@@ -117,12 +129,12 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     >
       {showIcon && variant !== "text" && <ButtonIcon as={Camera} size="xl" />}
       <Typography
-      size={buttonTextSize}
-      style={{
-        ...textStyles[variant as keyof typeof textStyles],
-        marginLeft: showIcon && variant !== "text" ? 8 : 0,
-      }}
-    >
+        size={buttonTextSize}
+        style={{
+          ...textStyles[variant as keyof typeof textStyles],
+          marginLeft: showIcon && variant !== "text" ? 8 : 0,
+        }}
+      >
         {children}
       </Typography>
     </Button>

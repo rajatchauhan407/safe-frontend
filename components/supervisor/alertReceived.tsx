@@ -13,10 +13,14 @@ import DangerIcon from "../../assets/icons/danger";
 import LocationComponent from "./Location";
 import GroupButton from "../common/groupButton";
 import SMSModal from "./SMSModal";
-import { BACKEND_BASE_URL, BACKEND_ORIGIN_LOCAL, LOCAL_BASE_URL } from "../../config/api";
+import {
+  BACKEND_BASE_URL,
+  BACKEND_ORIGIN_LOCAL,
+  LOCAL_BASE_URL,
+} from "../../config/api";
 import useFetch from "../../hooks/useFetch";
-import { useSelector,useDispatch } from "react-redux";
-import { RootState, AppDispatch} from "../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../lib/store";
 import { IUser } from "../../shared/interfaces/user.interface";
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
@@ -46,7 +50,6 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   constructionSiteId,
   imageUrl
 }) => {
-
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
   >(null);
@@ -56,7 +59,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     "POST"
   );
   // console.log(type);
-  // console.log(user);
+  // console.log(imageUrl);
   useEffect(() => {
     if (type === "accident") {
       setSelectedButton("One Whistle");
@@ -74,21 +77,19 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   const [openSMS, setOpenSMS] = useState(false);
 
   const handleIncidentPress = async () => {
-    const options={
+    const options = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       withCredentials: true,
-      body: JSON.stringify(
-        {   constructionSiteId,
-            supervisorId: (user as IUser)._id,
-            action: selectedButton
-        }
-        ),
-  }
-   console.log(options)
-  await fetchData(options);
- 
+      body: JSON.stringify({
+        constructionSiteId,
+        supervisorId: (user as IUser)._id,
+        action: selectedButton,
+      }),
+    };
+    console.log(options);
+    await fetchData(options);
 
     setOpenSMS(true);
   };
@@ -156,7 +157,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      <Image
+      {imageUrl && <Image
         size="2xl"
         w={"$full"}
         borderRadius={10}
@@ -164,13 +165,16 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           uri: imageUrl,
         }}
         alt={`${emergency} example`}
-      />
+      />}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
         <Typography bold>Select type of emergency</Typography>
       </Box>
-      <GroupButton onSelect={handleEmergencyTypeSelect} action={"One Whistle"} />
+      <GroupButton
+        onSelect={handleEmergencyTypeSelect}
+        action={"One Whistle"}
+      />
 
       <Box mb="$4">
         {selectedButton === "One Whistle" && (
