@@ -7,3 +7,4 @@ export interface IIconProps {
   onLongPress?: (event: GestureResponderEvent) => void; 
   onPressOut?: (event: GestureResponderEvent) => void;
 }
+

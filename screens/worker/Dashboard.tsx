@@ -21,7 +21,7 @@ import { RootState } from "../../lib/store";
 import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
 const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [isCheckedIn, setIsCheckedIn] = useState(true);
   // const [userName, setUserName] = useState("");
   const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
