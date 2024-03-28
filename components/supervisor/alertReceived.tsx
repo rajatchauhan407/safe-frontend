@@ -27,6 +27,7 @@ interface AlertReceivedProps {
   reportedFor: string;
   needAssistance: boolean;
   constructionSiteId: string;
+  imageUrl?: string;
 }
 
 interface EmergencyItem {
@@ -42,7 +43,8 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   workersInjured,
   reportedFor,
   needAssistance,
-  constructionSiteId
+  constructionSiteId,
+  imageUrl
 }) => {
 
   const [selectedButton, setSelectedButton] = useState<
@@ -159,7 +161,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         w={"$full"}
         borderRadius={10}
         source={{
-          uri: "https://images.pexels.com/photos/15961832/pexels-photo-15961832/free-photo-of-a-bonfire-at-night.jpeg",
+          uri: imageUrl,
         }}
         alt={`${emergency} example`}
       />

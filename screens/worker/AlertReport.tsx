@@ -116,7 +116,7 @@ const AlertReport: React.FC = () => {
       headers:{
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...alertData, photo: imageData}),
+      body: JSON.stringify({...alertData, photo: photo?imageData:null}),
     };
     await fetchData(options);
   };
