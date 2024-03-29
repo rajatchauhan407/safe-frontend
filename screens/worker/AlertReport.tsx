@@ -443,7 +443,7 @@ const AlertReport: React.FC = () => {
                   isDisabled={
                     !(
                       numWorkersInjured >= 0 &&
-                      reportType &&
+                      ((reportType && reportType !== "") || (emergencyText?.trim() !== "" && reportType === null)) &&
                       urgencyLevel !== null &&
                       (needAssistance === "true" || needAssistance === "false")
                     )
