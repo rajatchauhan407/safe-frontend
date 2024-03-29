@@ -1,5 +1,5 @@
 // Component Imports===============================================
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { StyleSheet } from "react-native";
 import {
   Box,
@@ -32,26 +32,37 @@ import { RootStackParamList } from "../../types/navigationTypes";
 // Connection to backend Imports===============================================
 import axios from "axios";
 import { BACKEND_BASE_URL } from "../../config/api";
-// =================================================================
-// HardCoded Emergency Contacts
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
+// ============================================================================
 
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
 }
-
+// Emergency Contacts==============================
 const emergencyContacts = [
   { id: "1", name: "911", phoneNumber: "+16726736640" },
   { id: "2", name: "BC Workers", phoneNumber: "+16729998362" },
   { id: "3", name: "FireFighter", phoneNumber: "+16043633286" },
   { id: "4", name: "Manager", phoneNumber: "+16047206967" },
-  { id: "5", name: "First Aid Team", phoneNumber: "+16726736640" },
+  { id: "5", name: "First Aid Team", phoneNumber: "+17789565141" },
 ];
+// ===============================================
 
 const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
   const [checkedContacts, setCheckedContacts] = React.useState<string[]>([]);
   const [message, setMessage] = React.useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // ===============================================
+// Getting the construction Site Id from redux slice
+const { isAuthenticated, status, user } = useSelector(
+  (state: RootState) => state.auth
+);
+let siteId = "";
+if (user) {
+  siteId = user.constructionSiteId || "";
+}
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -64,7 +75,7 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         : [...prevContacts, contactId]
     );
   };
-
+// =============================================
   // Send SMS to Backend Function
   const sendSMS = async () => {
     try {
@@ -81,7 +92,8 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         .filter(Boolean);
       await axios.post(`${BACKEND_BASE_URL}/sms`, {
         contacts: contactsArray,
-        message: "This is an Emergency Alert From SAFE App",
+        // message: message,
+        constructionSiteId: siteId,
       });
       console.log("SMS sent successfully");
       console.log("Checked Contacts:", checkedContacts);
@@ -132,8 +144,8 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
                         <Typography>{contact.name}</Typography>
                       </CheckboxLabel>
                       <CheckboxIndicator
-                        $checked={checkedContacts.includes(contact.id)}
-                        // $checked={{ backgroundColor: checkedContacts.includes(contact.id) ? 'blue' : 'white' }}
+                        // $checked={checkedContacts.includes(contact.id)}
+                        $checked={{ backgroundColor: checkedContacts.includes(contact.id) ? 'blue' : 'white' }}
                       >
                         <CheckboxIcon bg="$neutral" as={CheckIcon} />
                       </CheckboxIndicator>
