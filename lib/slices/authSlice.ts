@@ -57,7 +57,7 @@ const initialState:IAuth = {
     user:null
 }
 
-export const login = createAsyncThunk('auth/login', async (payload:{userId:string,password:string}, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth/login', async (payload:{userId:string,password:string, role:string}, { rejectWithValue }) => {
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/login`, {
         method: 'POST',

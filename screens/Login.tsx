@@ -61,8 +61,9 @@ const LoginScreen: React.FC = () => {
     let userData = {
       userId: loginAs === "Worker" ? workerID : supervisorID,
       password: password,
+      role: loginAs.toLowerCase(),
     };
-    setErrorMessage("");
+    // setErrorMessage("");
     // console.log(userData)
     try {
       const actionResult = await dispatch(login(userData));
