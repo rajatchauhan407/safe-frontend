@@ -232,6 +232,7 @@ const AlertReport: React.FC = () => {
       <FormControl>
         <VStack space="md">
           <Typography bold>Photo of Incident Location (Optional)</Typography>
+          {!showCamera && (
           <CommonButton
             variant="rounded"
             action="positive"
@@ -241,27 +242,40 @@ const AlertReport: React.FC = () => {
           >
             Take a Photo
           </CommonButton>
+        )}
           {/* Render camera if showCamera state is true */}
-          {showCamera && (
-            <Camera style={{ flex: 1 }} ref={cameraRef} type={cameraType}>
-              <TouchableOpacity
-                onPress={handleCameraClose}
-                style={{ alignSelf: "flex-end", marginRight: 16 }}
-              >
-                <Typography bold style={{ color: "white" }}>
-                  Close Camera
-                </Typography>
-              </TouchableOpacity>
-              <TouchableOpacity
+        {showCamera ? (
+          <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
+            {/* Close Camera Button */}
+            <TouchableOpacity
+              onPress={handleCameraClose}
+              style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+            >
+              <Typography bold style={{ color: "white", fontSize: 20 }}>
+                X
+              </Typography>
+            </TouchableOpacity>
+            {/* Capture Photo Button */}
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                bottom: 20, // Adjust bottom position as needed
+                alignSelf: "center",
+                zIndex: 1,
+              }}
+            >
+              <CommonButton
+                variant="rounded"
+                action="positive"
+                showIcon={true}
+                buttonTextSize={18}
                 onPress={handleTakePhoto}
-                style={{ alignSelf: "center", marginBottom: 16 }}
               >
-                <Typography bold style={{ color: "white" }}>
-                  Take Picture
-                </Typography>
-              </TouchableOpacity>
-            </Camera>
-          )}
+                Take Photo
+              </CommonButton>
+            </TouchableOpacity>
+          </Camera>
+        ) : null}
         </VStack>
       </FormControl>
     );
