@@ -72,13 +72,13 @@ const AlertReport: React.FC = () => {
   // console.log('user>>', user);
   /*** send alert for the app ****/
   const sendAlert = async () => {
-    console.log("Sending alert");
-    console.log("Reporting for:", reportingFor);
-    console.log("Number of workers injured:", numWorkersInjured);
-    console.log("Report type:", reportType);
+    // console.log("Sending alert");
+    // console.log("Reporting for:", reportingFor);
+    // console.log("Number of workers injured:", numWorkersInjured);
+    // console.log("Report type:", reportType);
     // console.log('Other emergency type:', otherEmergencyType);
-    console.log("Urgency level:", urgencyLevel);
-    console.log("Need assistance:", needAssistance);
+    // console.log("Urgency level:", urgencyLevel);
+    // console.log("Need assistance:", needAssistance);
 
     let imageData;
 
@@ -113,7 +113,7 @@ const AlertReport: React.FC = () => {
       imageData = base64Image;
       
     }
-    console.log("formdata>>", alertData);
+    // console.log("formdata>>", alertData);
     const options = {
       headers:{
         "Content-Type": "application/json",
@@ -136,7 +136,7 @@ const AlertReport: React.FC = () => {
       };
       const photo = await cameraRef.current.takePictureAsync(options);
       setPhoto(photo.uri);
-      console.log(photo);
+      // console.log(photo);
     }
   };
 
