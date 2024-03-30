@@ -157,7 +157,6 @@ const Dashboard: React.FC = () => {
           <LocationComponent siteLocation={siteLocation} />
 
           {/* WORKERS CHECKED IN */}
-          {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
           <NumOfWorkers seeAll={true} />
 
           {/* IN SAFE ZONE */}
@@ -183,10 +182,7 @@ const Dashboard: React.FC = () => {
       {/* DRAWER */}
       <Box style={styles.drawer}>
         {data && (
-          <DrawerSupervisor
-            alertType={currentAlertType} /* alertType="sos" */
-            alertData={data}
-          />
+          <DrawerSupervisor alertType={currentAlertType} alertData={data} />
         )}
       </Box>
     </>

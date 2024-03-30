@@ -6,14 +6,17 @@ import { View, StyleSheet, PanResponder, Animated } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertButton from "../common/alertButton";
 import Typography from "../common/typography";
+import { Center, Image, VStack } from "@gluestack-ui/themed";
+import CommonButton from "../common/button";
 
 interface DrawerProps {
-  alertType: "none" | "accident" | "evacuation" | "sos";
+  alertType: "none" | "accident" | "evacuation" | "sos" | "activeEvacuation";
   alertData?: any;
 }
 
 const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -56,7 +59,6 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
   }, [isOpen]);
 
   const handleReceivedDetailsPress = () => {
-    /* navigation.navigate("Received Alert", { alertData: alertData }); */
     if (alertType === "sos") {
       navigation.navigate("SOS Details" as never);
     } else {
@@ -70,6 +72,10 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
     } else {
       return "#ffffff";
     }
+  };
+
+  const handleCancelAlert = () => {
+    setShowCancelModal(true);
   };
 
   return (
@@ -86,7 +92,9 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
           />
           <Typography style={styles.drawerText}>
             {alertType === "none"
-              ? "Great! There's no alert to report"
+              ? "Great! There's no alert to report."
+              : alertType === "activeEvacuation"
+              ? "You are currently under evacuation."
               : "You have received 01 Alert."}
           </Typography>
         </View>
@@ -95,13 +103,37 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
         <View style={styles.content}>
           {/* Content of the drawer based on the alert text */}
           {alertType !== "none" && (
-            <AlertButton
-              user="supervisor"
-              emergency={alertType}
-              /* color={getAlertColor()} */
-              /* onPress={handleIncidentPress} */
-              onPress={handleReceivedDetailsPress}
-            />
+            <>
+              {alertType === "activeEvacuation" ? (
+                <Center>
+                  <VStack>
+                    <Typography>
+                      The green area is your site safe zone.
+                    </Typography>
+                    <Image
+                      size="lg"
+                      borderRadius={20}
+                      source={{
+                        uri: "https://techandtribe-safe.s3.us-east-2.amazonaws.com/safe_zone.jpg",
+                      }}
+                    />
+                    <CommonButton
+                      variant="underline"
+                      onPress={handleCancelAlert}
+                    >
+                      <Typography>Cancel Alert</Typography>
+                    </CommonButton>
+                  </VStack>
+                </Center>
+              ) : (
+                <AlertButton
+                  user="supervisor"
+                  emergency={alertType}
+                  /* color={getAlertColor()} */
+                  onPress={handleReceivedDetailsPress}
+                />
+              )}
+            </>
           )}
         </View>
       )}
