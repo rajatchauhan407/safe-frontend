@@ -12,7 +12,8 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { useSelector} from "react-redux";
 import { RootState} from "../../lib/store";
-import { BACKEND_BASE_URL } from "../../config/api";
+import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
+import useRequest from "../../hooks/useRequest";
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -20,10 +21,11 @@ const Profile: React.FC = () => {
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
+  const { data, isLoading, error, fetchData }: any = useRequest(`${BACKEND_BASE_URL}/deleteToken`,'POST')
   let siteId = "";
   let userId  = "";
    if (user) {
-    console.log("logged in user>> " + user._id);
+    // console.log("logged in user>> " + user._id);
     userId=user._id;
     siteId = user.constructionSiteId || ""; 
   } 
@@ -42,7 +44,7 @@ const Profile: React.FC = () => {
           "Content-type": "application/json",
         },
       });
-      console.log("worker checked out during logout - "+userId);
+      // console.log("worker checked out during logout - "+userId);
     }
     catch{
     }
@@ -52,7 +54,17 @@ const Profile: React.FC = () => {
     await handleCheckout();
     await deleteItem('token');
     await deleteItem('user');  
+    
+    const options = {
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({userId: user?.userId}), // Add null check
+    }
+    console.log("options", options);
+    await fetchData(options);
     dispatch(logout());
+    console.log("logged out");
     navigation.navigate('Login');
   };
 

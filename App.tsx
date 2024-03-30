@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
@@ -14,8 +15,25 @@ import {
 } from "@expo-google-fonts/nunito-sans";
 import { Provider } from "react-redux";
 import { store } from "./lib/store";
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 
 export default function App() {
+
+  useEffect(()=>{
+// This listener is fired whenever a notification is received while the app is foregrounded
+Notifications.addNotificationReceivedListener(notification => {
+  console.log(notification);
+});
+  },[])
   const [fontsLoaded] = useFonts({
     NunitoSans_400Regular,
     NunitoSans_600SemiBold,
