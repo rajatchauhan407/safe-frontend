@@ -25,13 +25,11 @@ import AlertMessage from "./alertMessage";
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
-  onCancelConfirmed: () => void;
 }
 
 const CancelAlertModal: React.FC<ModalProps> = ({
   showModal,
   setShowModal,
-  onCancelConfirmed,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
