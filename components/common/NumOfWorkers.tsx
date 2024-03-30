@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, HStack, Heading } from "@gluestack-ui/themed";
+import { Card, HStack, Heading, Text } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
 import Typography from "./typography";
 import CommonButton from "./button";
-import { useSelector} from "react-redux";
-import { RootState} from "../../lib/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -24,8 +24,8 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
 
   if (user) {
     console.log("logged in user>> " + user._id);
-    siteID = user.constructionSiteId || "";     
-  } 
+    siteID = user.constructionSiteId || "";
+  }
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -58,8 +58,15 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   };
 
   return (
-    <Card size="md" variant="elevated" bgColor="$highlight" borderRadius="$3xl">
-      <Heading mb="$1">
+    <Card
+      size="md"
+      variant="elevated"
+      bgColor="$highlight"
+      borderRadius="$3xl"
+      pr={"$0"}
+      pb={"$2"}
+    >
+      <Heading>
         <Typography size="lg" bold>
           Total Checked-in Workers
         </Typography>
