@@ -7,8 +7,7 @@ import { Keyboard, Platform} from "react-native";
 /* Expo Notification Imports*/
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-
-
+import { Alert } from "react-native";
 import {
   Box,
   Button,
@@ -41,10 +40,12 @@ import { RootState, AppDispatch } from "../lib/store";
 import { login } from "../lib/slices/authSlice";
 import Constants from "expo-constants";
 import useRequest from "../hooks/useRequest";
-import { LOCAL_BASE_URL } from "../config/api";
+import { LOCAL_BASE_URL, BACKEND_BASE_URL } from "../config/api";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
+
+  // =============================================================
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loginAs, setLoginAs] = useState<string>("");
   const [workerID, setWorkerID] = useState<string>("");
@@ -53,9 +54,11 @@ const LoginScreen: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState("");
 
-  const {data, isLoading, error, fetchData}: any = useRequest(`${LOCAL_BASE_URL}/storeToken`,'POST');
+  const {data, isLoading, error, fetchData}: any = useRequest(`${BACKEND_BASE_URL}/storeToken`,'POST');
 
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  // =============================================================
   const handlePswState = () => {
     Keyboard.dismiss();
     setShowPassword((showState) => !showState);
@@ -111,13 +114,18 @@ const LoginScreen: React.FC = () => {
     let userData = {
       userId: loginAs === "Worker" ? workerID : supervisorID,
       password: password,
+      role: loginAs.toLowerCase(),
     };
+    // setErrorMessage("");
     // console.log(userData)
     try {
       const actionResult = await dispatch(login(userData));
       const { payload } = actionResult;
       console.log("action result",payload);
       
+
+      console.log(actionResult);
+      console.log(payload);
       if (actionResult.type === "auth/login/fulfilled") {
        const token = await registerForPushNotificationsAsync();
        const options = {
@@ -149,11 +157,24 @@ const LoginScreen: React.FC = () => {
       } else {
         // Handle login failure
         console.error("Login failed:", payload);
-        // Show an error message to the user, if desired
+        Alert.alert(
+          "Login Failed",
+          "Wrong credentials. Please try again.", 
+          [
+            { text: "OK" } 
+          ]
+        );
       }
     } catch (error) {
       // Handle login failure
       console.error("An error occurred during login:", error);
+      Alert.alert(
+        "Error",
+        "An unexpected error occurred. Please try again later.",
+        [
+          { text: "OK" }
+        ]
+      );
     }
   };
 
@@ -294,6 +315,7 @@ const LoginScreen: React.FC = () => {
                   <Typography>Forgot your password?</Typography>
                 </ButtonText>
               </Button>
+                
 
               <View>
                 {/* ======================================= */}

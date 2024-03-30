@@ -65,7 +65,7 @@ const AlertReport: React.FC = () => {
   const [photo, setPhoto] = useState<any>("");
 
   const { data, isLoading, error, fetchData } = useRequest(
-    `${LOCAL_BASE_URL}/alert`,
+    `${BACKEND_BASE_URL}/alert`,
     "POST"
   );
   const user = useSelector((state: RootState) => state.auth.user);

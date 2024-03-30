@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
-  const { data, isLoading, error, fetchData }: any = useRequest(`${LOCAL_BASE_URL}/deleteToken`,'POST')
+  const { data, isLoading, error, fetchData }: any = useRequest(`${BACKEND_BASE_URL}/deleteToken`,'POST')
   let siteId = "";
   let userId  = "";
    if (user) {
