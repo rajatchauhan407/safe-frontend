@@ -125,6 +125,7 @@ const Dashboard: React.FC = () => {
   }, [data]);
 
   const navigation = useNavigation();
+
   const hanldeAddNewUser = () => {
     navigation.navigate("Add User" as never);
   };
