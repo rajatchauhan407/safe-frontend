@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { BACKEND_BASE_URL } from "../../config/api";
 import Typography from "./typography";
 import CommonButton from "./button";
-import { useSelector} from "react-redux";
-import { RootState} from "../../lib/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/store";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -25,8 +25,8 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
 
   if (user) {
     console.log("logged in user>> " + user._id);
-    siteID = user.constructionSiteId || "";     
-  } 
+    siteID = user.constructionSiteId || "";
+  }
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -59,8 +59,15 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   };
 
   return (
-    <Card size="md" variant="elevated" bgColor="$success" borderRadius="$3xl">
-      <Heading mb="$1">
+    <Card
+      size="md"
+      variant="elevated"
+      bgColor="$success"
+      borderRadius="$3xl"
+      pr={"$0"}
+      pb={"$2"}
+    >
+      <Heading>
         <Typography size="lg" bold>
           Workers at Safe Zone
         </Typography>

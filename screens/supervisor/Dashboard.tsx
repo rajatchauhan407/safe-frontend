@@ -147,12 +147,14 @@ const Dashboard: React.FC = () => {
           </Button> */}
 
           {/* GREETING */}
-          <Text>
-            <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
-            <Typography size="2xl" bold>
-              Let's start building!
-            </Typography>
-          </Text>
+          <Box mb={"$2"} pl={"$3"}>
+            <Text>
+              <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
+              <Typography size="2xl" bold>
+                Let's start building!
+              </Typography>
+            </Text>
+          </Box>
 
           {/* LOCATION */}
           <LocationComponent siteLocation={siteLocation} />

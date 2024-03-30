@@ -15,15 +15,15 @@ const AlertSimulationCard: React.FC<AlertSimulationCardProps> = ({
   const isRowLayout: boolean = layout === "row";
 
   return (
-    <VStack space="md" m={0}>
-      <Card
-        size="md"
-        variant="elevated"
-        m={0}
-        rounded={24}
-        bg={"$white"}
-        style={isRowLayout ? styles.rowContainer : styles.columnContainer}
-      >
+    <Card
+      size="md"
+      variant="elevated"
+      m={0}
+      rounded={24}
+      bg={"$white"}
+      style={isRowLayout ? styles.rowContainer : styles.columnContainer}
+    >
+      <VStack space="sm" m={0}>
         <SimulatorIcon size={36} color="" focussed={false} />
         <Box w="$full" mb="$2">
           <Typography size="md" bold>
@@ -36,8 +36,8 @@ const AlertSimulationCard: React.FC<AlertSimulationCardProps> = ({
         <Box style={styles.textContainer}>
           <Typography style={styles.startText}>Start</Typography>
         </Box>
-      </Card>
-    </VStack>
+      </VStack>
+    </Card>
   );
 };
 
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   startText: {
     fontSize: 38,
     fontFamily: "NunitoSans_700Bold",
+    textAlign: "center",
   },
 });
 
