@@ -161,6 +161,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         <Image
           size="2xl"
           w={"$full"}
+          h={"$1/5"}
           borderRadius={10}
           source={{
             uri: imageUrl,
@@ -171,6 +172,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         <Image
           size="2xl"
           w={"$full"}
+          h={"$1/5"}
           borderRadius={10}
           source={{
             uri:
