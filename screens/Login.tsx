@@ -4,6 +4,7 @@ import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import { Keyboard } from "react-native";
+import { Alert } from "react-native";
 import {
   Box,
   Button,
@@ -37,13 +38,16 @@ import { login } from "../lib/slices/authSlice";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
+
+  // =============================================================
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loginAs, setLoginAs] = useState<string>("");
   const [workerID, setWorkerID] = useState<string>("");
   const [supervisorID, setSupervisorID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  // =============================================================
   const handlePswState = () => {
     Keyboard.dismiss();
     setShowPassword((showState) => !showState);
@@ -57,11 +61,14 @@ const LoginScreen: React.FC = () => {
     let userData = {
       userId: loginAs === "Worker" ? workerID : supervisorID,
       password: password,
+      role: loginAs.toLowerCase(),
     };
+    // setErrorMessage("");
     // console.log(userData)
     try {
       const actionResult = await dispatch(login(userData));
       const { payload } = actionResult;
+
       console.log(actionResult);
       console.log(payload);
       if (actionResult.type === "auth/login/fulfilled") {
@@ -79,10 +86,23 @@ const LoginScreen: React.FC = () => {
       } else {
         // Handle login failure
         console.error("Login failed:", payload);
-        // Show an error message to the user, if desired
+        Alert.alert(
+          "Login Failed",
+          "Wrong credentials. Please try again.", 
+          [
+            { text: "OK" } 
+          ]
+        );
       }
     } catch (error) {
       console.error("An error occurred during login:", error);
+      Alert.alert(
+        "Error",
+        "An unexpected error occurred. Please try again later.",
+        [
+          { text: "OK" }
+        ]
+      );
     }
   };
 
@@ -223,6 +243,7 @@ const LoginScreen: React.FC = () => {
                   <Typography>Forgot your password?</Typography>
                 </ButtonText>
               </Button>
+                
 
               <View>
                 {/* ======================================= */}
