@@ -9,12 +9,16 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Alert } from "react-native";
 import {
+  AlertCircleIcon,
   Box,
   Button,
   ButtonIcon,
   ButtonText,
   Center,
   FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
   FormControlLabel,
   FormControlLabelText,
   HStack,
@@ -278,6 +282,12 @@ const LoginScreen: React.FC = () => {
                     keyboardType="numeric"
                   />
                 </Input>
+                <FormControlError>
+                  <FormControlErrorIcon as={AlertCircleIcon} />
+                  <FormControlErrorText>
+                    <Typography>Enter a valid ID.</Typography>
+                  </FormControlErrorText>
+                </FormControlError>
               </FormControl>
 
               <FormControl size="md" isRequired>
@@ -304,6 +314,12 @@ const LoginScreen: React.FC = () => {
                     />
                   </InputSlot>
                 </Input>
+                <FormControlError>
+                  <FormControlErrorIcon as={AlertCircleIcon} />
+                  <FormControlErrorText>
+                    <Typography>Enter a valid password.</Typography>
+                  </FormControlErrorText>
+                </FormControlError>
               </FormControl>
 
               {/* LOGIN BUTTON */}
