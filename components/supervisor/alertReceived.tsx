@@ -48,7 +48,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   reportedFor,
   needAssistance,
   constructionSiteId,
-  imageUrl
+  imageUrl,
 }) => {
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
@@ -157,15 +157,32 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      {imageUrl && <Image
-        size="2xl"
-        w={"$full"}
-        borderRadius={10}
-        source={{
-          uri: imageUrl,
-        }}
-        alt={`${emergency} example`}
-      />}
+      {imageUrl ? (
+        <Image
+          size="2xl"
+          w={"$full"}
+          h={"$1/5"}
+          borderRadius={10}
+          source={{
+            uri: imageUrl,
+          }}
+          alt={`${emergency} example`}
+        />
+      ) : (
+        <Image
+          size="2xl"
+          w={"$full"}
+          h={"$1/5"}
+          borderRadius={10}
+          source={{
+            uri:
+              type === "accident"
+                ? "https://techandtribe-safe.s3.us-east-2.amazonaws.com/accident.jpg"
+                : "https://techandtribe-safe.s3.us-east-2.amazonaws.com/fire_hazard.jpg",
+          }}
+          alt={`${emergency} example`}
+        />
+      )}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
