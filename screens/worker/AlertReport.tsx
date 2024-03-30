@@ -63,6 +63,7 @@ const AlertReport: React.FC = () => {
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
+  const [alertSent, setAlertSent] = useState(false);
 
   const { data, isLoading, error, fetchData } = useRequest(
     `${BACKEND_BASE_URL}/alert`,
@@ -121,6 +122,8 @@ const AlertReport: React.FC = () => {
       body: JSON.stringify({...alertData, photo: photo?imageData:null}),
     };
     await fetchData(options);
+    setAlertSent(true);
+    navigation.navigate("Dashboard" as never);
   };
 
   useEffect(() => {

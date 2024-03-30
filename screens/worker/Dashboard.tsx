@@ -22,14 +22,14 @@ import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
 const Dashboard: React.FC = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(true);
-  // const [userName, setUserName] = useState("");
   const [siteLocation, setSiteLocation] = useState("");
-  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+  const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation"
   >("none");
+  const [alertSent, setAlertSent] = useState(false);
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -326,6 +326,16 @@ const Dashboard: React.FC = () => {
       </Box>
     );
 
+    const AlertSentMessage = () =>
+      <Box>
+        <AlertMessage
+          backgroundColor="#00AE8C"
+          textColor="#1E1E1E"
+          iconColor="#1E1E1E"
+          text="Your incident has been reported"
+        />
+      </Box>;
+
   const TooltipSOS = () => {
     const [fadeAnim] = useState(new Animated.Value(0));
 
@@ -372,6 +382,7 @@ const Dashboard: React.FC = () => {
   return (
     <>
       <CheckInAlertMessage />
+      {alertSent && <AlertSentMessage />}
       <ScreenLayout>
         <VStack space="sm" reversed={false}>
           <GreetingSection />
