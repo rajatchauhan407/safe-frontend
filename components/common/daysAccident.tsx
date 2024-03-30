@@ -36,6 +36,7 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({
   }, []);
 
   return (
+    <VStack space="sm" m={0}>
     <Card
       size="md"
       variant="elevated"
@@ -44,7 +45,6 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({
       bg={"$white"}
       style={isRowLayout ? styles.rowContainer : styles.columnContainer}
     >
-      <VStack space="sm" m={0}>
         <DaysCheckIcon size={36} color={"#00AE8C"} focussed={false} />
         <Typography size="md" bold>
           {" "}
@@ -53,8 +53,8 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({
         <Box style={styles.daysTextContainer}>
           <Typography style={styles.daysText}>{daysWithoutAccident}</Typography>
         </Box>
-      </VStack>
     </Card>
+    </VStack>
   );
 };
 

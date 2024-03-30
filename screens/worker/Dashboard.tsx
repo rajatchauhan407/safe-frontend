@@ -20,8 +20,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
+import { ScrollView } from "react-native-gesture-handler";
 const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(true);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
@@ -300,13 +301,13 @@ const Dashboard: React.FC = () => {
     <Text>
       <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
       <Typography size="2xl" bold>
-        Let's start building
+        Let's stay safe
       </Typography>
     </Text>
   );
 
   const LocationSection = () => (
-    <Box mt={10} style={{ flexDirection: "row", alignItems: "center" }}>
+    <Box mt={10} mb={5} style={{ flexDirection: "row", alignItems: "center" }}>
       <LocationIcon size={13} color={""} focussed={false} />
       <Typography size="md" pl={5}>
         {siteLocation}
