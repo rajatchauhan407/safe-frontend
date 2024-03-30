@@ -160,7 +160,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      {imageUrl ? (
+      {/* {imageUrl ? (
         <Image
           size="2xl"
           w={"$full"}
@@ -185,7 +185,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           }}
           alt={`${emergency} example`}
         />
-      )}
+      )} */}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
@@ -232,7 +232,11 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       </CommonButton>
 
       {/* CANEL ALERT MODAL */}
-      <CancelAlertModal showModal={cancelAlert} setShowModal={setCancelAlert} />
+      <CancelAlertModal
+        showModal={cancelAlert}
+        setShowModal={setCancelAlert}
+        showAlertMessage={false}
+      />
     </VStack>
   );
 };

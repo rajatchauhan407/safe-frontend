@@ -25,6 +25,8 @@ import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import useFetch from "../../hooks/useFetch";
 import { IAlert } from "../../shared/interfaces/alert.interface";
 import AddUserIcon from "../../assets/icons/addUser";
+import AlertMessage from "../../components/common/alertMessage";
+import CancelAlertModal from "../../components/common/cancelAlertModal";
 
 const Dashboard: React.FC = () => {
   // const [userName, setUserName] = useState("David");
@@ -130,6 +132,11 @@ const Dashboard: React.FC = () => {
     navigation.navigate("Add User" as never);
   };
 
+  const [showCancelAlert, setShowCancelAlert] = useState(false);
+
+  const handleShowAlertMessage = () => {
+    setShowCancelAlert(true);
+  };
   return (
     <>
       <ScrollView>
@@ -188,6 +195,24 @@ const Dashboard: React.FC = () => {
           <DrawerSupervisor alertType={currentAlertType} alertData={data} />
         )}
       </Box>
+
+      {/* CANCELED ALERT NOTIFICATION */}
+      {showCancelAlert && (
+        <Box position="absolute" top={0} right={0} left={0}>
+          <AlertMessage
+            backgroundColor="$neutral"
+            text="Your alert has been cancelled!"
+            textColor="#ffffff"
+            iconColor="#ffffff"
+          />
+        </Box>
+      )}
+
+      <CancelAlertModal
+        showModal={showCancelAlert}
+        setShowModal={setShowCancelAlert}
+        showAlertMessage={handleShowAlertMessage} // Pass the function here
+      />
     </>
   );
 };

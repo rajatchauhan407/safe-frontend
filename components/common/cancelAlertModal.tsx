@@ -25,11 +25,13 @@ import AlertMessage from "./alertMessage";
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
+  showAlertMessage: boolean;
 }
 
 const CancelAlertModal: React.FC<ModalProps> = ({
   showModal,
   setShowModal,
+  showAlertMessage,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -77,10 +79,8 @@ const CancelAlertModal: React.FC<ModalProps> = ({
                 setShowModal(false);
                 setTimeout(() => {
                   navigation.navigate("Dashboard" as never);
-                }, 1500);
-                setTimeout(() => {
-                  /* onCancelConfirmed(); */
-                }, 2000);
+                  showAlertMessage();
+                }, 1000);
               }}
             >
               <ButtonText>
@@ -92,13 +92,6 @@ const CancelAlertModal: React.FC<ModalProps> = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <AlertMessage
-        backgroundColor="$neutral"
-        text="Your alert has been cancelled!"
-        textColor="#ffffff"
-        iconColor="#ffffff"
-      /> */}
     </Center>
   );
 };
