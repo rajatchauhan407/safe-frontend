@@ -3,18 +3,22 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { Keyboard, Platform} from "react-native";
+import { Keyboard, Platform } from "react-native";
 /* Expo Notification Imports*/
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Alert } from "react-native";
 import {
+  AlertCircleIcon,
   Box,
   Button,
   ButtonIcon,
   ButtonText,
   Center,
   FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
   FormControlLabel,
   FormControlLabelText,
   HStack,
@@ -44,7 +48,6 @@ import { LOCAL_BASE_URL, BACKEND_BASE_URL } from "../config/api";
 /*** imports end here****/
 
 const LoginScreen: React.FC = () => {
-
   // =============================================================
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loginAs, setLoginAs] = useState<string>("");
@@ -54,8 +57,10 @@ const LoginScreen: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState("");
 
-  const {data, isLoading, error, fetchData}: any = useRequest(`${BACKEND_BASE_URL}/storeToken`,'POST');
-
+  const { data, isLoading, error, fetchData }: any = useRequest(
+    `${BACKEND_BASE_URL}/storeToken`,
+    "POST"
+  );
 
   const [errorMessage, setErrorMessage] = useState<string>("");
   // =============================================================
@@ -70,44 +75,46 @@ const LoginScreen: React.FC = () => {
   /** Function to register for push notifications and storing the expo push token in the db **/
   async function registerForPushNotificationsAsync() {
     let token;
-  
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
+
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
+        lightColor: "#FF231F7C",
       });
     }
-  
+
     if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
+      if (existingStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
         return;
       }
-      if (Constants.expoConfig && Constants.expoConfig.extra && Constants.expoConfig.extra.eas) {
+      if (
+        Constants.expoConfig &&
+        Constants.expoConfig.extra &&
+        Constants.expoConfig.extra.eas
+      ) {
         token = await Notifications.getExpoPushTokenAsync({
           projectId: Constants.expoConfig.extra.eas.projectId,
         });
         // console.log(token);
         return token.data;
       } else {
-        alert('Failed to get push token for push notification!');
+        alert("Failed to get push token for push notification!");
         return;
       }
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert("Must use physical device for Push Notifications");
     }
   }
-
-
-
 
   /**  Function to Handle Login */
   const handleLogin = async () => {
@@ -121,28 +128,28 @@ const LoginScreen: React.FC = () => {
     try {
       const actionResult = await dispatch(login(userData));
       const { payload } = actionResult;
-      console.log("action result",payload);
-      
+      console.log("action result", payload);
 
       console.log(actionResult);
       console.log(payload);
       if (actionResult.type === "auth/login/fulfilled") {
-       const token = await registerForPushNotificationsAsync();
-       const options = {
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body: JSON.stringify({
-          token:token,
-          userId:payload.user.userId,
-          timestamp:new Date().toISOString(),
-          platform:Platform.OS})
-       }
-       await fetchData(options)
-       console.log(data);
-       if(error){
-          throw new Error('Failed to store token');
-       }
+        const token = await registerForPushNotificationsAsync();
+        const options = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            userId: payload.user.userId,
+            timestamp: new Date().toISOString(),
+            platform: Platform.OS,
+          }),
+        };
+        await fetchData(options);
+        console.log(data);
+        if (error) {
+          throw new Error("Failed to store token");
+        }
         if (payload.user.role === "supervisor") {
           navigation.navigate("Main", {
             screen: "Supervisor",
@@ -157,13 +164,9 @@ const LoginScreen: React.FC = () => {
       } else {
         // Handle login failure
         console.error("Login failed:", payload);
-        Alert.alert(
-          "Login Failed",
-          "Wrong credentials. Please try again.", 
-          [
-            { text: "OK" } 
-          ]
-        );
+        Alert.alert("Login Failed", "Wrong credentials. Please try again.", [
+          { text: "OK" },
+        ]);
       }
     } catch (error) {
       // Handle login failure
@@ -171,9 +174,7 @@ const LoginScreen: React.FC = () => {
       Alert.alert(
         "Error",
         "An unexpected error occurred. Please try again later.",
-        [
-          { text: "OK" }
-        ]
+        [{ text: "OK" }]
       );
     }
   };
@@ -210,7 +211,13 @@ const LoginScreen: React.FC = () => {
                     >
                       <HStack space="sm">
                         <Box>
-                          <SupervisorIcon size={20} color="" focussed={false} />
+                          <SupervisorIcon
+                            size={20}
+                            color={
+                              loginAs === "Supervisor" ? "#1E1E1E" : "#FD9201"
+                            }
+                            focussed={true}
+                          />
                         </Box>
                         <Box>
                           <ButtonText>
@@ -230,7 +237,11 @@ const LoginScreen: React.FC = () => {
                     >
                       <HStack space="sm">
                         <Box>
-                          <WorkerIcon size={22} color="" focussed={false} />
+                          <WorkerIcon
+                            size={22}
+                            color={loginAs === "Worker" ? "#1E1E1E" : "#FD9201"}
+                            focussed={true}
+                          />
                         </Box>
                         <Box>
                           <ButtonText>
@@ -271,6 +282,12 @@ const LoginScreen: React.FC = () => {
                     keyboardType="numeric"
                   />
                 </Input>
+                <FormControlError>
+                  <FormControlErrorIcon as={AlertCircleIcon} />
+                  <FormControlErrorText>
+                    <Typography>Enter a valid ID.</Typography>
+                  </FormControlErrorText>
+                </FormControlError>
               </FormControl>
 
               <FormControl size="md" isRequired>
@@ -297,6 +314,12 @@ const LoginScreen: React.FC = () => {
                     />
                   </InputSlot>
                 </Input>
+                <FormControlError>
+                  <FormControlErrorIcon as={AlertCircleIcon} />
+                  <FormControlErrorText>
+                    <Typography>Enter a valid password.</Typography>
+                  </FormControlErrorText>
+                </FormControlError>
               </FormControl>
 
               {/* LOGIN BUTTON */}
@@ -315,7 +338,6 @@ const LoginScreen: React.FC = () => {
                   <Typography>Forgot your password?</Typography>
                 </ButtonText>
               </Button>
-                
 
               <View>
                 {/* ======================================= */}

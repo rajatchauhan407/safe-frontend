@@ -63,6 +63,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
       navigation.navigate("SOS Details" as never);
     } else {
       navigation.navigate("Received Alert", { alertData: alertData });
+      console.log(alertType);
     }
   };
 
