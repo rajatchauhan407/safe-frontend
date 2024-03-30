@@ -22,6 +22,7 @@ import useFetch from "../../hooks/useFetch";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../lib/store";
 import { IUser } from "../../shared/interfaces/user.interface";
+import CancelAlertModal from "../common/cancelAlertModal";
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
   emergency: string;
@@ -99,9 +100,11 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     // navigation.navigate('SafeZoneScreen');
   };
 
-  const handleCancel = () => {
-    navigation.goBack(); // Navigate back to the previous screen (dashboard)
-  };
+  const [cancelAlert, setCancelAlert] = useState(false);
+
+  /* const handleCancel = () => {
+    setCancelAlert(true);
+  }; */
 
   const emergencies: EmergencyItem[] = [
     { text: "A worker fell", icon: FallIcon },
@@ -222,11 +225,14 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       /> */}
 
       {/* CANCEL ALERT */}
-      <CommonButton variant="text" onPress={handleCancel}>
+      <CommonButton variant="text" onPress={() => setCancelAlert(true)}>
         <ButtonText textDecorationLine="underline" size="md">
           <Typography size="lg">Cancel Alert</Typography>
         </ButtonText>
       </CommonButton>
+
+      {/* CANEL ALERT MODAL */}
+      <CancelAlertModal showModal={cancelAlert} setShowModal={setCancelAlert} />
     </VStack>
   );
 };
