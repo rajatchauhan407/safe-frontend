@@ -25,7 +25,7 @@ import AlertMessage from "./alertMessage";
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
-  showAlertMessage: boolean;
+  showAlertMessage: () => void;
 }
 
 const CancelAlertModal: React.FC<ModalProps> = ({

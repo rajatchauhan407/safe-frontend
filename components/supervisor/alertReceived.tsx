@@ -102,10 +102,6 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
 
   const [cancelAlert, setCancelAlert] = useState(false);
 
-  /* const handleCancel = () => {
-    setCancelAlert(true);
-  }; */
-
   const emergencies: EmergencyItem[] = [
     { text: "A worker fell", icon: FallIcon },
     { text: "Fire hazard", icon: FireHazardIcon },
@@ -160,7 +156,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      {/* {imageUrl ? (
+      {imageUrl ? (
         <Image
           size="2xl"
           w={"$full"}
@@ -185,7 +181,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           }}
           alt={`${emergency} example`}
         />
-      )} */}
+      )}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
@@ -235,7 +231,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <CancelAlertModal
         showModal={cancelAlert}
         setShowModal={setCancelAlert}
-        showAlertMessage={false}
+        showAlertMessage={() => setCancelAlert(false)}
       />
     </VStack>
   );

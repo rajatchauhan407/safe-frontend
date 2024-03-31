@@ -211,7 +211,7 @@ const Dashboard: React.FC = () => {
       <CancelAlertModal
         showModal={showCancelAlert}
         setShowModal={setShowCancelAlert}
-        showAlertMessage={handleShowAlertMessage} // Pass the function here
+        showAlertMessage={() => setShowCancelAlert(false)}
       />
     </>
   );
