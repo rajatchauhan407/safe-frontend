@@ -22,6 +22,7 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
+    vibrationPattern: [0, 250, 250, 250]
   }),
 });
 
