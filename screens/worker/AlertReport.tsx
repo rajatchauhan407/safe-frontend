@@ -6,7 +6,6 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
-  CircleIcon,
   FormControl,
   Radio,
   RadioGroup,
@@ -18,6 +17,7 @@ import {
   Button,
   Box,
 } from "@gluestack-ui/themed";
+import RadioIconCustom from "../../components/common/radioIcon";
 import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
@@ -301,13 +301,13 @@ const AlertReport: React.FC = () => {
                   <HStack space="2xl">
                     <Radio size="lg" value="Myself">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom}/>
                       </RadioIndicator>
                       <Typography>Myself</Typography>
                     </Radio>
                     <Radio size="lg" value="Other worker">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>Other worker</Typography>
                     </Radio>
@@ -433,13 +433,13 @@ const AlertReport: React.FC = () => {
                   <HStack space="2xl">
                     <Radio size="lg" value="true">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>Yes</Typography>
                     </Radio>
                     <Radio size="lg" value="false">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>No</Typography>
                     </Radio>
