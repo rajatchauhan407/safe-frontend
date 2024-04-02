@@ -6,7 +6,6 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
-  CircleIcon,
   FormControl,
   Radio,
   RadioGroup,
@@ -16,8 +15,11 @@ import {
   TextareaInput,
   ScrollView,
   Button,
+  Input,
+  InputField,
   Box,
 } from "@gluestack-ui/themed";
+import RadioIconCustom from "../../components/common/radioIcon";
 import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
@@ -63,6 +65,7 @@ const AlertReport: React.FC = () => {
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
+  const [alertSent, setAlertSent] = useState(false);
 
   const { data, isLoading, error, fetchData } = useRequest(
     `${BACKEND_BASE_URL}/alert`,
@@ -121,6 +124,8 @@ const AlertReport: React.FC = () => {
       body: JSON.stringify({...alertData, photo: photo?imageData:null}),
     };
     await fetchData(options);
+    setAlertSent(true);
+    navigation.navigate("Dashboard", { alertSent: true });
   };
 
   useEffect(() => {
@@ -232,6 +237,7 @@ const AlertReport: React.FC = () => {
       <FormControl>
         <VStack space="md">
           <Typography bold>Photo of Incident Location (Optional)</Typography>
+          {!showCamera && (
           <CommonButton
             variant="rounded"
             action="positive"
@@ -241,27 +247,40 @@ const AlertReport: React.FC = () => {
           >
             Take a Photo
           </CommonButton>
+        )}
           {/* Render camera if showCamera state is true */}
-          {showCamera && (
-            <Camera style={{ flex: 1 }} ref={cameraRef} type={cameraType}>
-              <TouchableOpacity
-                onPress={handleCameraClose}
-                style={{ alignSelf: "flex-end", marginRight: 16 }}
-              >
-                <Typography bold style={{ color: "white" }}>
-                  Close Camera
-                </Typography>
-              </TouchableOpacity>
-              <TouchableOpacity
+        {showCamera ? (
+          <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
+            {/* Close Camera Button */}
+            <TouchableOpacity
+              onPress={handleCameraClose}
+              style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+            >
+              <Typography bold style={{ color: "white", fontSize: 20 }}>
+                X
+              </Typography>
+            </TouchableOpacity>
+            {/* Capture Photo Button */}
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                bottom: 20, // Adjust bottom position as needed
+                alignSelf: "center",
+                zIndex: 1,
+              }}
+            >
+              <CommonButton
+                variant="rounded"
+                action="positive"
+                showIcon={true}
+                buttonTextSize={18}
                 onPress={handleTakePhoto}
-                style={{ alignSelf: "center", marginBottom: 16 }}
               >
-                <Typography bold style={{ color: "white" }}>
-                  Take Picture
-                </Typography>
-              </TouchableOpacity>
-            </Camera>
-          )}
+                Take Photo
+              </CommonButton>
+            </TouchableOpacity>
+          </Camera>
+        ) : null}
         </VStack>
       </FormControl>
     );
@@ -284,13 +303,13 @@ const AlertReport: React.FC = () => {
                   <HStack space="2xl">
                     <Radio size="lg" value="Myself">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom}/>
                       </RadioIndicator>
                       <Typography>Myself</Typography>
                     </Radio>
                     <Radio size="lg" value="Other worker">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>Other worker</Typography>
                     </Radio>
@@ -402,8 +421,24 @@ const AlertReport: React.FC = () => {
                 </Slider>
               </HStack>
             </FormControl>
+                              
+            {/* FIELD 5 - LOCATION */}
+            <FormControl>
+              <VStack space="sm">
+                <Typography bold>Emergency Location*</Typography>
+                <Input
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                >
+                  <InputField placeholder="Enter Location" />
+                </Input>
+              </VStack>
+            </FormControl>
 
-            {/* FIELD 5 - NEED ASSISTANCE */}
+            {/* FIELD 6 - NEED ASSISTANCE */}
             <FormControl>
               <RadioGroup
                 value={needAssistance}
@@ -416,13 +451,13 @@ const AlertReport: React.FC = () => {
                   <HStack space="2xl">
                     <Radio size="lg" value="true">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>Yes</Typography>
                     </Radio>
                     <Radio size="lg" value="false">
                       <RadioIndicator mr="$2">
-                        <RadioIcon as={CircleIcon} />
+                        <RadioIcon as={RadioIconCustom} />
                       </RadioIndicator>
                       <Typography>No</Typography>
                     </Radio>
@@ -443,7 +478,7 @@ const AlertReport: React.FC = () => {
                   isDisabled={
                     !(
                       numWorkersInjured >= 0 &&
-                      reportType &&
+                      ((reportType && reportType !== "") || (emergencyText?.trim() !== "" && reportType === null)) &&
                       urgencyLevel !== null &&
                       (needAssistance === "true" || needAssistance === "false")
                     )
