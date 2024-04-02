@@ -55,7 +55,7 @@ const Alert: React.FC = () => {
   const [emergencyText, setEmergencyText] = useState("");
   // const [emergencyType, setEmergencyType] = useState<string | null>(null);r
   const { data, isLoading, error, fetchData } = useRequest(
-    `${LOCAL_BASE_URL}/supervisor-alert`,
+    `${BACKEND_BASE_URL}/supervisor-alert`,
     "POST"
   );
   const [openSMS, setOpenSMS] = useState(false);
