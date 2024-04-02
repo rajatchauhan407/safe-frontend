@@ -9,6 +9,7 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
     "Zone 3 - Building B"
   );
   const { alertData } = route.params;
+  
   return (
     <>
       <ScrollView>
