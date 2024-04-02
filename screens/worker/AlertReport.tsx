@@ -15,6 +15,8 @@ import {
   TextareaInput,
   ScrollView,
   Button,
+  Input,
+  InputField,
   Box,
 } from "@gluestack-ui/themed";
 import RadioIconCustom from "../../components/common/radioIcon";
@@ -123,7 +125,7 @@ const AlertReport: React.FC = () => {
     };
     await fetchData(options);
     setAlertSent(true);
-    navigation.navigate("Dashboard" as never);
+    navigation.navigate("Dashboard", { alertSent: true });
   };
 
   useEffect(() => {
@@ -419,8 +421,24 @@ const AlertReport: React.FC = () => {
                 </Slider>
               </HStack>
             </FormControl>
+                              
+            {/* FIELD 5 - LOCATION */}
+            <FormControl>
+              <VStack space="sm">
+                <Typography bold>Emergency Location*</Typography>
+                <Input
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                >
+                  <InputField placeholder="Enter Location" />
+                </Input>
+              </VStack>
+            </FormControl>
 
-            {/* FIELD 5 - NEED ASSISTANCE */}
+            {/* FIELD 6 - NEED ASSISTANCE */}
             <FormControl>
               <RadioGroup
                 value={needAssistance}

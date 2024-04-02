@@ -21,7 +21,13 @@ import { RootState } from "../../lib/store";
 import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
 import { ScrollView } from "react-native-gesture-handler";
-const Dashboard: React.FC = () => {
+import { RouteProp } from "@react-navigation/native";
+
+type DashboardProps = {
+  route: RouteProp<RootStackParamList, "Dashboard">;
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); 
@@ -31,6 +37,13 @@ const Dashboard: React.FC = () => {
     "none" | "accident" | "evacuation"
   >("none");
   const [alertSent, setAlertSent] = useState(false);
+  
+  useEffect(() => {
+    if(route.params){
+      const {alertSent} = route.params;
+      setAlertSent(alertSent);
+    }
+  }, [route.params]);
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -294,7 +307,7 @@ const Dashboard: React.FC = () => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("AlertDetails" as never);
+    navigation.navigate("Alert Details" as never);
   };
 
   const GreetingSection = () => (
