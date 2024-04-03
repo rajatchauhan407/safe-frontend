@@ -43,6 +43,22 @@
           "microphonePermission": "Allow $(SAFE APP) to access your microphone",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notificationicon.png",
+          "color": "#ffffff",
+          "sounds": [
+            "./assets/notificationsound.wav"
+          ]
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
       ]
     ]
   }

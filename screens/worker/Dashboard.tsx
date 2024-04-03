@@ -20,16 +20,30 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
-const Dashboard: React.FC = () => {
-  const [isCheckedIn, setIsCheckedIn] = useState(true);
-  // const [userName, setUserName] = useState("");
+import { ScrollView } from "react-native-gesture-handler";
+import { RouteProp } from "@react-navigation/native";
+
+type DashboardProps = {
+  route: RouteProp<RootStackParamList, "Dashboard">;
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ route }) => {
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [siteLocation, setSiteLocation] = useState("");
-  const [checkInTime, setCheckInTime] = useState(""); // New state variable for check-in time
+  const [checkInTime, setCheckInTime] = useState(""); 
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation"
   >("none");
+  const [alertSent, setAlertSent] = useState(false);
+  
+  useEffect(() => {
+    if(route.params){
+      const {alertSent} = route.params;
+      setAlertSent(alertSent);
+    }
+  }, [route.params]);
 
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -293,20 +307,20 @@ const Dashboard: React.FC = () => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("AlertDetails" as never);
+    navigation.navigate("Alert Details" as never);
   };
 
   const GreetingSection = () => (
     <Text>
       <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
       <Typography size="2xl" bold>
-        Let's start building
+        Let's stay safe
       </Typography>
     </Text>
   );
 
   const LocationSection = () => (
-    <Box mt={10} style={{ flexDirection: "row", alignItems: "center" }}>
+    <Box mt={10} mb={5} style={{ flexDirection: "row", alignItems: "center" }}>
       <LocationIcon size={13} color={""} focussed={false} />
       <Typography size="md" pl={5}>
         {siteLocation}
@@ -325,6 +339,16 @@ const Dashboard: React.FC = () => {
         />
       </Box>
     );
+
+    const AlertSentMessage = () =>
+      <Box>
+        <AlertMessage
+          backgroundColor="#00AE8C"
+          textColor="#1E1E1E"
+          iconColor="#1E1E1E"
+          text="Your incident has been reported"
+        />
+      </Box>;
 
   const TooltipSOS = () => {
     const [fadeAnim] = useState(new Animated.Value(0));
@@ -372,6 +396,7 @@ const Dashboard: React.FC = () => {
   return (
     <>
       <CheckInAlertMessage />
+      {alertSent && <AlertSentMessage />}
       <ScreenLayout>
         <VStack space="sm" reversed={false}>
           <GreetingSection />

@@ -6,7 +6,7 @@ import { Camera } from "lucide-react-native";
 
 interface CommonButtonProps extends TouchableOpacityProps {
   variant?: "fill" | "outline" | "rounded" | "text" | "underline";
-  action?: "primary" | "secondary" | "positive" | "sos";
+  action?: "primary" | "secondary" | "positive" | "negative";
   isDisabled?: boolean;
   isCheckIn?: boolean;
   isLogIn?: boolean;
@@ -56,7 +56,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
           ? "#00AE8C"
           : action === "positive"
           ? "#1E1E1E"
-          : action === "sos"
+          : action === "negative"
           ? "#D0080F"
           : "#FFFFFF",
       borderRadius: 100,
