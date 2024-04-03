@@ -96,7 +96,7 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,wor
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    //backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-start', 
   },
   drawerContainer: {

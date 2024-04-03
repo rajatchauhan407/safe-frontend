@@ -31,7 +31,7 @@ import { getItem } from "../../lib/slices/authSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
-import useFetch from "../../hooks/useFetch";
+import useRequest from "../../hooks/useRequest";
 
 // import ActSheet from "../../components/common/actionSheet";
 
@@ -41,6 +41,8 @@ interface EmergencyItem {
 }
 
 const Alert: React.FC = () => {
+  
+  const user = useSelector((state: RootState) => state.auth.user);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
@@ -51,9 +53,9 @@ const Alert: React.FC = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [emergencyText, setEmergencyText] = useState("");
-  const user = useSelector((state: RootState) => state.auth.user);
-  const { data, isLoading, error, fetchData } = useFetch(
-    `${BACKEND_BASE_URL}/alert`,
+  // const [emergencyType, setEmergencyType] = useState<string | null>(null);r
+  const { data, isLoading, error, fetchData } = useRequest(
+    `${BACKEND_BASE_URL}/supervisor-alert`,
     "POST"
   );
   const [openSMS, setOpenSMS] = useState(false);
@@ -64,6 +66,7 @@ const Alert: React.FC = () => {
       const userData = await getItem("user");
       // console.log(token);
       // console.log(userData);
+
     };
     retrieveToken();
   }, []);
@@ -156,6 +159,7 @@ const Alert: React.FC = () => {
     console.log("Reporting for:", reportingFor);
     console.log("Number of workers injured:", numWorkersInjured);
     console.log("Report type:", reportType);
+    
     // console.log('Other emergency type:', otherEmergencyType);
 
     const alertData = {
@@ -167,11 +171,17 @@ const Alert: React.FC = () => {
       alertLocation: {
         type: "Point",
         coordinates: [0, 0], // to be updated
-      }, // to be updated
+      },
+      responseAction:{
+        supervisorId: user ? user.userId : null,
+        actionType:selectedButton
+      },
+      // to be updated
       // reportingFor,
       emergencyText: emergencyText,
       workersInjured: numWorkersInjured,
     };
+    console.log(alertData);
     const options = {
       headers: {
         "Content-Type": "application/json",
@@ -180,7 +190,7 @@ const Alert: React.FC = () => {
     };
     await fetchData(options);
 
-    setOpenSMS(true);
+    // setOpenSMS(true);
   };
 
   /* Cancel Alert -------------------------- */
