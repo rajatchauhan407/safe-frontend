@@ -17,6 +17,7 @@ import SafeWorkerIcon from "../../assets/icons/safeWorker";
 import NotSafeWorkerIcon from "../../assets/icons/notSafeWorker";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
+import websocketService from "../../services/websocket.service";
 
 interface Worker {
   id: number;
@@ -39,55 +40,71 @@ const SafeZoneList: React.FC = () => {
     console.log("logged in user>> " + user._id);
     siteID = user.constructionSiteId || "";
   }
-
-  /* Fetch Workers Info */
   useEffect(() => {
-    const fetchWorkers = async () => {
-      try {
-        const siteId = {
-          siteId: siteID,
-        };
-        const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(siteId),
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        const data = await res.json();
-        console.log("Data from backend >> WorkersData" + data.data.workersData);
-        console.log(
-          "Data from backend >> WorkersCheckedIn " + data.data.safeZoneWorkers
-        );
+    // Connect to websocket
+    websocketService.connect();
+    websocketService.subscribeToEvent('safezoneworker', (data) => {
+      console.log("Websocket received safezoneworker event:", data);    
+      fetchWorkers();
+    }); 
+    websocketService.subscribeToEvent('workerstatus', (data) => {
+      console.log("Websocket received workerstatus event:", data);    
+      fetchWorkers();
+    });   
+    //Cleanup function to disconnect from websocket when component unmounts
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  });
 
-        const updatedSiteWorkers: Worker[] = [];
-        // Loop through workersData array
-        for (const worker of data.data.workersData) {
-          console.log("Worker Name:", worker.firstName);
-          console.log("Worker Role:", worker.lastName);
-          let onSite = false;
-          for (const workerOnSite of data.data.safeZoneWorkers) {
-            if (worker._id === workerOnSite.userId) {
-              onSite = true;
-              console.log("checked - in " + worker._id);
-              break;
-            }
+  const fetchWorkers = async () => {
+    try {
+      const siteId = {
+        siteId: siteID,
+      };
+      const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(siteId),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("Data from backend >> WorkersData" + data.data.workersData);
+      console.log(
+        "Data from backend >> WorkersCheckedIn " + data.data.safeZoneWorkers
+      );
+
+      const updatedSiteWorkers: Worker[] = [];
+      // Loop through workersData array
+      for (const worker of data.data.workersData) {
+        console.log("Worker Name:", worker.firstName);
+        console.log("Worker Role:", worker.lastName);
+        let onSite = false;
+        for (const workerOnSite of data.data.safeZoneWorkers) {
+          if (worker._id === workerOnSite.userId) {
+            onSite = true;
+            console.log("checked - in " + worker._id);
+            break;
           }
-          // Add worker to updatedSiteWorkers array
-          updatedSiteWorkers.push({
-            id: worker._id,
-            name: `${worker.firstName} ${worker.lastName}`,
-            role: worker.jobPosition,
-            avatar: "avatar-link-5",
-            onSite: onSite,
-          });
         }
-        setWorkers(updatedSiteWorkers);
-      } catch (error) {
-        console.error("Error fetching workers:", error);
+        // Add worker to updatedSiteWorkers array
+        updatedSiteWorkers.push({
+          id: worker._id,
+          name: `${worker.firstName} ${worker.lastName}`,
+          role: worker.jobPosition,
+          avatar: "avatar-link-5",
+          onSite: onSite,
+        });
       }
-    };
+      setWorkers(updatedSiteWorkers);
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+    }
+  };
+  /* Fetch Workers Info */
+  useEffect(() => {    
     fetchWorkers();
   }, []);
 

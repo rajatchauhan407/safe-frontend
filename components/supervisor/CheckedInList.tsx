@@ -17,6 +17,7 @@ import CommonButton from "../common/button";
 import SortIcon from "../../assets/icons/sort";
 import { useSelector} from "react-redux";
 import { RootState} from "../../lib/store";
+import websocketService from "../../services/websocket.service";
 
 interface Worker {
   id: number;
@@ -40,54 +41,66 @@ const CheckedInList: React.FC = () => {
     siteID = user.constructionSiteId || "";     
   } 
 
-  /* Fetch Workers Info */
-  useEffect(() => {
-    const fetchWorkers = async () => {
-      try {
-        const siteId = {
-          siteId: siteID,
-        };
-        const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(siteId),
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        const data = await res.json();
-        console.log("Data from backend >> WorkersData" + data.data.workersData);
-        console.log(
-          "Data from backend >> WorkersCheckedIn " + data.data.workersCheckedIn
-        );
+  const fetchWorkers = async () => {
+    try {
+      const siteId = {
+        siteId: siteID,
+      };
+      const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(siteId),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("Data from backend >> WorkersData" + data.data.workersData);
+      console.log(
+        "Data from backend >> WorkersCheckedIn " + data.data.workersCheckedIn
+      );
 
-        const updatedSiteWorkers: Worker[] = [];
-        // Loop through workersData array
-        for (const worker of data.data.workersData) {
-          console.log("Worker Name:", worker.firstName);
-          console.log("Worker Role:", worker.lastName);
-          let checkedIn = false;
-          for (const workerCheckedIn of data.data.workersCheckedIn) {
-            if (worker._id === workerCheckedIn.userId) {
-              checkedIn = true;
-              console.log("checked - in " + worker._id);
-              break;
-            }
+      const updatedSiteWorkers: Worker[] = [];
+      // Loop through workersData array
+      for (const worker of data.data.workersData) {
+        // console.log("Worker Name:", worker.firstName);
+        // console.log("Worker Role:", worker.lastName);
+        let checkedIn = false;
+        for (const workerCheckedIn of data.data.workersCheckedIn) {
+          if (worker._id === workerCheckedIn.userId) {
+            checkedIn = true;
+            // console.log("checked - in " + worker._id);
+            break;
           }
-          // Add worker to updatedSiteWorkers array
-          updatedSiteWorkers.push({
-            id: worker._id,
-            name: `${worker.firstName} ${worker.lastName}`,
-            role: worker.jobPosition,
-            avatar: "avatar-link-5",
-            checkedIn: checkedIn,
-          });
         }
-        setWorkers(updatedSiteWorkers);
-      } catch (error) {
-        console.error("Error fetching workers:", error);
+        // Add worker to updatedSiteWorkers array
+        updatedSiteWorkers.push({
+          id: worker._id,
+          name: `${worker.firstName} ${worker.lastName}`,
+          role: worker.jobPosition,
+          avatar: "avatar-link-5",
+          checkedIn: checkedIn,
+        });
       }
-    };
+      setWorkers(updatedSiteWorkers);
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+    }
+  };
+  useEffect(() => {
+    // Connect to websocket
+    websocketService.connect();
+    websocketService.subscribeToEvent('workerstatus', (data) => {
+      console.log("Websocket - Received workerstatus event:", data);    
+      fetchWorkers();
+    });    
+    //Cleanup function to disconnect from websocket when component unmounts
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  });
+  /* Fetch Workers Info */
+  useEffect(() => {    
     fetchWorkers();
   }, []);
 
