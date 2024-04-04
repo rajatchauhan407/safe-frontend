@@ -12,12 +12,12 @@ import { useSelector} from "react-redux";
 import { RootState} from "../../lib/store";
 import { BACKEND_BASE_URL } from "../../config/api";
 
-const SafeZone: React.FC<any> = ({route}) => {
+const SafeZone: React.FC<any> = () => {
   const [siteLocation, setSiteLocation] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
-    const {alertData} = route.params;
+    // const {alertData} = route.params;
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
