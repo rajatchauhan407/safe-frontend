@@ -20,7 +20,7 @@ import {
   Box,
 } from "@gluestack-ui/themed";
 import RadioIconCustom from "../../components/common/radioIcon";
-import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
@@ -63,6 +63,8 @@ const AlertReport: React.FC = () => {
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
+  const [photoTaken, setPhotoTaken] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [alertSent, setAlertSent] = useState(false);
   const [location, setLocation] = useState<string>('');
   const { data, isLoading, error, fetchData } = useRequest(
@@ -140,12 +142,19 @@ const AlertReport: React.FC = () => {
       };
       const photo = await cameraRef.current.takePictureAsync(options);
       setPhoto(photo.uri);
+      setPhotoTaken(true);
+      setShowPreview(true);
       // console.log(photo);
     }
   };
 
+  const handleShowPreview = () => {
+    setShowPreview(true);
+  };
+
   const handleCameraClose = () => {
     setShowCamera(false);
+    setShowPreview(false);
   };
 
   const emergencies: EmergencyItem[] = [
@@ -232,58 +241,81 @@ const AlertReport: React.FC = () => {
   };
 
   const AssistanceForm = () => {
+    const handleTakeAnotherPhoto = () => {
+      setPhoto(null);
+      setShowPreview(false);
+    };
+  
     return (
       <FormControl>
         <VStack space="md">
           <Typography bold>Photo of Incident Location (Optional)</Typography>
           {!showCamera && (
-          <CommonButton
-            variant="rounded"
-            action="positive"
-            showIcon={true}
-            buttonTextSize={18}
-            onPress={() => setShowCamera(true)}
-          >
-            Take a Photo
-          </CommonButton>
-        )}
+            <CommonButton
+              variant="rounded"
+              action="positive"
+              showIcon={true}
+              buttonTextSize={18}
+              onPress={() => setShowCamera(true)}
+            >
+              Open Camera
+            </CommonButton>
+          )}
           {/* Render camera if showCamera state is true */}
-        {showCamera ? (
-          <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
-            {/* Close Camera Button */}
-            <TouchableOpacity
-              onPress={handleCameraClose}
-              style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-            >
-              <Typography bold style={{ color: "white", fontSize: 20 }}>
-                X
-              </Typography>
-            </TouchableOpacity>
-            {/* Capture Photo Button */}
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                bottom: 20, // Adjust bottom position as needed
-                alignSelf: "center",
-                zIndex: 1,
-              }}
-            >
+          {!showPreview && showCamera ? (
+            <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
+              {/* Close Camera Button */}
+              <TouchableOpacity
+                onPress={handleCameraClose}
+                style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+              >
+                <Typography bold style={{ color: "white", fontSize: 20 }}>
+                  X
+                </Typography>
+              </TouchableOpacity>
+              {/* Capture Photo Button */}
+              {!showPreview && (
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: 20, // Adjust bottom position as needed
+                    alignSelf: "center",
+                    zIndex: 1,
+                  }}
+                >
+                  <CommonButton
+                    variant="rounded"
+                    action="positive"
+                    showIcon={true}
+                    buttonTextSize={18}
+                    onPress={handleTakePhoto}
+                  >
+                    Take Photo
+                  </CommonButton>
+                </TouchableOpacity>
+              )}
+            </Camera>
+          ) : null}
+          {/* Render preview if showPreview state is true */}
+          {showPreview && (
+            <View style={{ flex: 1 }}>
+              <Image source={{ uri: photo }} style={{ flex: 1, height: 400, marginBottom: 20 }} />
               <CommonButton
                 variant="rounded"
                 action="positive"
                 showIcon={true}
                 buttonTextSize={18}
-                onPress={handleTakePhoto}
+                onPress={handleTakeAnotherPhoto}
               >
-                Take Photo
+                Take Another Photo
               </CommonButton>
-            </TouchableOpacity>
-          </Camera>
-        ) : null}
+            </View>
+          )}
         </VStack>
       </FormControl>
     );
   };
+  
 
   const handleCancelAlert = () => {
     navigation.navigate("Dashboard" as never);
