@@ -20,7 +20,7 @@ import {
   Box,
 } from "@gluestack-ui/themed";
 import RadioIconCustom from "../../components/common/radioIcon";
-import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { NavigationProp } from "@react-navigation/native";
@@ -55,9 +55,7 @@ const AlertReport: React.FC = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [urgencyLevel, setUrgencyLevel] = useState(2);
-  const [needAssistance, setNeedAssistance] = useState<
-    "true" | "false" | undefined
-  >(undefined);
+  const [needAssistance, setNeedAssistance] = useState<"true" | "false">("false");
   const [showAssistanceForm, setShowAssistanceForm] = useState(false);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraType, setCameraType] = useState(CameraType.back);
@@ -65,6 +63,8 @@ const AlertReport: React.FC = () => {
   const cameraRef = useRef<Camera>(null);
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
+  const [photoTaken, setPhotoTaken] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [alertSent, setAlertSent] = useState(false);
   const [location, setLocation] = useState<string>('');
   const { data, isLoading, error, fetchData } = useRequest(
@@ -142,12 +142,19 @@ const AlertReport: React.FC = () => {
       };
       const photo = await cameraRef.current.takePictureAsync(options);
       setPhoto(photo.uri);
+      setPhotoTaken(true);
+      setShowPreview(true);
       // console.log(photo);
     }
   };
 
+  const handleShowPreview = () => {
+    setShowPreview(true);
+  };
+
   const handleCameraClose = () => {
     setShowCamera(false);
+    setShowPreview(false);
   };
 
   const emergencies: EmergencyItem[] = [
@@ -234,58 +241,81 @@ const AlertReport: React.FC = () => {
   };
 
   const AssistanceForm = () => {
+    const handleTakeAnotherPhoto = () => {
+      setPhoto(null);
+      setShowPreview(false);
+    };
+  
     return (
       <FormControl>
         <VStack space="md">
           <Typography bold>Photo of Incident Location (Optional)</Typography>
           {!showCamera && (
-          <CommonButton
-            variant="rounded"
-            action="positive"
-            showIcon={true}
-            buttonTextSize={18}
-            onPress={() => setShowCamera(true)}
-          >
-            Take a Photo
-          </CommonButton>
-        )}
+            <CommonButton
+              variant="rounded"
+              action="positive"
+              showIcon={true}
+              buttonTextSize={18}
+              onPress={() => setShowCamera(true)}
+            >
+              Open Camera
+            </CommonButton>
+          )}
           {/* Render camera if showCamera state is true */}
-        {showCamera ? (
-          <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
-            {/* Close Camera Button */}
-            <TouchableOpacity
-              onPress={handleCameraClose}
-              style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-            >
-              <Typography bold style={{ color: "white", fontSize: 20 }}>
-                X
-              </Typography>
-            </TouchableOpacity>
-            {/* Capture Photo Button */}
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                bottom: 20, // Adjust bottom position as needed
-                alignSelf: "center",
-                zIndex: 1,
-              }}
-            >
+          {!showPreview && showCamera ? (
+            <Camera style={{ flex: 1, height: 400 }} ref={cameraRef} type={cameraType}>
+              {/* Close Camera Button */}
+              <TouchableOpacity
+                onPress={handleCameraClose}
+                style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+              >
+                <Typography bold style={{ color: "white", fontSize: 20 }}>
+                  X
+                </Typography>
+              </TouchableOpacity>
+              {/* Capture Photo Button */}
+              {!showPreview && (
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: 20, // Adjust bottom position as needed
+                    alignSelf: "center",
+                    zIndex: 1,
+                  }}
+                >
+                  <CommonButton
+                    variant="rounded"
+                    action="positive"
+                    showIcon={true}
+                    buttonTextSize={18}
+                    onPress={handleTakePhoto}
+                  >
+                    Take Photo
+                  </CommonButton>
+                </TouchableOpacity>
+              )}
+            </Camera>
+          ) : null}
+          {/* Render preview if showPreview state is true */}
+          {showPreview && (
+            <View style={{ flex: 1 }}>
+              <Image source={{ uri: photo }} style={{ flex: 1, height: 400, marginBottom: 20 }} />
               <CommonButton
                 variant="rounded"
                 action="positive"
                 showIcon={true}
                 buttonTextSize={18}
-                onPress={handleTakePhoto}
+                onPress={handleTakeAnotherPhoto}
               >
-                Take Photo
+                Take Another Photo
               </CommonButton>
-            </TouchableOpacity>
-          </Camera>
-        ) : null}
+            </View>
+          )}
         </VStack>
       </FormControl>
     );
   };
+  
 
   const handleCancelAlert = () => {
     navigation.navigate("Dashboard" as never);
@@ -373,7 +403,7 @@ const AlertReport: React.FC = () => {
                   {/* Render Textarea if no emergency is selected */}
                   {reportType === null && (
                     <FormControl>
-                      <Typography bold>Describe the emergency*</Typography>
+                      <Typography bold>Describe the incident*</Typography>
                       <Textarea>
                         <TextareaInput
                           value={emergencyText}
@@ -426,7 +456,7 @@ const AlertReport: React.FC = () => {
             {/* FIELD 5 - LOCATION */}
             <FormControl>
               <VStack space="sm">
-                <Typography bold>Emergency Location*</Typography>
+                <Typography bold>Incident Location*</Typography>
                 <Input
                   variant="outline"
                   size="md"
@@ -434,7 +464,7 @@ const AlertReport: React.FC = () => {
                   isInvalid={false}
                   isReadOnly={false}
                 >
-                  <InputField placeholder="Enter Location" onChangeText={(text) => {setLocation(text)}} 
+                  <InputField placeholder="Enter the location" onChangeText={(text) => {setLocation(text)}} 
                   value={location} />
                 </Input>
               </VStack>
@@ -448,7 +478,7 @@ const AlertReport: React.FC = () => {
               >
                 <VStack space="md">
                   <Typography bold>
-                    Do you need assistance on the spot?*
+                    Do you need assistance on the location?*
                   </Typography>
                   <HStack space="2xl">
                     <Radio size="lg" value="true">
@@ -472,9 +502,15 @@ const AlertReport: React.FC = () => {
             {/* SEND REPORT */}
             <FormControl>
               <VStack space="md">
-                <Typography textAlign="center" color="#D0080F" bold>
-                  All the above fields are required
-                </Typography>
+                  {(numWorkersInjured < 0 ||
+                  ((!reportType || reportType === "") && emergencyText?.trim() === "") ||
+                  urgencyLevel === null ||
+                  !needAssistance ||
+                  location.trim() === "") && (
+                  <Typography textAlign="center" color="#D0080F" bold>
+                    All the above fields are required
+                  </Typography>
+                )}
                 <CommonButton
                   variant="rounded"
                   isDisabled={
@@ -482,7 +518,8 @@ const AlertReport: React.FC = () => {
                       numWorkersInjured >= 0 &&
                       ((reportType && reportType !== "") || (emergencyText?.trim() !== "" && reportType === null)) &&
                       urgencyLevel !== null &&
-                      (needAssistance === "true" || needAssistance === "false")
+                      (needAssistance === "true" || needAssistance === "false")&&
+                      location.trim() !== ""
                     )
                   }
                   onPress={sendAlert}

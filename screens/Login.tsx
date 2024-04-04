@@ -200,11 +200,11 @@ const LoginScreen: React.FC = () => {
 
               {/* LOGIN BUTTONS */}
               <Box>
-                <Typography mb="$1">Login as</Typography>
+                <Typography mb="$1" bold>Login as</Typography>
                 <HStack space="md">
                   <Box flex={1}>
                     <CommonButton
-                      variant={loginAs === "Supervisor" ? "rounded" : "outline"}
+                      variant={loginAs === "Supervisor" ? "loginRounded" : "loginOutline"}
                       isLogIn={true}
                       /* showIcon={true} */
                       onPress={() => setLoginAs("Supervisor")}
@@ -214,16 +214,16 @@ const LoginScreen: React.FC = () => {
                           <SupervisorIcon
                             size={20}
                             color={
-                              loginAs === "Supervisor" ? "#1E1E1E" : "#FD9201"
+                              loginAs === "Supervisor" ? "#FFFFFF" : "#1E1E1E"
                             }
                             focussed={true}
                           />
                         </Box>
                         <Box>
                           <ButtonText>
-                            <Typography buttonTextSize={24} bold>
-                              Supervisor
-                            </Typography>
+                          <Typography buttonTextSize={24} bold style={{ color: loginAs === "Supervisor" ? "#FFFFFF" : "#1E1E1E" }}>
+                          Supervisor
+                          </Typography>
                           </ButtonText>
                         </Box>
                       </HStack>
@@ -231,7 +231,7 @@ const LoginScreen: React.FC = () => {
                   </Box>
                   <Box flex={1}>
                     <CommonButton
-                      variant={loginAs === "Worker" ? "rounded" : "outline"}
+                      variant={loginAs === "Worker" ? "loginRounded" : "loginOutline"}
                       isLogIn={true}
                       onPress={() => setLoginAs("Worker")}
                     >
@@ -239,13 +239,13 @@ const LoginScreen: React.FC = () => {
                         <Box>
                           <WorkerIcon
                             size={22}
-                            color={loginAs === "Worker" ? "#1E1E1E" : "#FD9201"}
+                            color={loginAs === "Worker" ? "#FFFFFF" : "#1E1E1E"}
                             focussed={true}
                           />
                         </Box>
                         <Box>
                           <ButtonText>
-                            <Typography buttonTextSize={24} bold>
+                            <Typography buttonTextSize={24} bold style={{ color: loginAs === "Worker" ? "#FFFFFF" : "#1E1E1E" }} >
                               Worker
                             </Typography>
                           </ButtonText>
@@ -271,7 +271,7 @@ const LoginScreen: React.FC = () => {
                 <Input>
                   <InputField
                     type="text"
-                    placeholder="EnterID"
+                    placeholder="Enter ID"
                     onChangeText={(text) =>
                       loginAs === "Worker"
                         ? setWorkerID(text)
