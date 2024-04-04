@@ -55,9 +55,7 @@ const AlertReport: React.FC = () => {
   const [numWorkersInjured, setNumWorkersInjured] = useState(0);
   const [reportType, setReportType] = useState<string | null>(null);
   const [urgencyLevel, setUrgencyLevel] = useState(2);
-  const [needAssistance, setNeedAssistance] = useState<
-    "true" | "false" | undefined
-  >(undefined);
+  const [needAssistance, setNeedAssistance] = useState<"true" | "false">("false");
   const [showAssistanceForm, setShowAssistanceForm] = useState(false);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraType, setCameraType] = useState(CameraType.back);
@@ -472,9 +470,15 @@ const AlertReport: React.FC = () => {
             {/* SEND REPORT */}
             <FormControl>
               <VStack space="md">
-                <Typography textAlign="center" color="#D0080F" bold>
-                  All the above fields are required
-                </Typography>
+                  {(numWorkersInjured < 0 ||
+                  ((!reportType || reportType === "") && emergencyText?.trim() === "") ||
+                  urgencyLevel === null ||
+                  !needAssistance ||
+                  location.trim() === "") && (
+                  <Typography textAlign="center" color="#D0080F" bold>
+                    All the above fields are required
+                  </Typography>
+                )}
                 <CommonButton
                   variant="rounded"
                   isDisabled={
