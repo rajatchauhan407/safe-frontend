@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation, Link } from "@react-navigation/native";
+import { useNavigation, Link, RouteProp } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import {
   Box,
@@ -28,8 +28,13 @@ import { IAlert } from "../../shared/interfaces/alert.interface";
 import AddUserIcon from "../../assets/icons/addUser";
 import AlertMessage from "../../components/common/alertMessage";
 import CancelAlertModal from "../../components/common/cancelAlertModal";
+import { RootStackParamList } from "../../types/navigationTypes";
 
-const Dashboard: React.FC = () => {
+type DashboardProps = {
+  route: RouteProp<RootStackParamList, "Dashboard">;
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   // const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
@@ -139,9 +144,13 @@ const Dashboard: React.FC = () => {
 
   const [showCancelAlert, setShowCancelAlert] = useState(false);
 
-  const handleShowAlertMessage = () => {
-    setShowCancelAlert(true);
-  };
+  useEffect(() => {
+    if (route.params) {
+      const { alertSent } = route.params;
+      setShowCancelAlert(alertSent);
+    }
+  }, [route.params]);
+
   return (
     <>
       <ScrollView>
@@ -216,12 +225,6 @@ const Dashboard: React.FC = () => {
           />
         </Box>
       )}
-
-      <CancelAlertModal
-        showModal={showCancelAlert}
-        setShowModal={setShowCancelAlert}
-        showAlertMessage={() => setShowCancelAlert(false)}
-      />
     </>
   );
 };

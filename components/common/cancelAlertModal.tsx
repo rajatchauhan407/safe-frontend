@@ -25,15 +25,14 @@ import AlertMessage from "./alertMessage";
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
-  showAlertMessage: () => void;
 }
 
 const CancelAlertModal: React.FC<ModalProps> = ({
   showModal,
   setShowModal,
-  showAlertMessage,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [alertSent, setAlertSent] = useState(false);
 
   return (
     <Center>
@@ -78,8 +77,8 @@ const CancelAlertModal: React.FC<ModalProps> = ({
               onPress={() => {
                 setShowModal(false);
                 setTimeout(() => {
-                  navigation.navigate("Dashboard" as never);
-                  showAlertMessage();
+                  setAlertSent(true);
+                  navigation.navigate("Dashboard", { alertSent: true });
                 }, 1000);
               }}
             >
