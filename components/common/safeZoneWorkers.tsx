@@ -7,6 +7,7 @@ import Typography from "./typography";
 import CommonButton from "./button";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
+import websocketService from "../../services/websocket.service";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -28,29 +29,47 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
     siteID = user.constructionSiteId || "";
   }
 
-  useEffect(() => {
-    const fetchWorkers = async () => {
-      try {
-        const siteId = {
-          siteId: siteID,
-        };
-        const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(siteId),
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        const data = await res.json();
-        // Update state with the fetched values
-        setTotalOnSite(data.data.safeZoneWorkers.length);
-        setTotalExpected(data.data.workersData.length);
-      } catch (error) {
-        console.error("Error fetching workers:", error);
-      }
-    };
 
+  useEffect(() => {
+    // Connect to websocket
+    websocketService.connect();
+    websocketService.subscribeToEvent('safezoneworker', (data) => {
+      console.log("Websocket received safezoneworker event:", data);    
+      fetchWorkers();
+    }); 
+    websocketService.subscribeToEvent('workerstatus', (data) => {
+      console.log("Websocket received workerstatus event:", data);    
+      fetchWorkers();
+    });   
+    // Cleanup function to disconnect from websocket when component unmounts
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  });
+
+  const fetchWorkers = async () => {
+    try {
+      const siteId = {
+        siteId: siteID,
+      };
+      const res = await fetch(`${BACKEND_BASE_URL}/safezoneworkersdata`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(siteId),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      // Update state with the fetched values
+      setTotalOnSite(data.data.safeZoneWorkers.length);
+      setTotalExpected(data.data.workersData.length);
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchWorkers();
   }, []);
 

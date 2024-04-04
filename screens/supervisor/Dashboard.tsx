@@ -8,6 +8,7 @@ import {
   ScrollView,
   Text,
   get,
+  set,
 } from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -97,12 +98,16 @@ const Dashboard: React.FC = () => {
     console.log("Connected to websocket");
 
     websocketService.subscribeToEvent("alert", (data) => {
-      fetchData({
-        credentials: "include",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
+      if (data === true) {
+        fetchData({
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        setIsAlert(true);
+      }
+
       // setData(data);
       // setCurrentAlertType(data.alertType);
     });
@@ -192,7 +197,11 @@ const Dashboard: React.FC = () => {
       {/* DRAWER */}
       <Box style={styles.drawer}>
         {data && (
-          <DrawerSupervisor alertType={currentAlertType} alertData={data} />
+          <DrawerSupervisor
+            alertType={currentAlertType} /* alertType="sos" */
+            alertData={data}
+            isAlert={isAlert}
+          />
         )}
       </Box>
 

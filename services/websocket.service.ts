@@ -4,7 +4,7 @@ import { BACKEND_BASE_URL, BACKEND_ORIGIN, LOCAL_BASE_URL,BACKEND_ORIGIN_LOCAL} 
 class WebSocketService{
     private socket: Socket;
     constructor(){
-        this.socket = io(BACKEND_ORIGIN_LOCAL);
+        this.socket = io(BACKEND_ORIGIN);
 
         this.socket.on('connect',()=>{
             console.log("connected to websocket server");
@@ -23,7 +23,7 @@ class WebSocketService{
     
 
     connect(){
-        console.log("connecting to websocket server from connect method");
+        console.log("connecting to websocket server from connect method ");
         this.socket.connect();
     }
 

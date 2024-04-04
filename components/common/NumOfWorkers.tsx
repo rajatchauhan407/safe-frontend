@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, HStack, Heading, Text } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
-import { BACKEND_BASE_URL } from "../../config/api";
+import { BACKEND_BASE_URL} from "../../config/api";
 import Typography from "./typography";
 import CommonButton from "./button";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
+import websocketService from "../../services/websocket.service";
+import useFetch from "../../hooks/useFetch";
 
 interface NumOfWorkersProps {
   seeAll: boolean;
@@ -17,6 +19,7 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   const navigation = useNavigation();
   const [totalCheckedIn, setTotalCheckedIn] = useState<number>(0);
   const [totalExpected, setTotalExpected] = useState<number>(0);
+  const [refreshData,setRefreshData] = useState(false);
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
@@ -26,30 +29,42 @@ const NumOfWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
     console.log("logged in user>> " + user._id);
     siteID = user.constructionSiteId || "";
   }
-
+    
   useEffect(() => {
-    const fetchWorkers = async () => {
-      try {
-        const siteId = {
-          siteId: siteID,
-        };
-        const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(siteId),
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        const data = await res.json();
-        // Update state with the fetched values
-        setTotalCheckedIn(data.data.workersCheckedIn.length);
-        setTotalExpected(data.data.workersData.length);
-      } catch (error) {
-        console.error("Error fetching workers:", error);
-      }
-    };
+    // Connect to websocket
+    websocketService.connect();
+    websocketService.subscribeToEvent('workerstatus', (data) => {
+      console.log("Websocket - Received workerstatus event:", data);    
+      fetchWorkers();
+    });    
+    //Cleanup function to disconnect from websocket when component unmounts
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  });
 
+  const fetchWorkers = async () => {
+    try {
+      const siteId = {
+        siteId: siteID,
+      };
+      const res = await fetch(`${BACKEND_BASE_URL}/workersdata`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(siteId),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      // Update state with the fetched values
+      setTotalCheckedIn(data.data.workersCheckedIn.length);
+      setTotalExpected(data.data.workersData.length);
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+    }
+  };
+  useEffect(() => {
     fetchWorkers();
   }, []);
 
