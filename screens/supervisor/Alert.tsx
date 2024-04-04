@@ -321,9 +321,12 @@ const Alert: React.FC = () => {
             {/* SEND REPORT */}
             <FormControl>
               <VStack space="md">
-                <Typography textAlign="center" color="#D0080F" bold>
-                  All the above fields are required*
-                </Typography>
+                  {((selectedButton === "Evacuation" && !(numWorkersInjured >= 0 && reportType)) ||
+                  (selectedButton === "One Whistle" && !(numWorkersInjured >= 0 && reportType))) && (
+                  <Typography textAlign="center" color="#D0080F" bold>
+                    All the above fields are required*
+                  </Typography>
+                )}
                 {selectedButton === "Evacuation" && (
                   <AlertButton
                     user="worker"
