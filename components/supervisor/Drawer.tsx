@@ -10,9 +10,10 @@ import Typography from "../common/typography";
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos";
   alertData?: any;
+  isAlert: boolean;
 }
 
-const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
+const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
@@ -46,6 +47,12 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData }) => {
     }
     console.log(alertType);
   }, [alertType]);
+
+  useEffect(()=>{
+    if(isAlert){
+      setIsOpen(true);
+    }
+  },[isAlert]);
 
   useEffect(() => {
     Animated.timing(translateY, {
