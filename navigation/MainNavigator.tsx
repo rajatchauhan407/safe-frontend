@@ -24,6 +24,7 @@ const Stack = createStackNavigator();
 const MainNavigator: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     const retrieveToken = async () => {
       try {
@@ -38,9 +39,11 @@ const MainNavigator: React.FC = () => {
     };
     retrieveToken();
   }, [dispatch]);
+
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
   );
+
   useEffect(() => {
     // console.log(status);
 
@@ -61,10 +64,12 @@ const MainNavigator: React.FC = () => {
       }
     }
   }, [isAuthenticated, navigation]);
+
   // if(status === 'loading' || 'idle'){
   //   return <Text>Loading...</Text>
   // }
   // if(status === 'succeed'){
+
   return (
     <Stack.Navigator initialRouteName={isAuthenticated ? "Main" : "Login"}>
       <Stack.Screen
