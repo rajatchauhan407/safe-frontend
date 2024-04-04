@@ -53,7 +53,11 @@ const SOSDetails: React.FC = () => {
             </Box>
 
             {/* SMS */}
-            <CommonButton variant="rounded" action="sos" onPress={handleSMS}>
+            <CommonButton
+              variant="rounded"
+              action="negative"
+              onPress={handleSMS}
+            >
               Send SMS to First Aid Team
             </CommonButton>
 
