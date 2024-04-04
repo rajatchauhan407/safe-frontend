@@ -203,7 +203,7 @@ const Alert: React.FC = () => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           <VStack space="2xl">
             {/* FIELD 1 - REPORT FOR */}

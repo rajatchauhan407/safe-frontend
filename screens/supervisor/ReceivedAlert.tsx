@@ -12,7 +12,7 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
   console.log("ReceivedAlertDetails: alertData: ", alertData)
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           {/* REPORTED BY */}
           <Box>

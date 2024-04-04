@@ -69,9 +69,9 @@ const CheckedIn: React.FC = () => {
       </ScrollView>
 
       {/* DRAWER */}
-      <Box style={styles.drawer}>
+      {/* <Box style={styles.drawer}>
         <Drawer alertType={currentAlertType} />
-      </Box>
+      </Box> */}
     </ScreenLayout>
   );
 };

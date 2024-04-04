@@ -399,6 +399,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
+    <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
       <CheckInAlertMessage />
       {alertSent && <AlertSentMessage />}
       <ScreenLayout>
@@ -440,6 +441,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           )}
         </Box>
       </ScreenLayout>
+      </ScrollView>
     </>
   );
 };
