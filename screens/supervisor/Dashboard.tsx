@@ -153,7 +153,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           {/* TEMPORARY ADD USER BUTTON ---- DO NOT DELETE */}
           {/* <Button
