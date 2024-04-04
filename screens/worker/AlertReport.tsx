@@ -66,7 +66,7 @@ const AlertReport: React.FC = () => {
   const [emergencyText, setEmergencyText] = useState("");
   const [photo, setPhoto] = useState<any>("");
   const [alertSent, setAlertSent] = useState(false);
-
+  const [location, setLocation] = useState<string>('');
   const { data, isLoading, error, fetchData } = useRequest(
     `${BACKEND_BASE_URL}/alert`,
     "POST"
@@ -100,6 +100,7 @@ const AlertReport: React.FC = () => {
       workersInjured: numWorkersInjured,
       degreeOfEmergency: urgencyLevel,
       assistance: needAssistance,
+      location: location,
     };
     // Object.keys(alertData).forEach((key) => {
     //   formData.append(key, (alertData as any)[key] as string);
@@ -116,7 +117,7 @@ const AlertReport: React.FC = () => {
       imageData = base64Image;
       
     }
-    // console.log("formdata>>", alertData);
+    console.log("formdata>>", alertData);
     const options = {
       headers:{
         "Content-Type": "application/json",
@@ -433,7 +434,8 @@ const AlertReport: React.FC = () => {
                   isInvalid={false}
                   isReadOnly={false}
                 >
-                  <InputField placeholder="Enter Location" />
+                  <InputField placeholder="Enter Location" onChangeText={(text) => {setLocation(text)}} 
+                  value={location} />
                 </Input>
               </VStack>
             </FormControl>
