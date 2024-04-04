@@ -371,7 +371,7 @@ const AlertReport: React.FC = () => {
                   {/* Render Textarea if no emergency is selected */}
                   {reportType === null && (
                     <FormControl>
-                      <Typography bold>Describe the emergency*</Typography>
+                      <Typography bold>Describe the incident*</Typography>
                       <Textarea>
                         <TextareaInput
                           value={emergencyText}
@@ -424,7 +424,7 @@ const AlertReport: React.FC = () => {
             {/* FIELD 5 - LOCATION */}
             <FormControl>
               <VStack space="sm">
-                <Typography bold>Emergency Location*</Typography>
+                <Typography bold>Incident Location*</Typography>
                 <Input
                   variant="outline"
                   size="md"
@@ -432,7 +432,7 @@ const AlertReport: React.FC = () => {
                   isInvalid={false}
                   isReadOnly={false}
                 >
-                  <InputField placeholder="Enter Location" onChangeText={(text) => {setLocation(text)}} 
+                  <InputField placeholder="Enter the location" onChangeText={(text) => {setLocation(text)}} 
                   value={location} />
                 </Input>
               </VStack>
@@ -446,7 +446,7 @@ const AlertReport: React.FC = () => {
               >
                 <VStack space="md">
                   <Typography bold>
-                    Do you need assistance on the spot?*
+                    Do you need assistance on the location?*
                   </Typography>
                   <HStack space="2xl">
                     <Radio size="lg" value="true">

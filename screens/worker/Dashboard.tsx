@@ -311,7 +311,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("Alert Details" as never);
+    navigation.navigate("Incident Report" as never);
   };
 
   const GreetingSection = () => (
