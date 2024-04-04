@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { VStack, Box } from '@gluestack-ui/themed';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Typography from '../common/typography';
 import CommonButton from '../common/button';
 import ScreenLayout from '../layout/screenLayout';
@@ -15,6 +15,7 @@ import LocationIcon from '../../assets/icons/location';
 import { useSelector} from "react-redux";
 import { RootState} from "../../lib/store";
 import { BACKEND_BASE_URL } from "../../config/api";
+import { RootStackParamList } from '../../types/navigationTypes';
 
 interface WorkerSafeZoneProps {
     onSafeConfirmation: () => void;
@@ -23,6 +24,7 @@ interface WorkerSafeZoneProps {
     location?: string;
     level?: number;
     workersInjured?: number;
+    route: any;
 }
 
 interface EmergencyItem {
@@ -36,9 +38,11 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     emergency = 'A worker fell', 
     location, 
     level = 0, 
-    workersInjured = 0
+    workersInjured = 0,
+    route
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
   const { isAuthenticated, status, user } = useSelector(
     (state: RootState) => state.auth
@@ -50,6 +54,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     userId=user._id;
     siteId = user.constructionSiteId || ""; 
   } 
+  const {alertData} = route.params;
 
   const emergencies: EmergencyItem[] = [
     { text: 'A worker fell', icon: FallIcon },
@@ -60,7 +65,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     { text: 'Struck by hazard', icon: DangerIcon },
   ];
 
-  const selectedEmergency = emergencies.find(item => item.text === emergency);
+  const selectedEmergency = emergencies.find(item => item.text === alertData.emergency);
 
   const LocationSafeZone = () => (
     <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'center' }}>
@@ -103,9 +108,9 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
             <Typography textAlign="center" bold>Remain calm and proceed to safe zone</Typography>
 
             <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />
-                <BoxWithNumber number={level} text={`Level`} type={type} />
-                <BoxWithNumber number={workersInjured} text={`Workers Injured`} type={type} />
+                <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={alertData.emergencyType} type={type}  />
+                <BoxWithNumber number={alertData.level} text={`Level`} type={type} />
+                <BoxWithNumber number={alertData.workersInjured} text={`Workers Injured`} type={type} />
             </VStack>
 
             <LocationSafeZone />

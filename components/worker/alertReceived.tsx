@@ -10,7 +10,8 @@ import ElectricIcon from '../../assets/icons/electric';
 import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
-
+import { RootStackParamList } from '../../types/navigationTypes';
+import { NavigationProp } from '@react-navigation/native';
 interface AlertReceivedProps {
   type: 'accident' | 'evacuation';
   emergency: string;
@@ -25,8 +26,8 @@ interface EmergencyItem {
 }
 
 const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
-  const navigation = useNavigation();
-
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  
   const handleIncidentPress = () => {
     // Handle incident press
   };
@@ -35,7 +36,14 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
   )
 
   const navigateToSafeZone = () => {
-    navigation.navigate('Evacuation Alert' as never);
+    navigation.navigate('Evacuation Alert',{
+      alertData: {
+        location,
+        emergencyType: emergency,
+        level,
+        workersInjured,
+      } // Provide a valid value for the alertData property
+    });
   };
 
   const emergencies: EmergencyItem[] = [
@@ -52,7 +60,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
   return (
     <VStack space="md">
       <Typography textAlign="center" bold>Incident on {location}</Typography>
-      {/* <AlertButton user="worker"  onPress={handleIncidentPress} /> */}
+      <AlertButton user="worker"  onPress={handleIncidentPress} emergency={type}/>
 
       <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
         <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={emergency} type={type}  />

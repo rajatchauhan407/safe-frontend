@@ -18,7 +18,8 @@ import {
   BACKEND_ORIGIN_LOCAL,
   LOCAL_BASE_URL,
 } from "../../config/api";
-import useFetch from "../../hooks/useFetch";
+// import useFetch from "../../hooks/useFetch";
+import useRequest from "../../hooks/useRequest";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../lib/store";
 import { IUser } from "../../shared/interfaces/user.interface";
@@ -54,19 +55,19 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     "One Whistle" | "Evacuation" | null
   >(null);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data, isLoading, error, fetchData }: any = useFetch(
+  const { data, isLoading, error, fetchData }: any = useRequest(
     `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
   );
   // console.log(type);
   // console.log(imageUrl);
-  useEffect(() => {
-    if (type === "accident") {
-      setSelectedButton("One Whistle");
-    } else if (type === "evacuation") {
-      setSelectedButton("Evacuation");
-    }
-  }, [type]);
+  // useEffect(() => {
+  //   if (type === "accident") {
+  //     setSelectedButton("One Whistle");
+  //   } else if (type === "evacuation") {
+  //     setSelectedButton("Evacuation");
+  //   }
+  // }, [type]);
 
   const handleEmergencyTypeSelect = (action: "One Whistle" | "Evacuation") => {
     setSelectedButton(action);
@@ -85,7 +86,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       body: JSON.stringify({
         constructionSiteId,
         supervisorId: (user as IUser)._id,
-        action: selectedButton,
+        action: selectedButton==="One Whistle" ? "accident" : "evacuation",
       }),
     };
     console.log(options);
@@ -197,7 +198,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         {selectedButton === "One Whistle" && (
           <AlertButton
             user="supervisor"
-            emergency={type === "accident" ? "oneWhistle" : type}
+            emergency="accident"
             onPress={handleIncidentPress}
           />
         )}
@@ -205,7 +206,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         {selectedButton === "Evacuation" && (
           <AlertButton
             user="worker"
-            emergency={type}
+            emergency="evacuation"
             onPress={handleIncidentPress}
           />
         )}
