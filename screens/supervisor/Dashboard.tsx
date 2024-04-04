@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation, Link } from "@react-navigation/native";
+import { useNavigation, Link, RouteProp } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import {
   Box,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Text,
   get,
+  set,
 } from "@gluestack-ui/themed";
 import LocationIcon from "../../assets/icons/location";
 import CommonDaysAccidentCard from "../../components/common/daysAccident";
@@ -25,8 +26,15 @@ import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import useFetch from "../../hooks/useFetch";
 import { IAlert } from "../../shared/interfaces/alert.interface";
 import AddUserIcon from "../../assets/icons/addUser";
+import AlertMessage from "../../components/common/alertMessage";
+import CancelAlertModal from "../../components/common/cancelAlertModal";
+import { RootStackParamList } from "../../types/navigationTypes";
 
-const Dashboard: React.FC = () => {
+type DashboardProps = {
+  route: RouteProp<RootStackParamList, "Dashboard">;
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   // const [userName, setUserName] = useState("David");
   const [siteLocation, setSiteLocation] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
@@ -95,12 +103,16 @@ const Dashboard: React.FC = () => {
     console.log("Connected to websocket");
 
     websocketService.subscribeToEvent("alert", (data) => {
-      fetchData({
-        credentials: "include",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
+      if (data === true) {
+        fetchData({
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        setIsAlert(true);
+      }
+
       // setData(data);
       // setCurrentAlertType(data.alertType);
     });
@@ -130,9 +142,18 @@ const Dashboard: React.FC = () => {
     navigation.navigate("Add User" as never);
   };
 
+  const [showCancelAlert, setShowCancelAlert] = useState(false);
+
+  useEffect(() => {
+    if (route.params) {
+      const { alertSent } = route.params;
+      setShowCancelAlert(alertSent);
+    }
+  }, [route.params]);
+
   return (
     <>
-      <ScrollView>
+      <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           {/* TEMPORARY ADD USER BUTTON ---- DO NOT DELETE */}
           {/* <Button
@@ -151,7 +172,7 @@ const Dashboard: React.FC = () => {
             <Text>
               <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
               <Typography size="2xl" bold>
-                Let's start building!
+                Prioritize safety!
               </Typography>
             </Text>
           </Box>
@@ -160,7 +181,6 @@ const Dashboard: React.FC = () => {
           <LocationComponent siteLocation={siteLocation} />
 
           {/* WORKERS CHECKED IN */}
-          {/* <NumOfWorkers totalCheckedIn={30} totalExpected={34} /> */}
           <NumOfWorkers seeAll={true} />
 
           {/* IN SAFE ZONE */}
@@ -189,9 +209,22 @@ const Dashboard: React.FC = () => {
           <DrawerSupervisor
             alertType={currentAlertType} /* alertType="sos" */
             alertData={data}
+            isAlert={isAlert}
           />
         )}
       </Box>
+
+      {/* CANCELED ALERT NOTIFICATION */}
+      {showCancelAlert && (
+        <Box position="absolute" top={0} right={0} left={0}>
+          <AlertMessage
+            backgroundColor="$neutral"
+            text="Your alert has been cancelled!"
+            textColor="#ffffff"
+            iconColor="#ffffff"
+          />
+        </Box>
+      )}
     </>
   );
 };

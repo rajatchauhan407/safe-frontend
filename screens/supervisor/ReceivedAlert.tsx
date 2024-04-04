@@ -9,10 +9,10 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
     "Zone 3 - Building B"
   );
   const { alertData } = route.params;
-  
+  console.log("ReceivedAlertDetails: alertData: ", alertData)
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           {/* REPORTED BY */}
           <Box>

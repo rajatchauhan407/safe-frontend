@@ -18,10 +18,12 @@ import {
   BACKEND_ORIGIN_LOCAL,
   LOCAL_BASE_URL,
 } from "../../config/api";
-import useFetch from "../../hooks/useFetch";
+// import useFetch from "../../hooks/useFetch";
+import useRequest from "../../hooks/useRequest";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../lib/store";
 import { IUser } from "../../shared/interfaces/user.interface";
+import CancelAlertModal from "../common/cancelAlertModal";
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
   emergency: string;
@@ -54,19 +56,19 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     "One Whistle" | "Evacuation" | null
   >(null);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data, isLoading, error, fetchData }: any = useFetch(
+  const { data, isLoading, error, fetchData }: any = useRequest(
     `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
   );
   // console.log(type);
   // console.log(imageUrl);
-  useEffect(() => {
-    if (type === "accident") {
-      setSelectedButton("One Whistle");
-    } else if (type === "evacuation") {
-      setSelectedButton("Evacuation");
-    }
-  }, [type]);
+  // useEffect(() => {
+  //   if (type === "accident") {
+  //     setSelectedButton("One Whistle");
+  //   } else if (type === "evacuation") {
+  //     setSelectedButton("Evacuation");
+  //   }
+  // }, [type]);
 
   const handleEmergencyTypeSelect = (action: "One Whistle" | "Evacuation") => {
     setSelectedButton(action);
@@ -85,7 +87,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       body: JSON.stringify({
         constructionSiteId,
         supervisorId: (user as IUser)._id,
-        action: selectedButton,
+        action: selectedButton==="One Whistle" ? "accident" : "evacuation",
       }),
     };
     console.log(options);
@@ -99,9 +101,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     // navigation.navigate('SafeZoneScreen');
   };
 
-  const handleCancel = () => {
-    navigation.goBack(); // Navigate back to the previous screen (dashboard)
-  };
+  const [cancelAlert, setCancelAlert] = useState(false);
 
   const emergencies: EmergencyItem[] = [
     { text: "A worker fell", icon: FallIcon },
@@ -157,7 +157,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      {imageUrl ? (
+      {/* {imageUrl ? (
         <Image
           size="2xl"
           w={"$full"}
@@ -169,20 +169,10 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           alt={`${emergency} example`}
         />
       ) : (
-        <Image
-          size="2xl"
-          w={"$full"}
-          h={"$1/5"}
-          borderRadius={10}
-          source={{
-            uri:
-              type === "accident"
-                ? "https://techandtribe-safe.s3.us-east-2.amazonaws.com/accident.jpg"
-                : "https://techandtribe-safe.s3.us-east-2.amazonaws.com/fire_hazard.jpg",
-          }}
-          alt={`${emergency} example`}
-        />
-      )}
+        <Box w={"$full"} h={"$0"}>
+          <Typography>No image was sent with the report</Typography>
+        </Box>
+      )} */}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
@@ -197,7 +187,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         {selectedButton === "One Whistle" && (
           <AlertButton
             user="supervisor"
-            emergency={type === "accident" ? "oneWhistle" : type}
+            emergency="accident"
             onPress={handleIncidentPress}
           />
         )}
@@ -205,7 +195,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         {selectedButton === "Evacuation" && (
           <AlertButton
             user="worker"
-            emergency={type}
+            emergency="evacuation"
             onPress={handleIncidentPress}
           />
         )}
@@ -222,11 +212,14 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       /> */}
 
       {/* CANCEL ALERT */}
-      <CommonButton variant="text" onPress={handleCancel}>
+      <CommonButton variant="text" onPress={() => setCancelAlert(true)}>
         <ButtonText textDecorationLine="underline" size="md">
           <Typography size="lg">Cancel Alert</Typography>
         </ButtonText>
       </CommonButton>
+
+      {/* CANEL ALERT MODAL */}
+      <CancelAlertModal showModal={cancelAlert} setShowModal={setCancelAlert} />
     </VStack>
   );
 };

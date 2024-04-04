@@ -5,5 +5,6 @@ export type RootStackParamList = {
     AlertDetails:undefined;
     'Received Alert': {alertData: any};
     'Dashboard': {alertSent: any};
+    'Evacuation Alert':{alertData: any};
     // Add other routes here
   };

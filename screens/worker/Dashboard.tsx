@@ -11,7 +11,7 @@ import * as Location from "expo-location";
 import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
-import { Box, VStack, Text } from "@gluestack-ui/themed";
+import { Box, VStack, Text, set } from "@gluestack-ui/themed";
 import AlertMessage from "../../components/common/alertMessage";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
@@ -37,7 +37,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     "none" | "accident" | "evacuation"
   >("none");
   const [alertSent, setAlertSent] = useState(false);
-  
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   useEffect(() => {
     if(route.params){
       const {alertSent} = route.params;
@@ -68,6 +69,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alertWorker", (data) => {
+      console.log(data);
       if (data === true) {
         fetchData({
           credentials: "include",
@@ -75,13 +77,15 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
             "Content-type": "application/json",
           },
         });
+        console.log("Alert received working to sucscription");
+      setOpenDrawer(true);
       }
     });
     console.log(data);
-    return () => {
-      websocketService.disconnect();
-    };
-  });
+    // return () => {
+    //   websocketService.disconnect();
+    // };
+  },[]);
 
   /* Use this to change alert type */
   useEffect(() => {
@@ -307,14 +311,14 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("Alert Details" as never);
+    navigation.navigate("Incident Report" as never);
   };
 
   const GreetingSection = () => (
     <Text>
       <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
       <Typography size="2xl" bold>
-        Let's stay safe
+        Work smart, stay safe!
       </Typography>
     </Text>
   );
@@ -395,6 +399,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
+    <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
       <CheckInAlertMessage />
       {alertSent && <AlertSentMessage />}
       <ScreenLayout>
@@ -423,18 +428,20 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           </VStack>
         </VStack>
         <TooltipSOS />
-        {/* DRAWER */}
-        <Box style={styles.drawer}>
+      </ScreenLayout>
+      </ScrollView>
+      {/* DRAWER */}
+      <Box style={styles.drawer}>
           {data && (
             <DrawerWorker
               alertType={data.responseAction.actionType}
               emergencyType={data.emergencyType}
               level={data.degreeOfEmergency}
               workersInjured={data.workersInjured}
+              isAlert={openDrawer}
             />
           )}
         </Box>
-      </ScreenLayout>
     </>
   );
 };

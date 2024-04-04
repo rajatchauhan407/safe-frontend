@@ -6,15 +6,17 @@ import { View, Text, TouchableOpacity, StyleSheet, PanResponder, Animated } from
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertReceived from "./alertReceived";
 import Typography from "../common/typography";
+import { set } from "@gluestack-style/react";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation";
   emergencyType: string;
   level: number;
   workersInjured: number;
+  isAlert: boolean;
 }
 
-const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,workersInjured }) => {
+const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,workersInjured,isAlert=false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   console.log(`DrawerWorker: alertType: ${alertType}, emergencyType: ${emergencyType}, level: ${level}, workersInjured: ${workersInjured}`)
@@ -39,7 +41,9 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,wor
       },           
     })
   ).current;
-
+ useEffect(() => {
+  setIsOpen(isAlert)
+},[isAlert])
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
