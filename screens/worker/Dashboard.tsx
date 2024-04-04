@@ -311,14 +311,14 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("Alert Details" as never);
+    navigation.navigate("Incident Report" as never);
   };
 
   const GreetingSection = () => (
     <Text>
       <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
       <Typography size="2xl" bold>
-        Let's stay safe
+        Work smart, stay safe!
       </Typography>
     </Text>
   );
@@ -399,6 +399,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
+    <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
       <CheckInAlertMessage />
       {alertSent && <AlertSentMessage />}
       <ScreenLayout>
@@ -427,8 +428,10 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           </VStack>
         </VStack>
         <TooltipSOS />
-        {/* DRAWER */}
-        <Box style={styles.drawer}>
+      </ScreenLayout>
+      </ScrollView>
+      {/* DRAWER */}
+      <Box style={styles.drawer}>
           {data && (
             <DrawerWorker
               alertType={data.responseAction.actionType}
@@ -439,7 +442,6 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
             />
           )}
         </Box>
-      </ScreenLayout>
     </>
   );
 };

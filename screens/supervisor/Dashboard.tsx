@@ -153,7 +153,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView  style={{ backgroundColor: '#F8F8FF' }}>
         <ScreenLayout>
           {/* TEMPORARY ADD USER BUTTON ---- DO NOT DELETE */}
           {/* <Button
@@ -172,7 +172,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
             <Text>
               <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
               <Typography size="2xl" bold>
-                Let's start building!
+                Prioritize safety!
               </Typography>
             </Text>
           </Box>

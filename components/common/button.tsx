@@ -5,7 +5,7 @@ import Typography from "./typography";
 import { Camera } from "lucide-react-native";
 
 interface CommonButtonProps extends TouchableOpacityProps {
-  variant?: "fill" | "outline" | "rounded" | "text" | "underline";
+  variant?: "fill" | "outline" | "rounded" | "text" | "underline" | "loginRounded" | "loginOutline";
   action?: "primary" | "secondary" | "positive" | "negative";
   isDisabled?: boolean;
   isCheckIn?: boolean;
@@ -46,6 +46,12 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       borderColor: action === "primary" ? "#FD9201" : "#6C757D",
       borderWidth: 1,
       backgroundColor: "transparent",
+      borderRadius: 16,
+    },
+    loginOutline: {
+      borderColor: "#1E1E1E",
+      borderWidth: 1,
+      backgroundColor: "transparent",
       borderRadius: isLogIn ? 100 : 4,
     },
     rounded: {
@@ -59,6 +65,10 @@ const CommonButton: React.FC<CommonButtonProps> = ({
           : action === "negative"
           ? "#D0080F"
           : "#FFFFFF",
+      borderRadius: 100,
+    },
+    loginRounded: {
+      backgroundColor:"#1E1E1E",
       borderRadius: 100,
     },
     text: {
