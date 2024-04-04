@@ -172,7 +172,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
             <Text>
               <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
               <Typography size="2xl" bold>
-                Let's start building!
+                Prioritize safety!
               </Typography>
             </Text>
           </Box>
