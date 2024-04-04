@@ -428,8 +428,10 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           </VStack>
         </VStack>
         <TooltipSOS />
-        {/* DRAWER */}
-        <Box style={styles.drawer}>
+      </ScreenLayout>
+      </ScrollView>
+      {/* DRAWER */}
+      <Box style={styles.drawer}>
           {data && (
             <DrawerWorker
               alertType={data.responseAction.actionType}
@@ -440,8 +442,6 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
             />
           )}
         </Box>
-      </ScreenLayout>
-      </ScrollView>
     </>
   );
 };
