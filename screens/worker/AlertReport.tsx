@@ -482,7 +482,8 @@ const AlertReport: React.FC = () => {
                       numWorkersInjured >= 0 &&
                       ((reportType && reportType !== "") || (emergencyText?.trim() !== "" && reportType === null)) &&
                       urgencyLevel !== null &&
-                      (needAssistance === "true" || needAssistance === "false")
+                      (needAssistance === "true" || needAssistance === "false")&&
+                      location.trim() !== ""
                     )
                   }
                   onPress={sendAlert}
