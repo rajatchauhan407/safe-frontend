@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { VStack, Box, HStack, Image, ButtonText } from "@gluestack-ui/themed";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import Typography from "../common/typography";
 import AlertButton from "../common/alertButton";
 import CommonButton from "../common/button";
@@ -24,6 +24,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../lib/store";
 import { IUser } from "../../shared/interfaces/user.interface";
 import CancelAlertModal from "../common/cancelAlertModal";
+import { RootStackParamList } from "../../types/navigationTypes";
+import { dismissAlert } from "../../lib/slices/authSlice";
+
 interface AlertReceivedProps {
   type: "accident" | "evacuation";
   emergency: string;
@@ -60,6 +63,8 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
   );
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   // console.log(type);
   // console.log(imageUrl);
   // useEffect(() => {
@@ -74,8 +79,8 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     setSelectedButton(action);
   };
   console.log(data);
-  const navigation = useNavigation();
-
+  // const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
   const [openSMS, setOpenSMS] = useState(false);
 
   const handleIncidentPress = async () => {
@@ -92,7 +97,9 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     };
     console.log(options);
     await fetchData(options);
-
+    
+    dispatch(dismissAlert())
+    // navigation.navigate({ name: "Dashboard",params: { alertSent: null } });
     setOpenSMS(true);
   };
 

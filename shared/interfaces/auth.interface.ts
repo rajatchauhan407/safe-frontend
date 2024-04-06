@@ -6,4 +6,5 @@ export interface IAuth{
     error:any;
     status: 'idle' | 'loading' | 'succeed' | 'failed';
     user:IUser | null;
+    dismissSupervisorAlert:boolean;
 }
