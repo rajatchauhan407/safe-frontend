@@ -59,7 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     "GET"
   );
 
-const isFocused = useIsFocused();
+// const isFocused = useIsFocused();
   const getAlert = async () => {
     // console.log("Fetching alert data")
     await fetchData({
@@ -75,14 +75,14 @@ const isFocused = useIsFocused();
 
 
 
-  useEffect(() => {
-    if(isFocused){
-      console.log('isfocused working');
-      (async () => {
-        await getAlert();
-      })();
-    }
-  },[isFocused])
+  // useEffect(() => {
+  //   if(isFocused){
+  //     console.log('isfocused working');
+  //     (async () => {
+  //       await getAlert();
+  //     })();
+  //   }
+  // },[isFocused])
 
   useEffect(() => {
     const getSite = async () => {
@@ -124,7 +124,7 @@ const isFocused = useIsFocused();
         getAlert();
         setIsAlert(true);
       }
-      console.log("Alert data>> ", data);
+      // console.log("Alert data>> ", data);
       // setData(data);
     });
   }, []);
