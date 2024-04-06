@@ -28,8 +28,10 @@ import { IAlert } from "../../shared/interfaces/alert.interface";
 import AddUserIcon from "../../assets/icons/addUser";
 import AlertMessage from "../../components/common/alertMessage";
 import CancelAlertModal from "../../components/common/cancelAlertModal";
-import { RootStackParamList } from "../../types/navigationTypes";
+import { useIsFocused } from "@react-navigation/native";
 
+import { RootStackParamList } from "../../types/navigationTypes";
+import useRequest from "../../hooks/useRequest";
 type DashboardProps = {
   route: RouteProp<RootStackParamList, "Dashboard">;
 };
@@ -41,8 +43,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     "none" | "accident" | "evacuation" | "sos"
   >("none");
   const [isAlert, setIsAlert] = useState(false);
-
-  const { isAuthenticated, status, user } = useSelector(
+  const [fetchKey, setFetchKey] = useState(0);  
+  const { isAuthenticated, status, user,dismissSupervisorAlert } = useSelector(
     (state: RootState) => state.auth
   );
   let userName = "";
@@ -52,12 +54,14 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     console.log("logged in user>> " + user._id);
     userName = `${user.firstName} ${user.lastName}`;
   }
-
   const { data, isLoading, error, fetchData }: any = useFetch(
     `${BACKEND_BASE_URL}/alert?constructionSiteId=${siteId}`,
     "GET"
   );
+
+const isFocused = useIsFocused();
   const getAlert = async () => {
+    // console.log("Fetching alert data")
     await fetchData({
       credentials: "include",
       headers: {
@@ -68,6 +72,17 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   useEffect(() => {
     getAlert();
   }, []);
+
+
+
+  useEffect(() => {
+    if(isFocused){
+      console.log('isfocused working');
+      (async () => {
+        await getAlert();
+      })();
+    }
+  },[isFocused])
 
   useEffect(() => {
     const getSite = async () => {
@@ -98,33 +113,27 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   }, []);
 
   useEffect(() => {
+    
     websocketService.connect();
 
     console.log("Connected to websocket");
 
-    websocketService.subscribeToEvent("alert", (data) => {
-      if (data === true) {
-        fetchData({
-          credentials: "include",
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
+    websocketService.subscribeToEvent("alert", (res) => {
+    console.log("Alert received>> ", res);
+      if (res === true) {
+        getAlert();
         setIsAlert(true);
       }
-
+      console.log("Alert data>> ", data);
       // setData(data);
-      // setCurrentAlertType(data.alertType);
     });
-
-    // return () => {
-    //   websocketService.disconnect();
-    // };
   }, []);
+
+
 
   /* Use this to change alert type */
   useEffect(() => {
-    console.log("Alert data>> ", data);
+    // console.log("Alert data>> ", data);
     if (data) {
       if (data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2) {
         setCurrentAlertType("accident");
@@ -205,7 +214,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
       {/* DRAWER */}
       <Box style={styles.drawer}>
-        {data && (
+        { !dismissSupervisorAlert && data && !data.resolved && (
           <DrawerSupervisor
             alertType={currentAlertType} /* alertType="sos" */
             alertData={data}
