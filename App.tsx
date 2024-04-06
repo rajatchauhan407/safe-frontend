@@ -33,7 +33,7 @@ export default function App() {
     Notifications.requestPermissionsAsync();
 
     // Set up the notification channel for Android devices.
-    Notifications.setNotificationChannelAsync('alert', {
+    Notifications.setNotificationChannelAsync('alert-notification', {
       name: 'E-mail notifications',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
@@ -48,7 +48,7 @@ export default function App() {
       },
       trigger: {
         seconds: 2,
-        channelId: 'alert',
+        channelId: 'alert-notification',
       },
     });
 
