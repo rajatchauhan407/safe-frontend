@@ -110,6 +110,9 @@ const authSlice = createSlice({
       },
       dismissAlert(state){
         state.dismissSupervisorAlert = true;
+      },
+      reviveAlert(state){
+        state.dismissSupervisorAlert = false;
       }
     },
     extraReducers:(builder)=>{
@@ -161,7 +164,7 @@ const authSlice = createSlice({
     }
 });
  
-export const {changeAuth,logout,dismissAlert} = authSlice.actions;
+export const {changeAuth,logout,dismissAlert, reviveAlert} = authSlice.actions;
 export default authSlice.reducer;
 
 
