@@ -113,14 +113,16 @@ const WorkerNavigator: React.FC = () => {
 
             //To simulate check-in successful during demo
             const sosAlertInfo = {
-              siteId: siteId,
-              workerId: userId,
-              location: {
-                latitude: 49.28300315023338,
-                longitude: -123.12037620096916,
+              role:'worker',
+              constructionSiteId: siteId,
+              userId: userId,
+              alertLocation:{
+                type:"Point",
+                coordinates:[49.28300315023338,-123.12037620096916]
               },
+              sos:true,
             };
-            const res = await fetch(`${BACKEND_BASE_URL}/sosalert`, {
+            const res = await fetch(`${BACKEND_BASE_URL}/alert`, {
               method: "POST",
               credentials: "include",
               body: JSON.stringify(sosAlertInfo),
