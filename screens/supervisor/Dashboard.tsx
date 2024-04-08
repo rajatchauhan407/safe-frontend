@@ -21,7 +21,7 @@ import websocketService from "../../services/websocket.service";
 import LocationComponent from "../../components/supervisor/Location";
 import SafeZoneWorkers from "../../components/common/safeZoneWorkers";
 import { useSelector } from "react-redux";
-import { RootState } from "../../lib/store";
+import { AppDispatch, RootState } from "../../lib/store";
 import { BACKEND_BASE_URL, LOCAL_BASE_URL } from "../../config/api";
 import useFetch from "../../hooks/useFetch";
 import { IAlert } from "../../shared/interfaces/alert.interface";
@@ -29,9 +29,10 @@ import AddUserIcon from "../../assets/icons/addUser";
 import AlertMessage from "../../components/common/alertMessage";
 import CancelAlertModal from "../../components/common/cancelAlertModal";
 import { useIsFocused } from "@react-navigation/native";
-
+import { useDispatch } from "react-redux";
 import { RootStackParamList } from "../../types/navigationTypes";
 import useRequest from "../../hooks/useRequest";
+import { reviveAlert } from "../../lib/slices/authSlice";
 type DashboardProps = {
   route: RouteProp<RootStackParamList, "Dashboard">;
 };
@@ -47,6 +48,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   const { isAuthenticated, status, user,dismissSupervisorAlert } = useSelector(
     (state: RootState) => state.auth
   );
+  const dispatch = useDispatch<AppDispatch>();
   let userName = "";
   let siteId = "";
   if (user) {
@@ -118,7 +120,9 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
     console.log("Connected to websocket");
 
+    
     websocketService.subscribeToEvent("alert", (res) => {
+      dispatch(reviveAlert());
     console.log("Alert received>> ", res);
       if (res === true) {
         getAlert();

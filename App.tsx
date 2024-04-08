@@ -57,6 +57,10 @@ export default function App() {
       console.log(notification);
     });
 
+    Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
     // Clean up the listener when the component unmounts.
     return () => subscription.remove();
   }, []);
