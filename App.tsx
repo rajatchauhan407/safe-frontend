@@ -15,26 +15,63 @@ import {
 } from "@expo-google-fonts/nunito-sans";
 import { Provider } from "react-redux";
 import { store } from "./lib/store";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    vibrationPattern: [0, 250, 250, 250]
-  }),
-});
-
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: true,
+//     shouldSetBadge: false,
+//     vibrationPattern: [0, 250, 250, 250]
+//   }),
+// });
 
 export default function App() {
+  useEffect(() => {
+    // Ask for notification permissions on iOS.
+    Notifications.requestPermissionsAsync();
 
-  useEffect(()=>{
-// This listener is fired whenever a notification is received while the app is foregrounded
-Notifications.addNotificationReceivedListener(notification => {
-  console.log(notification);
-});
-  },[])
+    // Set up the notification channel for Android devices.
+    Notifications.setNotificationChannelAsync("alert-notification", {
+      name: "E-mail notifications",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      sound: "notificationsound.wav", // Ensure this file is included in your app bundle
+    });
+
+    // Schedule a notification as an example.
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got an alert",
+        sound: "notificationsound.wav", // Ensure this file is included in your app bundle
+      },
+      trigger: {
+        seconds: 2,
+        channelId: "alert-notification",
+      },
+    });
+
+    // This listener is fired whenever a notification is received while the app is foregrounded.
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log(notification);
+      }
+    );
+
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
+
+    // Clean up the listener when the component unmounts.
+    return () => subscription.remove();
+  }, []);
+  //   useEffect(()=>{
+  // // This listener is fired whenever a notification is received while the app is foregrounded
+  // Notifications.addNotificationReceivedListener(notification => {
+  //   console.log(notification);
+  // });
+  //   },[])
+
   const [fontsLoaded] = useFonts({
     NunitoSans_400Regular,
     NunitoSans_600SemiBold,
