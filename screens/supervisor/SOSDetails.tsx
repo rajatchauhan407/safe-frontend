@@ -6,8 +6,11 @@ import LocationComponent from "../../components/supervisor/Location";
 import CommonButton from "../../components/common/button";
 import SMSModal from "../../components/supervisor/SMSModal";
 import MapComponent, { LatLng } from "../../components/common/map";
-
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../lib/store";
+import { dismissAlert } from "../../lib/slices/authSlice";
 const SOSDetails: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [siteLocation, setSiteLocation] = useState("100 W 49th Ave, Vancouver");
   const SOSLocation: LatLng = {
     latitude: 49.225105402346955,
@@ -16,6 +19,7 @@ const SOSDetails: React.FC = () => {
   const [openSMS, setOpenSMS] = useState(false);
 
   const handleSMS = () => {
+    dispatch(dismissAlert());
     setOpenSMS(true);
   };
 
