@@ -70,14 +70,14 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         iconSize: 64,
         iconColor: "#000000",
         title: "Report Emergency",
-        description: "Click to report an incident",
+        description: "Click to report an emergency",
       },
       accident: {
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
         title: "Emergency Alert",
-        description: "An emergency has been detected on-site. Follow safety procedures.",
+        description: "Click to acknowledge the alert.",
       },
       evacuation: {
         icon: WhistlesIcon,
@@ -174,7 +174,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
           borderRadius: 24,
         }}
       >
-        <VStack alignItems="center" space="md">
+        <VStack alignItems="center" space="sm">
           {showIcon && (
             <ButtonIcon
               as={Icon}

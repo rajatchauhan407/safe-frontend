@@ -59,7 +59,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
 
   return (
     <VStack space="md">
-      <Typography textAlign="center" bold>Incident on {location}</Typography>
+      <Typography textAlign="center" bold>Location: {location}</Typography>
       <AlertButton user="worker"  onPress={handleIncidentPress} emergency={type}/>
 
       <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>

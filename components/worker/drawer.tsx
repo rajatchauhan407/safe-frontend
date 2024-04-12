@@ -6,7 +6,6 @@ import { View, Text, TouchableOpacity, StyleSheet, PanResponder, Animated } from
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertReceived from "./alertReceived";
 import Typography from "../common/typography";
-import { set } from "@gluestack-style/react";
 
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation";
@@ -76,7 +75,7 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,wor
             <Typography style={styles.drawerText}>
               {alertType === "none"
                 ? "Great! There's no alert to report"
-                : "You have received 01 Alert."}
+                : "You have received an alert!"}
             </Typography>
           </View>
         </View>
@@ -85,7 +84,7 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,wor
             {alertType !== "none" && (
               <AlertReceived 
                 type={alertType}
-                location={"Zone 3 - Building B"}
+                location={"This is hard coded for now, but should be the location of the alert."}
                 emergency={emergencyType} 
                 level={level} 
                 workersInjured={workersInjured} />

@@ -193,9 +193,9 @@ if (user) {
       <CustomModal
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation(false)}
-        icon={<SucessIcon size={40} color="#00AE8C" focussed={false} />}
-        title="Success"
-        description="The SMS Alert messages to on-site First Aid Workers have been sent."
+        icon={<SucessIcon color={"#00AE8C"} size={60} focussed={false} />}
+        title="SMS Alert Sent!"
+        description="Your alert has been successfully sent."
         buttonText="Go to Dashboard"
         buttonAction={() => {
           navigation.navigate("Dashboard" as never);

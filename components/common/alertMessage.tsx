@@ -26,6 +26,9 @@ const AlertMessage: React.FC<AlertMessageProps> = ({
         duration: 500, 
         useNativeDriver: true,
       }).start();
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000); // Close the alert after 3 seconds
     } else {
       Animated.timing(slideAnim, {
         toValue: 0,

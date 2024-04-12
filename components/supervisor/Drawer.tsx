@@ -103,7 +103,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
               ? "Great! There's no alert to report."
               : alertType === "activeEvacuation"
               ? "You are currently under evacuation."
-              : "You have received 01 Alert."}
+              : "You have received 1 Alert."}
           </Typography>
         </View>
       </View>
