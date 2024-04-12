@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacityProps } from "react-native";
+import { TouchableOpacityProps, Text } from "react-native";
 import { Button, ButtonIcon, VStack, Card } from "@gluestack-ui/themed";
 import SosIcon from "../../assets/icons/sosButton";
 import SosRIcon from "../../assets/icons/sosRButton";
@@ -73,7 +73,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Accident Reported",
+        title: "Emergency On-Site",
         description: null,
       },
       evacuation: {
@@ -89,14 +89,14 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: HazardIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Accident Reported",
+        title: "Emergency Level 1 or 2",
         description: "Go to emergency details",
       },
       evacuation: {
         icon: HazardWIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Hazard Reported",
+        title: "Emergency Level 3 ",
         description: "Go to emergency details",
       },
       sos: {
@@ -135,14 +135,18 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     return { ...baseStyle, ...disabledStyle, ...textColorStyle };
   };
 
-  const {
-    icon: Icon,
+  const iconMappingEntry = iconMapping[user as keyof typeof iconMapping]?.[emergency as keyof typeof iconMapping[keyof typeof iconMapping]];
+
+  if (!iconMappingEntry) {
+    return <Text>No icon mapping found for the combination of user: {user} and emergency: {emergency}</Text>;
+  }
+
+  const { icon: Icon,
     iconSize: buttonIconSize,
     title,
-    description,
-  } = iconMapping[user as keyof typeof iconMapping][
-    emergency as keyof (typeof iconMapping)[keyof typeof iconMapping]
-  ];
+    description } = 
+    iconMapping[user as keyof typeof iconMapping][emergency as keyof (typeof iconMapping)[keyof typeof iconMapping]];
+
 
   const adjustedIconSize =
     typeof buttonIconSize === "number" ? `${buttonIconSize}px` : buttonIconSize;
@@ -181,8 +185,8 @@ const AlertButton: React.FC<AlertButtonProps> = ({
             style={{
               color: isDisabled
                 ? textStyles.disabled.textColor
-                : textStyles[emergency]
-                ? textStyles[emergency].textColor
+                : textStyles[emergency as keyof typeof textStyles]
+                ? textStyles[emergency as keyof typeof textStyles].textColor
                 : textStyles.default.textColor,
               textTransform: "uppercase",
               fontFamily: "NunitoSans_700Bold",
@@ -197,9 +201,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                 style={{
                   color: isDisabled
                     ? textStyles.disabled.textColor
-                    : textStyles[emergency]
-                    ? textStyles[emergency].textColor
-                    : textStyles.default.textColor,
+                    : textStyles[emergency as keyof typeof textStyles]?.textColor || textStyles.default.textColor,
                 }}
               >
                 {description}
