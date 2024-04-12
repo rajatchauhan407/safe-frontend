@@ -84,7 +84,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         iconSize: 176,
         iconColor: "#000000",
         title: "Evacuation Alert",
-        description: "An evacuation has been initiated. Proceed calmly to the safe zone.",
+        description: "Proceed calmly to the safe zone.",
       },
     },
     supervisor: {

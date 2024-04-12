@@ -235,7 +235,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         </ButtonText>
       </CommonButton>
 
-      {/* CANEL ALERT MODAL */}
+      {/* CANCEL ALERT MODAL */}
       <CancelAlertModal showModal={cancelAlert} setShowModal={setCancelAlert} />
     </VStack>
   );

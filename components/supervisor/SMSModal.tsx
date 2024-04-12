@@ -54,6 +54,8 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
   const [checkedContacts, setCheckedContacts] = React.useState<string[]>([]);
   const [message, setMessage] = React.useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [alertSent, setAlertSent] = useState(false);
+
   // ===============================================
 // Getting the construction Site Id from redux slice
 const { isAuthenticated, status, user } = useSelector(
@@ -177,7 +179,7 @@ if (user) {
                     mt="$4"
                     onPress={() => {
                       setShowModal(false);
-                      navigation.navigate("Dashboard" as never);
+                      navigation.navigate("Dashboard", { alertSent: true });
                     }}
                   >
                   <Typography textDecorationLine="underline">

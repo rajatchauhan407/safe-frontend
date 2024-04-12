@@ -22,14 +22,14 @@ interface AlertReceivedProps {
 
 interface EmergencyItem {
   text: string;
-  icon: React.FC<any>; // Change iconName to icon
+  icon: React.FC<any>; 
 }
 
 const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   
   const handleIncidentPress = () => {
-    // Handle incident press
+    // DISMISS THE ALERT OF THE WORKER HERE
   };
   console.log(
     `AlertReceived: type: ${type}, emergency: ${emergency}, location: ${location}, level: ${level}, workersInjured: ${workersInjured}`
@@ -74,7 +74,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location
 
       {type === 'evacuation' && (
         <CommonButton variant="underline" onPress={navigateToSafeZone} buttonTextSize={18} >
-          <Typography>Go to Safe Zone</Typography> 
+          <Typography>Click to view the Safe Zone</Typography> 
         </CommonButton>
       )}
     </VStack>
