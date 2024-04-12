@@ -23,20 +23,25 @@ const AlertMessage: React.FC<AlertMessageProps> = ({
     if (showAlert) {
       Animated.timing(slideAnim, {
         toValue: 1,
-        duration: 500, 
+        duration: 500,
         useNativeDriver: true,
       }).start();
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setShowAlert(false);
       }, 3000); // Close the alert after 3 seconds
+  
+      return () => clearTimeout(timeout);
     } else {
       Animated.timing(slideAnim, {
         toValue: 0,
-        duration: 500, 
+        duration: 500,
         useNativeDriver: true,
-      }).start();
+      }).start(() => {
+        // Optional: Callback function to handle any cleanup after animation
+      });
     }
   }, [showAlert]);
+   
 
   const handleClose = () => {
     setShowAlert(false);

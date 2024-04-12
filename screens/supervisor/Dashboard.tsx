@@ -227,7 +227,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
       </Box>
 
       {/* ALERT SENT */}
-      {showCancelAlert && (
+      {showAlertSent && (
         <Box position="absolute" top={0} right={0} left={0}>
           <AlertMessage
             backgroundColor="$success"
