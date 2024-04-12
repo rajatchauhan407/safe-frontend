@@ -45,14 +45,17 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({
       bg={"$white"}
       style={isRowLayout ? styles.rowContainer : styles.columnContainer}
     >
+      <VStack space="sm" m={0}>
         <DaysCheckIcon size={36} color={"#00AE8C"} focussed={false} />
+        <Box w="$full">
         <Typography size="md" bold>
-          {" "}
           Days without accident
         </Typography>
         <Box style={styles.daysTextContainer}>
           <Typography style={styles.daysText}>{daysWithoutAccident}</Typography>
         </Box>
+        </Box>
+      </VStack>
     </Card>
     </VStack>
   );
@@ -66,7 +69,10 @@ const styles = StyleSheet.create({
   },
   columnContainer: {
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "flex-start",
+  },
+  leftAlignText: {
+    textAlign: "left",
   },
   daysTextContainer: {
     backgroundColor: "#F8F8FF",
@@ -75,6 +81,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 20,
     paddingRight: 20,
+    alignSelf: "center",
+    marginTop: 7,
   },
   daysText: {
     fontSize: 44,
