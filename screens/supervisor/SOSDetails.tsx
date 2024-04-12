@@ -79,13 +79,13 @@ const SOSDetails: React.FC = () => {
               Send SMS to First Aid Team
             </CommonButton>
 
-            {/* SMS MODAL */}
+            {/* SMS CONFIRMATION MODAL */}
             <CustomModal
             isOpen={isOpen}
             onClose={closeModal}
             icon={<SucessIcon color={"#00AE8C"} size={60} focussed={false} />}
-            title="Success SMS Message"
-            description="The SMS alert messages to on-site First Aid Workers have been sent."
+            title="Success! SMS Alert Sent"
+            description="Your SMS alert message to on-site first aid workers have been successfully sent."
             buttonText="Go to Dashboard"
             buttonAction={() => {
               navigation.navigate("Dashboard" as never);

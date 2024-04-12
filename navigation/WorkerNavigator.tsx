@@ -155,8 +155,8 @@ const WorkerNavigator: React.FC = () => {
         isOpen={isOpen}
         onClose={closeModal}
         icon={<SucessIcon color={"#00AE8C"} size={60} focussed={false} />}
-        title="Your SOS alert has been reported to your supervisor."
-        description="On site first aid workers are on their way."
+        title="SOS Alert Reported to Supervisor"
+        description="On-site first aid workers are en route to assist you. Please remain calm."
         buttonText="Close"
         buttonAction={handleButtonAction}
       />
