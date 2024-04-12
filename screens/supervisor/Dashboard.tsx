@@ -181,14 +181,12 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           </Button> */}
 
           {/* GREETING */}
-          <Box mb={"$2"} pl={"$3"}>
             <Text>
               <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
               <Typography size="2xl" bold>
                 Prioritize safety!
               </Typography>
             </Text>
-          </Box>
 
           {/* LOCATION */}
           <LocationComponent siteLocation={siteLocation} />

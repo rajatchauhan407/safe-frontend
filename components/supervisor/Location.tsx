@@ -10,7 +10,7 @@ interface LocationProps {
 const LocationComponent: React.FC<LocationProps> = ({ siteLocation }) => {
   // console.log(`LocationComponent: siteLocation: ${siteLocation}`);
   return (
-    <HStack mt="$2" alignItems="center">
+    <HStack mt={10} mb={5} alignItems="center">
       <LocationIcon size={13} color={""} focussed={false} />
       <Typography size="md" pl={5}>
         {siteLocation}
