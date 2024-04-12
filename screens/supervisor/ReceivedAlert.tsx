@@ -17,7 +17,7 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
           {/* REPORTED BY */}
           <Box>
             <Typography>Reported by:</Typography>
-            <Typography bold>Rajat Chauhan</Typography>
+            <Typography bold>Cindy Charvet - This is hardcoded now</Typography>
           </Box>
 
           {/* EMERGENCY DETAILS */}

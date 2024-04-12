@@ -78,7 +78,7 @@ const MainNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       {/* Worker - Alert Details */}
-      <Stack.Screen name="Incident Report" component={AlertReport} />
+      <Stack.Screen name="Emergency Report" component={AlertReport} />
       {/* Worker - Evacuation Alert */}
       <Stack.Screen name="Evacuation Alert" component={WorkerSafeZone} />
       {/* Supervisor - Checked In Workers Screen */}

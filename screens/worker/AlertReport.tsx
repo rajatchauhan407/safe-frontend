@@ -249,7 +249,7 @@ const AlertReport: React.FC = () => {
     return (
       <FormControl>
         <VStack space="md">
-          <Typography bold>Photo of Incident Location (Optional)</Typography>
+          <Typography bold>Photo of Emergency Location (Optional)</Typography>
           {!showCamera && (
             <CommonButton
               variant="rounded"
@@ -403,7 +403,7 @@ const AlertReport: React.FC = () => {
                   {/* Render Textarea if no emergency is selected */}
                   {reportType === null && (
                     <FormControl>
-                      <Typography bold>Describe the incident*</Typography>
+                      <Typography bold>Describe the emergency*</Typography>
                       <Textarea>
                         <TextareaInput
                           value={emergencyText}
@@ -456,7 +456,7 @@ const AlertReport: React.FC = () => {
             {/* FIELD 5 - LOCATION */}
             <FormControl>
               <VStack space="sm">
-                <Typography bold>Incident Location*</Typography>
+                <Typography bold>Emergency Location*</Typography>
                 <Input
                   variant="outline"
                   size="md"

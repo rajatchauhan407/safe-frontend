@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { VStack, Box, HStack, Image, ButtonText } from "@gluestack-ui/themed";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import Typography from "../common/typography";
+import LocationIcon from "../../assets/icons/location";
 import AlertButton from "../common/alertButton";
 import CommonButton from "../common/button";
 import FallIcon from "../../assets/icons/fall";
@@ -161,14 +162,22 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       </HStack>
 
       {/* ALERT LOCATION */}
-      <LocationComponent siteLocation={location} />
+      <Box mt={10}>
+        <Typography>Emergency Location:</Typography>
+          <HStack mt={5} mb={5} alignItems="center">
+            <LocationIcon size={18} color={""} focussed={false} />
+              <Typography bold size="lg" pl={5}>
+                {location}
+              </Typography>
+          </HStack>
+      </Box>
 
       {/* IMAGE REPORT */}
       {imageUrl ? (
         <Image
           size="2xl"
           w={"$full"}
-          h={"$1/5"}
+          h={400}
           borderRadius={10}
           source={{
             uri: imageUrl,
@@ -176,14 +185,15 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
           alt={`${emergency} example`}
         />
       ) : (
-        <Box w={"$full"} h={"$0"}>
-          <Typography>No image was sent with the report</Typography>
-        </Box>
+        null
+        // <Box w={"$full"} h={50} justifyContent="center">
+        //   <Typography textAlign="left">No image was sent with the report</Typography>
+        // </Box>
       )}
 
       {/* EMERGENCY TYPE */}
-      <Box mb={"$3"}>
-        <Typography bold>Select type of emergency</Typography>
+      <Box mt={10} mb={"$1"}>
+        <Typography bold>Select the type of emergency</Typography>
       </Box>
       <GroupButton
         onSelect={handleEmergencyTypeSelect}
