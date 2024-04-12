@@ -11,7 +11,7 @@ import Typography from "./typography";
 
 interface AlertButtonProps extends TouchableOpacityProps {
   user?: "worker" | "supervisor";
-  emergency?: "report" | "accident" | "evacuation" | "sos" | "oneWhistle";
+  emergency?: "report" | "accident" | "evacuation" | "sos" | "oneWhistle" | "threeWhistles";
   level?: number;
   isDisabled?: boolean;
   showIcon?: boolean;
@@ -57,6 +57,9 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       oneWhistle: {
         backgroundColor: "#FD9201",
       },
+      threeWhistles: {
+        backgroundColor: "#D0080F",
+      },
     },
   };
 
@@ -66,22 +69,22 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: SosRIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Report Incident",
+        title: "Report Emergency",
         description: "Click to report an incident",
       },
       accident: {
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Emergency On-Site",
-        description: null,
+        title: "Emergency Alert",
+        description: "An emergency has been detected on-site. Follow safety procedures.",
       },
       evacuation: {
         icon: WhistlesIcon,
         iconSize: 176,
         iconColor: "#000000",
-        title: "Active Evacuation",
-        description: null,
+        title: "Evacuation Alert",
+        description: "An evacuation has been initiated. Proceed calmly to the safe zone.",
       },
     },
     supervisor: {
@@ -89,29 +92,36 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: HazardIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Emergency Level 1 or 2",
-        description: "Go to emergency details",
+        title: "Alert Level 1 or 2",
+        description: "Click to view emergency details",
       },
       evacuation: {
         icon: HazardWIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Emergency Level 3 ",
-        description: "Go to emergency details",
+        title: "Alert Level 3 ",
+        description: "Click to view emergency details",
       },
       sos: {
         icon: SosIcon,
         iconSize: 64,
         iconColor: "#000000",
         title: "SOS Reported",
-        description: "Go to SOS details",
+        description: "Click to view SOS details",
       },
       oneWhistle: {
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "1 WHISTLE ALERT",
-        description: null,
+        title: "Alert Workers",
+        description: "Click to trigger a sound alert.",
+      },
+      threeWhistles: {
+        icon: WhistlesIcon,
+        iconSize: 176,
+        iconColor: "#000000",
+        title: "Start Evacuation",
+        description: "Click to trigger an evacuation alarm.",
       },
     },
   };
@@ -121,6 +131,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     accident: { textColor: "#1E1E1E" },
     evacuation: { textColor: "#ffffff" },
     sos: { textColor: "#ffffff" },
+    threeWhistles: { textColor: "#ffffff" },
     default: { textColor: "#000000" },
     disabled: { textColor: "#1E1E1E" },
   };

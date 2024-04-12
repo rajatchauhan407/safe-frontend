@@ -42,10 +42,10 @@ interface ModalProps {
 }
 // Emergency Contacts==============================
 const emergencyContacts = [
-  { id: "1", name: "911", phoneNumber: "+16726736640" },
+  { id: "1", name: "Emergency Services (911)", phoneNumber: "+16726736640" },
   { id: "2", name: "BC Workers", phoneNumber: "+16729998362" },
-  { id: "3", name: "FireFighter", phoneNumber: "+16043633286" },
-  { id: "4", name: "Manager", phoneNumber: "+16047206967" },
+  { id: "3", name: "Fire Department", phoneNumber: "+16043633286" },
+  { id: "4", name: "Site Manager", phoneNumber: "+16047206967" },
   { id: "5", name: "First Aid Team", phoneNumber: "+17789565141" },
 ];
 // ===============================================
@@ -118,7 +118,7 @@ if (user) {
               {/* TITLE */}
               <Heading mt="$4" textAlign="center">
                 <Typography bold size="xl">
-                  Your emergency whistle has been triggered.
+                  Emergency Alert Sent
                 </Typography>
               </Heading>
             </VStack>
@@ -128,7 +128,7 @@ if (user) {
             <ModalBody width="$full" m="$0">
               {/* CHECKLIST TITLE */}
               <Text textAlign="center" py="$3" borderBottomWidth={1}>
-                <Typography bold>Choose SMS alert contacts</Typography>
+                <Typography bold>Select SMS Alert Contacts</Typography>
               </Text>
               {/* CHECKLIST */}
               <VStack space="md" mt="$3">
@@ -168,14 +168,20 @@ if (user) {
                   }}
                 >
                   <ButtonText>
-                    <Typography>Send</Typography>
+                    <Typography bold>Send SMS Alerts</Typography>
                   </ButtonText>
                 </CommonButton>
 
                 {/* SKIP SMS  */}
-                <ModalCloseButton mt="$4" onPress={() => setShowModal(false)}>
+                <ModalCloseButton
+                    mt="$4"
+                    onPress={() => {
+                      setShowModal(false);
+                      navigation.navigate("Dashboard" as never);
+                    }}
+                  >
                   <Typography textDecorationLine="underline">
-                    Skip SMS Messages
+                    Skip sending SMS
                   </Typography>
                 </ModalCloseButton>
               </VStack>

@@ -164,7 +164,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       <LocationComponent siteLocation={location} />
 
       {/* IMAGE REPORT */}
-      {/* {imageUrl ? (
+      {imageUrl ? (
         <Image
           size="2xl"
           w={"$full"}
@@ -179,7 +179,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         <Box w={"$full"} h={"$0"}>
           <Typography>No image was sent with the report</Typography>
         </Box>
-      )} */}
+      )}
 
       {/* EMERGENCY TYPE */}
       <Box mb={"$3"}>
@@ -194,15 +194,15 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
         {selectedButton === "One Whistle" && (
           <AlertButton
             user="supervisor"
-            emergency="accident"
+            emergency="oneWhistle"
             onPress={handleIncidentPress}
           />
         )}
 
         {selectedButton === "Evacuation" && (
           <AlertButton
-            user="worker"
-            emergency="evacuation"
+            user="supervisor"
+            emergency="threeWhistles"
             onPress={handleIncidentPress}
           />
         )}
