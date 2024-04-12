@@ -126,9 +126,9 @@ const CheckedInList: React.FC = () => {
 
     // Update button text based on sorting state
     if (sortCheckedFirst) {
-      setButtonText("Checked In");
+      setButtonText("On-Site");
     } else {
-      setButtonText("Checked Out");
+      setButtonText("Off-Site");
     }
   };
 
