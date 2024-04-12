@@ -145,12 +145,7 @@ interface BoxWithIconProps {
 }
 
 const BoxWithIcon: React.FC<BoxWithIconProps> = ({ icon: IconComponent, text, level }) => {
-  let iconColor;
-  if (level === 3) {
-    iconColor = '#D0080F';
-  } else {
-    iconColor = '#FD9201';
-  }
+  const iconColor = '#D0080F';
   return (
     <VStack space='sm' width={110} height={110} style={{ alignItems: 'center', justifyContent:'center' }} p={10} borderWidth={2} borderColor='#C7C7C7' borderRadius={22}>
       <IconComponent size={34} color={iconColor} />
@@ -166,12 +161,7 @@ interface BoxWithNumberProps {
 }
   
 const BoxWithNumber: React.FC<BoxWithNumberProps> = ({ number, text, level }) => {
-  let textColor;
-  if (level === 3) {
-    textColor = '#D0080F'; 
-  } else {
-    textColor = '#FD9201';
-  }
+  const textColor = '#D0080F';
   return (
     <VStack style={{ alignItems: 'center'}}>
       <Box style={{ alignItems: 'center', justifyContent:'center' }} p={10} width={110} height={110} borderWidth={2} borderColor='#C7C7C7' borderRadius={22}>
