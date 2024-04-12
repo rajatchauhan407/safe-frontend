@@ -84,10 +84,11 @@ const SOSDetails: React.FC = () => {
             isOpen={isOpen}
             onClose={closeModal}
             icon={<SucessIcon color={"#00AE8C"} size={60} focussed={false} />}
-            title="Success! SMS Alert Sent"
-            description="Your SMS alert message to on-site first aid workers have been successfully sent."
+            title="SMS Alert Sent!"
+            description="Your alert to on-site first aid workers has been successfully sent."
             buttonText="Go to Dashboard"
             buttonAction={() => {
+              setIsOpen(false);
               navigation.navigate("Dashboard" as never);
             }}
           />
