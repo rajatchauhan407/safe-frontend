@@ -47,7 +47,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let siteId = "";
@@ -93,6 +93,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
           body: JSON.stringify(workerInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
         });
         const data = await res.json();

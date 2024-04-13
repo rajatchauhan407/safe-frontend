@@ -31,7 +31,7 @@ const CheckedInList: React.FC = () => {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [sortCheckedFirst, setSortCheckedFirst] = useState<boolean>(true);
   const [buttonText, setButtonText] = useState<string>("Sort");
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let siteID = "";
@@ -52,6 +52,7 @@ const CheckedInList: React.FC = () => {
         body: JSON.stringify(siteId),
         headers: {
           "Content-type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
       });
       const data = await res.json();

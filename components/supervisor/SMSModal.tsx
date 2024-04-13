@@ -58,7 +58,7 @@ const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
 
   // ===============================================
 // Getting the construction Site Id from redux slice
-const { isAuthenticated, status, user } = useSelector(
+const { isAuthenticated, status, user, token } = useSelector(
   (state: RootState) => state.auth
 );
 let siteId = "";
@@ -92,11 +92,19 @@ if (user) {
           return null;
         })
         .filter(Boolean);
+
+        const header = {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        };
+
       await axios.post(`${BACKEND_BASE_URL}/sms`, {
         contacts: contactsArray,
         // message: message,
         constructionSiteId: siteId,
-      });
+      },header);
       console.log("SMS sent successfully");
       console.log("Checked Contacts:", checkedContacts);
     } catch (error) {

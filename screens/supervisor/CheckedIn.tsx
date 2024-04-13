@@ -15,7 +15,7 @@ const CheckedIn: React.FC = () => {
   const [currentAlertType, setCurrentAlertType] = useState<
     "none" | "accident" | "evacuation" | "sos"
   >("none");
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let userName = "";
@@ -38,6 +38,7 @@ const CheckedIn: React.FC = () => {
           body: JSON.stringify(siteInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
         });
         const data = await res.json();

@@ -46,7 +46,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     }
   }, [route.params]);
 
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let siteId = "";
@@ -54,9 +54,11 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   let userName = "";
   if (user) {
     console.log("logged in user>> " + user._id);
+   
     userId = user._id;
     siteId = user.constructionSiteId || "";
     userName = `${user.firstName} ${user.lastName}`;
+    
   }
 
   const { data, isLoading, error, fetchData }: any = useFetch(
@@ -106,6 +108,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           body: JSON.stringify(workerInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}` 
           },
         });
         const data = await res.json();
@@ -141,6 +144,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           body: JSON.stringify(siteInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}` 
           },
         });
         const data = await res.json();
@@ -207,6 +211,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
                 body: JSON.stringify(checkInInfo),
                 headers: {
                   "Content-type": "application/json",
+                  "Authorization": `Bearer ${token}` 
                 },
               });
               const data = await res.json();
@@ -276,6 +281,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           body: JSON.stringify(checkOutInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}` 
           },
         });
         const data = await res.json();

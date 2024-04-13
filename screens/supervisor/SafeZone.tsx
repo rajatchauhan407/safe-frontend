@@ -18,7 +18,7 @@ const SafeZone: React.FC<any> = () => {
     "none" | "accident" | "evacuation" | "sos"
   >("none");
     // const {alertData} = route.params;
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let userName = "";
@@ -41,6 +41,7 @@ const SafeZone: React.FC<any> = () => {
           body: JSON.stringify(siteInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
         });
         const data = await res.json();
