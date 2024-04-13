@@ -51,8 +51,8 @@ const LoginScreen: React.FC = () => {
   // =============================================================
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loginAs, setLoginAs] = useState<string>("");
-  const [workerID, setWorkerID] = useState<string>("");
-  const [supervisorID, setSupervisorID] = useState<string>("");
+  const [workerID, setWorkerID] = useState<string>("100391546");
+  const [supervisorID, setSupervisorID] = useState<string>("100391540");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -68,6 +68,24 @@ const LoginScreen: React.FC = () => {
     Keyboard.dismiss();
     setShowPassword((showState) => !showState);
   };
+
+  // =========================DEMO PASSWORD=========================
+  const demoPasswords = {
+    worker: "100391546",
+    supervisor: "100391540"
+  };
+   // Function to handle role selection and set appropriate credentials
+   const selectRole = (role: 'Worker' | 'Supervisor') => {
+    setLoginAs(role);
+    if (role === "Worker") {
+      setWorkerID("100391546"); // Predefined Worker ID
+      setPassword(demoPasswords.worker); // Predefined Worker Password
+    } else {
+      setSupervisorID("100391540"); // Predefined Supervisor ID
+      setPassword(demoPasswords.supervisor); // Predefined Supervisor Password
+    }
+  };
+
 
   // const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
@@ -207,7 +225,7 @@ const LoginScreen: React.FC = () => {
                       variant={loginAs === "Supervisor" ? "loginRounded" : "loginOutline"}
                       isLogIn={true}
                       /* showIcon={true} */
-                      onPress={() => setLoginAs("Supervisor")}
+                      onPress={() => selectRole("Supervisor")}
                     >
                       <HStack space="sm">
                         <Box>
@@ -233,7 +251,7 @@ const LoginScreen: React.FC = () => {
                     <CommonButton
                       variant={loginAs === "Worker" ? "loginRounded" : "loginOutline"}
                       isLogIn={true}
-                      onPress={() => setLoginAs("Worker")}
+                      onPress={() => selectRole("Worker")}
                     >
                       <HStack space="sm">
                         <Box>
