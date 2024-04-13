@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { VStack, Card, Text, Box } from "@gluestack-ui/themed";
+import { VStack, Card, Box } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import Typography from "./typography";
 import DaysCheckIcon from "../../assets/icons/daysCheck";
@@ -36,37 +36,36 @@ const CommonDaysAccidentCard: React.FC<CommonDaysAccidentCardProps> = ({
   }, []);
 
   return (
-    <VStack space="sm" m={0}>
     <Card
       size="md"
       variant="elevated"
       m={0}
       rounded={24}
       bg={"$white"}
-      style={isRowLayout ? styles.rowContainer : styles.columnContainer}
     >
+      <VStack space="sm" m={0} alignItems={isRowLayout ? "center" : "flex-start"} style={isRowLayout ? styles.rowContainer : styles.columnContainer}>
         <DaysCheckIcon size={36} color={"#00AE8C"} focussed={false} />
         <Typography size="md" bold>
-          {" "}
           Days without accident
         </Typography>
         <Box style={styles.daysTextContainer}>
           <Typography style={styles.daysText}>{daysWithoutAccident}</Typography>
         </Box>
+      </VStack>
     </Card>
-    </VStack>
   );
 };
 
 const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
   columnContainer: {
     flexDirection: "column",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
   daysTextContainer: {
     backgroundColor: "#F8F8FF",
@@ -75,6 +74,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 20,
     paddingRight: 20,
+    alignSelf: "center",
+    marginTop: 7,
   },
   daysText: {
     fontSize: 44,

@@ -311,7 +311,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   );
 
   const handleIncidentPress = () => {
-    navigation.navigate("Incident Report" as never);
+    navigation.navigate("Emergency Report" as never);
   };
 
   const GreetingSection = () => (
@@ -350,7 +350,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           backgroundColor="#00AE8C"
           textColor="#1E1E1E"
           iconColor="#1E1E1E"
-          text="Your incident has been reported"
+          text="Your emergency has been reported"
         />
       </Box>;
 

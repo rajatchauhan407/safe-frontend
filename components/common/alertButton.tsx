@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacityProps } from "react-native";
+import { TouchableOpacityProps, Text } from "react-native";
 import { Button, ButtonIcon, VStack, Card } from "@gluestack-ui/themed";
 import SosIcon from "../../assets/icons/sosButton";
 import SosRIcon from "../../assets/icons/sosRButton";
@@ -11,7 +11,7 @@ import Typography from "./typography";
 
 interface AlertButtonProps extends TouchableOpacityProps {
   user?: "worker" | "supervisor";
-  emergency?: "report" | "accident" | "evacuation" | "sos" | "oneWhistle";
+  emergency?: "report" | "accident" | "evacuation" | "sos" | "oneWhistle" | "threeWhistles";
   level?: number;
   isDisabled?: boolean;
   showIcon?: boolean;
@@ -57,6 +57,9 @@ const AlertButton: React.FC<AlertButtonProps> = ({
       oneWhistle: {
         backgroundColor: "#FD9201",
       },
+      threeWhistles: {
+        backgroundColor: "#D0080F",
+      },
     },
   };
 
@@ -66,22 +69,22 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: SosRIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Report Incident",
-        description: "Click to report an incident",
+        title: "Report Emergency",
+        description: "Click to report an emergency",
       },
       accident: {
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Accident Reported",
-        description: null,
+        title: "Emergency Alert",
+        description: "Click to acknowledge the alert.",
       },
       evacuation: {
         icon: WhistlesIcon,
         iconSize: 176,
         iconColor: "#000000",
-        title: "Active Evacuation",
-        description: null,
+        title: "Evacuation Alert",
+        description: "Proceed calmly to the safe zone.",
       },
     },
     supervisor: {
@@ -89,29 +92,36 @@ const AlertButton: React.FC<AlertButtonProps> = ({
         icon: HazardIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Accident Reported",
-        description: "Go to emergency details",
+        title: "Alert Level 1 or 2",
+        description: "Click to view emergency details",
       },
       evacuation: {
         icon: HazardWIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "Hazard Reported",
-        description: "Go to emergency details",
+        title: "Alert Level 3 ",
+        description: "Click to view emergency details",
       },
       sos: {
         icon: SosIcon,
         iconSize: 64,
         iconColor: "#000000",
         title: "SOS Reported",
-        description: "Go to SOS details",
+        description: "Click to view SOS details",
       },
       oneWhistle: {
         icon: WhistleIcon,
         iconSize: 64,
         iconColor: "#000000",
-        title: "1 WHISTLE ALERT",
-        description: null,
+        title: "Alert Workers",
+        description: "Click to trigger a sound alert.",
+      },
+      threeWhistles: {
+        icon: WhistlesIcon,
+        iconSize: 176,
+        iconColor: "#000000",
+        title: "Start Evacuation",
+        description: "Click to trigger an evacuation alarm.",
       },
     },
   };
@@ -121,6 +131,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     accident: { textColor: "#1E1E1E" },
     evacuation: { textColor: "#ffffff" },
     sos: { textColor: "#ffffff" },
+    threeWhistles: { textColor: "#ffffff" },
     default: { textColor: "#000000" },
     disabled: { textColor: "#1E1E1E" },
   };
@@ -135,14 +146,18 @@ const AlertButton: React.FC<AlertButtonProps> = ({
     return { ...baseStyle, ...disabledStyle, ...textColorStyle };
   };
 
-  const {
-    icon: Icon,
+  const iconMappingEntry = iconMapping[user as keyof typeof iconMapping]?.[emergency as keyof typeof iconMapping[keyof typeof iconMapping]];
+
+  if (!iconMappingEntry) {
+    return <Text>No icon mapping found for the combination of user: {user} and emergency: {emergency}</Text>;
+  }
+
+  const { icon: Icon,
     iconSize: buttonIconSize,
     title,
-    description,
-  } = iconMapping[user as keyof typeof iconMapping][
-    emergency as keyof (typeof iconMapping)[keyof typeof iconMapping]
-  ];
+    description } = 
+    iconMapping[user as keyof typeof iconMapping][emergency as keyof (typeof iconMapping)[keyof typeof iconMapping]];
+
 
   const adjustedIconSize =
     typeof buttonIconSize === "number" ? `${buttonIconSize}px` : buttonIconSize;
@@ -159,7 +174,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
           borderRadius: 24,
         }}
       >
-        <VStack alignItems="center" space="md">
+        <VStack alignItems="center" space="sm">
           {showIcon && (
             <ButtonIcon
               as={Icon}
@@ -181,8 +196,8 @@ const AlertButton: React.FC<AlertButtonProps> = ({
             style={{
               color: isDisabled
                 ? textStyles.disabled.textColor
-                : textStyles[emergency]
-                ? textStyles[emergency].textColor
+                : textStyles[emergency as keyof typeof textStyles]
+                ? textStyles[emergency as keyof typeof textStyles].textColor
                 : textStyles.default.textColor,
               textTransform: "uppercase",
               fontFamily: "NunitoSans_700Bold",
@@ -197,9 +212,7 @@ const AlertButton: React.FC<AlertButtonProps> = ({
                 style={{
                   color: isDisabled
                     ? textStyles.disabled.textColor
-                    : textStyles[emergency]
-                    ? textStyles[emergency].textColor
-                    : textStyles.default.textColor,
+                    : textStyles[emergency as keyof typeof textStyles]?.textColor || textStyles.default.textColor,
                 }}
               >
                 {description}

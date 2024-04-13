@@ -31,7 +31,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, icon, title,
               <View style={styles.iconContainer}>
                 {icon}
               </View>
-              <Typography size="md" style={styles.title}>{title}</Typography>
+              <Typography size="lg" style={styles.title}>{title}</Typography>
               <Typography size="md" style={styles.description}>{description}</Typography>
               <Box style={{ width: '100%' }}>
                 <CommonButton
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   iconContainer: {
     marginBottom: 20,
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'center',
     marginBottom: 20,
+    lineHeight: 22,
   },
 });
 

@@ -130,9 +130,9 @@ const SafeZoneList: React.FC = () => {
 
     // Update button text based on sorting state
     if (sortOnZoneFirst) {
-      setButtonText("On-Site");
+      setButtonText("On-Safe Zone");
     } else {
-      setButtonText("Off-Site");
+      setButtonText("Off-Safe Zone");
     }
   };
 

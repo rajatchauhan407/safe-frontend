@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
-import SMSModal from "../../components/supervisor/SMSModal";
+import ScreenLayout from "../../components/layout/screenLayout";
 import { Button, ButtonText } from "@gluestack-ui/themed";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../lib/store";
@@ -41,24 +40,16 @@ const Profile: React.FC = () => {
     dispatch(logout());
     navigation.navigate("Login");
   };
+
   return (
-    <View>
-      <Text>Profile Screen Supervisor</Text>
-      <Button onPress={() => setOpenSMS(true)}>
-        <ButtonText>Open SMS again</ButtonText>
-      </Button>
-      <SMSModal showModal={openSMS} setShowModal={setOpenSMS} />
-
-      <Button onPress={() => setCancelAlert(true)} bg="$neutral">
-        <ButtonText>Cancel Alert Modal</ButtonText>
-      </Button>
-      <CancelAlertModal showModal={cancelAlert} setShowModal={setCancelAlert} />
-
-      <Button onPress={handleLogout} bg="$highlight">
-        <ButtonText>Logout</ButtonText>
-      </Button>
-    </View>
-  );
+    <>  
+    <ScreenLayout>
+        <Button onPress={handleLogout} bg="$highlight">
+          <ButtonText>Logout</ButtonText>
+        </Button>
+    </ScreenLayout>
+    </>
+    );
 };
 
 export default Profile;

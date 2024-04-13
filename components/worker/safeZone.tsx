@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Image } from 'react-native';
 import { VStack, Box } from '@gluestack-ui/themed';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Typography from '../common/typography';
@@ -25,6 +26,7 @@ interface WorkerSafeZoneProps {
     level?: number;
     workersInjured?: number;
     route: any;
+    imageUrl?: string;
 }
 
 interface EmergencyItem {
@@ -39,7 +41,8 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     location, 
     level = 0, 
     workersInjured = 0,
-    route
+    route,
+    imageUrl
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -76,6 +79,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
 
   
   const handleIncidentPress = () => {
+    // DISMISS THE ALERT OF THE WORKER HERE
     // onSafeConfirmation(); // Callback to notify parent component (Dashboard)
     const createSafeZoneWorker = async () => {
       try {
@@ -108,14 +112,23 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
             <Typography textAlign="center" bold>Remain calm and proceed to safe zone</Typography>
 
             <VStack style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={alertData.emergencyType} type={type}  />
-                <BoxWithNumber number={alertData.level} text={`Level`} type={type} />
-                <BoxWithNumber number={alertData.workersInjured} text={`Workers Injured`} type={type} />
+                <BoxWithIcon icon={selectedEmergency?.icon || DangerIcon} text={alertData.emergencyType} level={level}  />
+                <BoxWithNumber number={alertData.level} text={`Level`} level={level} />
+                <BoxWithNumber number={alertData.workersInjured} text={`Workers Injured`} level={level} />
             </VStack>
 
             <LocationSafeZone />
             
-            {/* ADD IMAGE OF THE SAFE ZONE - HARDCODED FROM S3 BUCKET */}
+            {imageUrl && (
+              <Image
+              style={{ width: '100%', height: 400, borderRadius: 10 }}
+              source={{
+                uri: imageUrl,
+              }}
+              alt={"Safe zone"}
+            />
+            
+            )}
 
             <CommonButton variant="rounded" action='secondary'  onPress={handleIncidentPress} buttonTextSize={24} >
                 I am safe
@@ -128,11 +141,11 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
 interface BoxWithIconProps {
   icon: React.FC<any>;
   text: string;
-  type: 'accident' | 'evacuation';
+  level: number;
 }
 
-const BoxWithIcon: React.FC<BoxWithIconProps> = ({ icon: IconComponent, text, type }) => {
-  const iconColor = type === 'accident' ? '#FD9201' : '#D0080F';
+const BoxWithIcon: React.FC<BoxWithIconProps> = ({ icon: IconComponent, text, level }) => {
+  const iconColor = '#D0080F';
   return (
     <VStack space='sm' width={110} height={110} style={{ alignItems: 'center', justifyContent:'center' }} p={10} borderWidth={2} borderColor='#C7C7C7' borderRadius={22}>
       <IconComponent size={34} color={iconColor} />
@@ -144,11 +157,11 @@ const BoxWithIcon: React.FC<BoxWithIconProps> = ({ icon: IconComponent, text, ty
 interface BoxWithNumberProps {
   number: number;
   text: string;
-  type: 'accident' | 'evacuation';
+  level: number;
 }
   
-const BoxWithNumber: React.FC<BoxWithNumberProps> = ({ number, text, type }) => {
-  const textColor = type === 'accident' ? '#FD9201' : '#D0080F';
+const BoxWithNumber: React.FC<BoxWithNumberProps> = ({ number, text, level }) => {
+  const textColor = '#D0080F';
   return (
     <VStack style={{ alignItems: 'center'}}>
       <Box style={{ alignItems: 'center', justifyContent:'center' }} p={10} width={110} height={110} borderWidth={2} borderColor='#C7C7C7' borderRadius={22}>

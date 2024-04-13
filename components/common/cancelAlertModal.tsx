@@ -20,7 +20,6 @@ import CommonButton from "./button";
 import SOSIcon from "../../assets/icons/sos";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigationTypes";
-import AlertMessage from "./alertMessage";
 
 interface ModalProps {
   showModal: boolean;

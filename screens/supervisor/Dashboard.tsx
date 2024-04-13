@@ -156,6 +156,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   };
 
   const [showCancelAlert, setShowCancelAlert] = useState(false);
+  const [showAlertSent, setShowAlertSent] = useState(false);
 
   useEffect(() => {
     if (route.params) {
@@ -181,14 +182,12 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           </Button> */}
 
           {/* GREETING */}
-          <Box mb={"$2"} pl={"$3"}>
             <Text>
               <Typography size="md" bold>{`Hi, ${userName}\n`}</Typography>
               <Typography size="2xl" bold>
                 Prioritize safety!
               </Typography>
             </Text>
-          </Box>
 
           {/* LOCATION */}
           <LocationComponent siteLocation={siteLocation} />
@@ -197,9 +196,9 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           <NumOfWorkers seeAll={true} />
 
           {/* IN SAFE ZONE */}
-          <Box mt="$5">
+          {/* <Box mt="$5">
             <SafeZoneWorkers seeAll={true} />
-          </Box>
+          </Box> */}
 
           {/* CARDS */}
           <HStack space="md" mt={"$5"}>
@@ -226,6 +225,18 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           />
         )}
       </Box>
+
+      {/* ALERT SENT */}
+      {showAlertSent && (
+        <Box position="absolute" top={0} right={0} left={0}>
+          <AlertMessage
+            backgroundColor="$success"
+            text="Your alert has been sent!"
+            textColor="#1e1e1e"
+            iconColor="#1e1e1e"
+          />
+        </Box>
+      )}
 
       {/* CANCELED ALERT NOTIFICATION */}
       {showCancelAlert && (
