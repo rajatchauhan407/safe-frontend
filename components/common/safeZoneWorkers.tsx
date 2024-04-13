@@ -19,7 +19,7 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
   const navigation = useNavigation();
   const [totalOnSite, setTotalOnSite] = useState<number>(0);
   const [totalExpected, setTotalExpected] = useState<number>(0);
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   let siteID = "";
@@ -58,6 +58,7 @@ const SafeZoneWorkers: React.FC<NumOfWorkersProps> = ({ seeAll }) => {
         body: JSON.stringify(siteId),
         headers: {
           "Content-type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
       });
       const data = await res.json();

@@ -16,7 +16,7 @@ import useRequest from "../../hooks/useRequest";
 const Profile: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user, token } = useSelector(
     (state: RootState) => state.auth
   );
   const { data, isLoading, error, fetchData }: any = useRequest(`${BACKEND_BASE_URL}/deleteToken`,'POST')
@@ -40,6 +40,7 @@ const Profile: React.FC = () => {
         body: JSON.stringify(checkOutInfo),
         headers: {
           "Content-type": "application/json",
+          "Authorization": `Bearer ${token}` 
         },
       });
       // console.log("worker checked out during logout - "+userId);

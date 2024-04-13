@@ -59,7 +59,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
   >(null);
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user,token } = useSelector((state: RootState) => state.auth);
   const { data, isLoading, error, fetchData }: any = useRequest(
     `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
@@ -88,6 +88,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     const options = {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       withCredentials: true,
       body: JSON.stringify({

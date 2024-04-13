@@ -20,7 +20,7 @@ const WorkerNavigator: React.FC = () => {
   const successColor = useToken("colors", "success");
   const [isOpen, setIsOpen] = useState(false);
   const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user, token } = useSelector(
     (state: RootState) => state.auth
   );
   let siteId = "";
@@ -93,6 +93,7 @@ const WorkerNavigator: React.FC = () => {
               body: JSON.stringify(sosAlertInfo),
               headers: {
                 "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`
               },
             });
             const data = await res.json();

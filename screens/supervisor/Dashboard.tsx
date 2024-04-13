@@ -45,7 +45,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   >("none");
   const [isAlert, setIsAlert] = useState(false);
   const [fetchKey, setFetchKey] = useState(0);  
-  const { isAuthenticated, status, user,dismissSupervisorAlert } = useSelector(
+  const { isAuthenticated, status, user,dismissSupervisorAlert,token } = useSelector(
     (state: RootState) => state.auth
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -68,6 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
       credentials: "include",
       headers: {
         "Content-type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
     });
   };
@@ -98,6 +99,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           body: JSON.stringify(siteInfo),
           headers: {
             "Content-type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
         });
         const data = await res.json();

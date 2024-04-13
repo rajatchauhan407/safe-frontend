@@ -43,6 +43,9 @@ interface EmergencyItem {
 const Alert: React.FC = () => {
   
   const user = useSelector((state: RootState) => state.auth.user);
+  const { isAuthenticated, status, token } = useSelector(
+    (state: RootState) => state.auth
+  );
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selectedButton, setSelectedButton] = useState<
     "One Whistle" | "Evacuation" | null
@@ -185,6 +188,7 @@ const Alert: React.FC = () => {
     const options = {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(alertData),
     };

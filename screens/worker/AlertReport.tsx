@@ -48,7 +48,9 @@ interface EmergencyItem {
 
 const AlertReport: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const { isAuthenticated, status, token } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [reportingFor, setReportingFor] = useState<"Myself" | "OtherWorker">(
     "Myself"
   );
@@ -121,6 +123,7 @@ const AlertReport: React.FC = () => {
     const options = {
       headers:{
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({...alertData, photo: photo?imageData:null}),
     };

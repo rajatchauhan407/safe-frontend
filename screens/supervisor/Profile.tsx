@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { isAuthenticated, status, user } = useSelector(
+  const { isAuthenticated, status, user,token } = useSelector(
     (state: RootState) => state.auth
   );
   const { data, isLoading, error, fetchData }: any = useRequest(
@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
 
     const options = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json",        
       },
       body: JSON.stringify({ userId: user?.userId }), // Add null check
     };
