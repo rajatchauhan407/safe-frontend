@@ -16,12 +16,13 @@ import AlertMessage from "../../components/common/alertMessage";
 import Typography from "../../components/common/typography";
 import ScreenLayout from "../../components/layout/screenLayout";
 import LocationIcon from "../../assets/icons/location";
-import { useSelector } from "react-redux";
-import { RootState } from "../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState,AppDispatch } from "../../lib/store";
 import websocketService from "../../services/websocket.service";
 import useFetch from "../../hooks/useFetch";
 import { ScrollView } from "react-native-gesture-handler";
 import { RouteProp } from "@react-navigation/native";
+import { reviveWorkerAlert } from "../../lib/slices/authSlice";
 
 type DashboardProps = {
   route: RouteProp<RootStackParamList, "Dashboard">;
@@ -38,15 +39,15 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   >("none");
   const [alertSent, setAlertSent] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
-
+  // const {dismissWorkerAlert} = useSelector((state: RootState) => state.auth);
   useEffect(() => {
     if(route.params){
       const {alertSent} = route.params;
       setAlertSent(alertSent);
     }
   }, [route.params]);
-
-  const { isAuthenticated, status, user,token } = useSelector(
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated, status, user,token,dismissWorkerAlert } = useSelector(
     (state: RootState) => state.auth
   );
   let siteId = "";
@@ -71,6 +72,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
     console.log("Connected to websocket");
     websocketService.subscribeToEvent("alertWorker", (data) => {
+      dispatch(reviveWorkerAlert());
+      console.log("dismiss worker alert"+dismissWorkerAlert);
       console.log(data);
       if (data === true) {
         fetchData({
@@ -157,7 +160,6 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
         console.error("Error:", error);
       }
     };
-
     fetchData();
     getSite();
   }, []);
@@ -438,7 +440,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
       </ScrollView>
       {/* DRAWER */}
       <Box style={styles.drawer}>
-          {data && (
+          {data && !dismissWorkerAlert && (
             <DrawerWorker
               alertType={data.responseAction.actionType}
               emergencyType={data.emergencyType}

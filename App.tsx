@@ -57,7 +57,7 @@ export default function App() {
       console.log(notification);
       // Set up the notification channel for Android devices.
     Notifications.setNotificationChannelAsync('alert-notification', {
-      name: 'E-mail notifications',
+      name: 'Alert Notifications',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       sound: 'notificationsound.wav', // Ensure this file is included in your app bundle

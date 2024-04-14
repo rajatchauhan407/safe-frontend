@@ -13,11 +13,11 @@ import InjuredIcon from '../../assets/icons/injured';
 import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import LocationIcon from '../../assets/icons/location';
-import { useSelector} from "react-redux";
-import { RootState} from "../../lib/store";
+import { useSelector,useDispatch} from "react-redux";
+import { RootState, AppDispatch} from "../../lib/store";
 import { BACKEND_BASE_URL } from "../../config/api";
 import { RootStackParamList } from '../../types/navigationTypes';
-
+import { dismissWorkerAlert } from '../../lib/slices/authSlice';
 interface WorkerSafeZoneProps {
     onSafeConfirmation: () => void;
     type?: 'accident' | 'evacuation';
@@ -45,15 +45,15 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     imageUrl
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const dispatch = useDispatch<AppDispatch>();
   const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
-  const { isAuthenticated, status, user,token } = useSelector(
+  const { isAuthenticated, status, user,token} = useSelector(
     (state: RootState) => state.auth
   );
   let siteId = "";
   let userId  = "";
   if (user) {
-    console.log("logged in user>> " + user._id);
+    // console.log("logged in user>> " + user._id);
     userId=user._id;
     siteId = user.constructionSiteId || ""; 
   } 
@@ -79,8 +79,11 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
 
   
   const handleIncidentPress = () => {
+
     // DISMISS THE ALERT OF THE WORKER HERE
+    dismissWorkerAlert();
     // onSafeConfirmation(); // Callback to notify parent component (Dashboard)
+
     const createSafeZoneWorker = async () => {
       try {
         const workerInfo = {

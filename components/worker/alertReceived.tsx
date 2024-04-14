@@ -12,6 +12,9 @@ import SpaceIcon from '../../assets/icons/space';
 import DangerIcon from '../../assets/icons/danger';
 import { RootStackParamList } from '../../types/navigationTypes';
 import { NavigationProp } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../lib/store';
+import { dismissWorkerAlert } from '../../lib/slices/authSlice';
 interface AlertReceivedProps {
   type: 'accident' | 'evacuation';
   emergency: string;
@@ -27,8 +30,9 @@ interface EmergencyItem {
 
 const AlertReceived: React.FC<AlertReceivedProps> = ({ type, emergency, location, level, workersInjured }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  
+  const dispatch = useDispatch<AppDispatch>();
   const handleIncidentPress = () => {
+    dispatch(dismissWorkerAlert());
     // DISMISS THE ALERT OF THE WORKER HERE
   };
   console.log(
