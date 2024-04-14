@@ -117,12 +117,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    
     websocketService.connect();
-
     console.log("Connected to websocket");
-
-    
     websocketService.subscribeToEvent("alert", (res) => {
       dispatch(reviveAlert());
     console.log("Alert received>> ", res);

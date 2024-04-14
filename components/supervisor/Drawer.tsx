@@ -8,7 +8,7 @@ import AlertButton from "../common/alertButton";
 import Typography from "../common/typography";
 import { Center, Image, VStack } from "@gluestack-ui/themed";
 import CommonButton from "../common/button";
-
+import { BACKEND_BASE_URL } from "../../config/api";
 interface DrawerProps {
   alertType: "none" | "accident" | "evacuation" | "sos" | "activeEvacuation";
   alertData?: any;
@@ -19,6 +19,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
   const [isOpen, setIsOpen] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
+  const [reporterName, setReporterName] = useState("");
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false, // Disabling touch gesture to start responder
@@ -43,6 +44,21 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
   ).current;
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const fetchData = async () => { 
+    if (alertData){
+      try{
+        const response = await fetch(`${BACKEND_BASE_URL}/user/${alertData.userId}`);
+        const data = await response.json();
+        setReporterName(data.firstName + " " + data.lastName);
+      }catch(error){
+        console.log(error)
+      }
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  },[])
 
   useEffect(() => {
     if (alertType !== "none") {
@@ -69,7 +85,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
     if (alertType === "sos") {
       navigation.navigate("SOS Details" as never);
     } else {
-      navigation.navigate("Received Alert", { alertData: alertData });
+      navigation.navigate("Received Alert", { alertData: alertData, reporterName: reporterName } as never);
       console.log(alertType);
     }
   };

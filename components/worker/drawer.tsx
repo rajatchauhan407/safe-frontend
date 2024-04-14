@@ -13,9 +13,10 @@ interface DrawerProps {
   level: number;
   workersInjured: number;
   isAlert: boolean;
+  location: string;
 }
 
-const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,workersInjured,isAlert=false }) => {
+const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,workersInjured,isAlert=false,location }) => {
   const [isOpen, setIsOpen] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   console.log(`DrawerWorker: alertType: ${alertType}, emergencyType: ${emergencyType}, level: ${level}, workersInjured: ${workersInjured}`)
@@ -84,7 +85,7 @@ const DrawerWorker: React.FC<DrawerProps> = ({ alertType,emergencyType,level,wor
             {alertType !== "none" && (
               <AlertReceived 
                 type={alertType}
-                location={"This is hard coded for now, but should be the location of the alert."}
+                location={location}
                 emergency={emergencyType} 
                 level={level} 
                 workersInjured={workersInjured} />

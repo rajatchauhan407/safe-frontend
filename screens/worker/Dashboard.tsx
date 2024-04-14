@@ -445,6 +445,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
               level={data.degreeOfEmergency}
               workersInjured={data.workersInjured}
               isAlert={openDrawer}
+              location={data.location}
             />
           )}
         </Box>
