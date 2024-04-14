@@ -8,7 +8,7 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
   const [accidentLocation, setAccidentLocation] = useState(
     "Zone 3 - Building B"
   );
-  const { alertData } = route.params;
+  const { alertData, reporterName } = route.params;
   console.log("ReceivedAlertDetails: alertData: ", alertData)
   return (
     <>
@@ -17,7 +17,7 @@ const ReceivedAlertDetails: React.FC<any> = ({ route }) => {
           {/* REPORTED BY */}
           <Box>
             <Typography>Reported by:</Typography>
-            <Typography bold>Cindy Charvet - This is hardcoded now</Typography>
+            <Typography bold>{reporterName}</Typography>
           </Box>
 
           {/* EMERGENCY DETAILS */}
