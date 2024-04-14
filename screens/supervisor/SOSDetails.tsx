@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useNavigation } from "@react-navigation/native";
 import { Box, HStack, ScrollView, VStack, View } from "@gluestack-ui/themed";
 import ScreenLayout from "../../components/layout/screenLayout";
 import SucessIcon from "../../assets/icons/sucess";
@@ -13,15 +13,17 @@ import { dismissAlert } from "../../lib/slices/authSlice";
 import CustomModal from "../../components/common/modal";
 import { RootStackParamList } from "../../types/navigationTypes";
 
-const SOSDetails: React.FC = () => {
+
+
+const SOSDetails: React.FC<any>= ({route}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
-  const [siteLocation, setSiteLocation] = useState("100 W 49th Ave, Vancouver");
+  const [siteLocation, setSiteLocation] = useState("800 Robsong St, Vancouver");
   const SOSLocation: LatLng = {
     latitude: 49.225105402346955,
     longitude: -123.10749431593648,
   }; // Set type for SOSLocation
-
+  const { alertData, reporterName, reportedDate, reportedTime, reporterRole } = route.params;
   const handleSMS = () => {
     dispatch(dismissAlert());
     setIsOpen(true);
@@ -53,20 +55,20 @@ const SOSDetails: React.FC = () => {
             {/* TIME STAMP */}
             <HStack>
               {/* <MapComponent location={SOSLocation} /> */}
-              <Typography bold>01/01/2024</Typography>
+              <Typography bold>{reportedDate}</Typography>
               <Typography bold> - </Typography>
-              <Typography bold>9:00 a.m.</Typography>
+              <Typography bold>{reportedTime}</Typography>
             </HStack>
 
             {/* REPORTED BY */}
             <Box>
               <HStack>
                 <Typography>Reporter name: </Typography>
-                <Typography bold>Sam Smith</Typography>
+                <Typography bold>{reporterName}</Typography>
               </HStack>
               <HStack>
                 <Typography>Role: </Typography>
-                <Typography bold>Electrician</Typography>
+                <Typography bold>{reporterRole}</Typography>
               </HStack>
             </Box>
 

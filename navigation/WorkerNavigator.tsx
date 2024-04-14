@@ -28,7 +28,7 @@ const WorkerNavigator: React.FC = () => {
   let userName = "";
   if (user) {
     console.log("logged in user>> " + user._id);
-    userId = user._id;
+    userId = user.userId;
     siteId = user.constructionSiteId || "";
     userName = `${user.firstName} ${user.lastName}`;
   }

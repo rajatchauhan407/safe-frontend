@@ -6,7 +6,7 @@ import { View, StyleSheet, PanResponder, Animated } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AlertButton from "../common/alertButton";
 import Typography from "../common/typography";
-import { Center, Image, VStack } from "@gluestack-ui/themed";
+import { Center, Image, VStack, set } from "@gluestack-ui/themed";
 import CommonButton from "../common/button";
 import { BACKEND_BASE_URL } from "../../config/api";
 interface DrawerProps {
@@ -20,6 +20,9 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
   const [showCancelModal, setShowCancelModal] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const [reporterName, setReporterName] = useState("");
+  const [reporterRole, setReporterRole] = useState("");
+  const [reportedDate, setReportedDate] = useState("");
+  const [reportedTime, setReportedTime] = useState("");
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false, // Disabling touch gesture to start responder
@@ -48,16 +51,36 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
   const fetchData = async () => { 
     if (alertData){
       try{
+        console.log("alertData.userId: "+ alertData.userId);
         const response = await fetch(`${BACKEND_BASE_URL}/user/${alertData.userId}`);
         const data = await response.json();
+        console.log("data receiver drom user: "+ data.firstName + " " + data.lastName);
         setReporterName(data.firstName + " " + data.lastName);
+        setReporterRole(data.role);
+
+        const date = new Date(alertData.timestamp);
+
+// Extract and format the date as MM/DD/YYYY
+const formattedDate = (date.getMonth() + 1).toString().padStart(2, '0') +
+                      '/' + date.getDate().toString().padStart(2, '0') +
+                      '/' + date.getFullYear();
+
+// Extract time in HH:MM:SS format
+const formattedTime = date.getHours().toString().padStart(2, '0') +
+                      ':' + date.getMinutes().toString().padStart(2, '0') +
+                      ':' + date.getSeconds().toString().padStart(2, '0');
+        setReportedDate(formattedDate);
+        setReportedTime(formattedTime);
+
       }catch(error){
         console.log(error)
       }
     }
   }
   useEffect(() => {
-    fetchData();
+    (async()=>{
+      await fetchData();
+    })()
   },[])
 
   useEffect(() => {
@@ -83,7 +106,7 @@ const DrawerSupervisor: React.FC<DrawerProps> = ({ alertType, alertData,isAlert=
 
   const handleReceivedDetailsPress = () => {
     if (alertType === "sos") {
-      navigation.navigate("SOS Details" as never);
+      navigation.navigate("SOS Details",{alertData:alertData, reporterName, reportedDate, reportedTime, reporterRole} as never);
     } else {
       navigation.navigate("Received Alert", { alertData: alertData, reporterName: reporterName } as never);
       console.log(alertType);

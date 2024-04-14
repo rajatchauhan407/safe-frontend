@@ -55,7 +55,8 @@ const initialState:IAuth = {
     error:null,
     status:'idle',
     user:null,
-    dismissSupervisorAlert:false
+    dismissSupervisorAlert:false,
+    dismissWorkerAlert:false
 }
 
 export const login = createAsyncThunk('auth/login', async (payload:{userId:string,password:string, role:string}, { rejectWithValue }) => {
@@ -113,6 +114,12 @@ const authSlice = createSlice({
       },
       reviveAlert(state){
         state.dismissSupervisorAlert = false;
+      },
+      dismissWorkerAlert(state){
+        state.dismissWorkerAlert = true;
+      },
+      reviveWorkerAlert(state){
+        state.dismissWorkerAlert = false;
       }
     },
     extraReducers:(builder)=>{
@@ -164,7 +171,7 @@ const authSlice = createSlice({
     }
 });
  
-export const {changeAuth,logout,dismissAlert, reviveAlert} = authSlice.actions;
+export const {changeAuth,logout,dismissAlert, reviveAlert, dismissWorkerAlert,reviveWorkerAlert} = authSlice.actions;
 export default authSlice.reducer;
 
 
