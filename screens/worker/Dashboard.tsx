@@ -32,6 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); 
+  const [isCheckInClicked, setIsCheckInClicked] = useState(false);
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
@@ -181,6 +182,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   const handleCheckInToggle = async () => {
     if (!isCheckedIn) {
+      setIsCheckInClicked(true);
       getLocation()
         .then(async (location) => {
           if (location) {
@@ -272,6 +274,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     } else {
       // Check-out process
       setIsCheckedIn(false);
+      setIsCheckInClicked(false);
       const checkOutInfo = {
         siteId: siteId,
         workerId: userId,
@@ -384,12 +387,12 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     };
 
     useEffect(() => {
-      if (isCheckedIn) {
+      if (isCheckInClicked) {
         fadeIn();
       } else {
         fadeOut();
       }
-    }, [isCheckedIn]);
+    }, [isCheckInClicked]);
 
     return (
       <Animated.View
