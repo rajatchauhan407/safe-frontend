@@ -60,6 +60,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
     "One Whistle" | "Evacuation" | null
   >(null);
   const { user,token } = useSelector((state: RootState) => state.auth);
+  const [onEvacuation, setOnEvacuation] = useState<boolean | null>(null);
   const { data, isLoading, error, fetchData }: any = useRequest(
     `${BACKEND_BASE_URL}/alert-worker`,
     "POST"
@@ -78,6 +79,11 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
 
   const handleEmergencyTypeSelect = (action: "One Whistle" | "Evacuation") => {
     setSelectedButton(action);
+    if (action === "Evacuation") {
+      setOnEvacuation(true); 
+    } else {
+      setOnEvacuation(false);
+    }
   };
   console.log(data);
   // const navigation = useNavigation();
@@ -220,7 +226,7 @@ const AlertReceived: React.FC<AlertReceivedProps> = ({
       </Box>
 
       {/* SMS MODAL */}
-      <SMSModal showModal={openSMS} setShowModal={setOpenSMS} />
+      <SMSModal showModal={openSMS} setShowModal={setOpenSMS} onEvacuation={onEvacuation} />
 
       {/* testing */}
       {/* <AlertButton

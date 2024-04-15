@@ -77,7 +77,7 @@ const CancelAlertModal: React.FC<ModalProps> = ({
                 setShowModal(false);
                 setTimeout(() => {
                   setAlertCanceled(true);
-                  navigation.navigate("Dashboard", { alertSent: null, alertCanceled: true });
+                  navigation.navigate("Dashboard", { alertSent: null, alertCanceled: true, onEvacuation: null });
                 }, 1000);
               }}
             >

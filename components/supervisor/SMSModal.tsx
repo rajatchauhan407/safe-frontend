@@ -39,6 +39,7 @@ import { RootState } from "../../lib/store";
 interface ModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
+  onEvacuation: boolean | null;
 }
 // Emergency Contacts==============================
 const emergencyContacts = [
@@ -50,7 +51,7 @@ const emergencyContacts = [
 ];
 // ===============================================
 
-const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
+const SMSModal: React.FC<ModalProps> = ({ showModal, setShowModal, onEvacuation  }) => {
   const [checkedContacts, setCheckedContacts] = React.useState<string[]>([]);
   const [message, setMessage] = React.useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -187,7 +188,7 @@ if (user) {
                     mt="$4"
                     onPress={() => {
                       setShowModal(false);
-                      navigation.navigate("Dashboard", { alertSent: true, alertCanceled: false });
+                      navigation.navigate("Dashboard", { alertSent: true, alertCanceled: false, onEvacuation});
                     }}
                   >
                   <Typography textDecorationLine="underline">
