@@ -209,7 +209,7 @@ if (user) {
         description="Your alert has been successfully sent."
         buttonText="Go to Dashboard"
         buttonAction={() => {
-          navigation.navigate("Dashboard" as never);
+          navigation.navigate("Dashboard", { alertSent: false, alertCanceled: false, onEvacuation});
           setShowConfirmation(false);
         }}
       />
