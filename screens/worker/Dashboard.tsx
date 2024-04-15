@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 15,
     position: "absolute",
-    bottom: 10,
+    bottom: -80,
     alignSelf: "center",
     width: "80%",
     zIndex: 2,
