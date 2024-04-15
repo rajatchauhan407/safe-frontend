@@ -18,10 +18,10 @@ import { RootStackParamList } from "../../types/navigationTypes";
 const SOSDetails: React.FC<any>= ({route}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
-  const [siteLocation, setSiteLocation] = useState("800 Robsong St, Vancouver");
+  const [siteLocation, setSiteLocation] = useState("800 Robson St, Vancouver");
   const SOSLocation: LatLng = {
-    latitude: 49.225105402346955,
-    longitude: -123.10749431593648,
+    latitude: 49.28271652553578,
+    longitude: -123.12115034190832,
   }; // Set type for SOSLocation
   const { alertData, reporterName, reportedDate, reportedTime, reporterRole } = route.params;
   const handleSMS = () => {

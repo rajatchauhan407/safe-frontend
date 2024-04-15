@@ -20,8 +20,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitudeDelta: 0.0005,
+          longitudeDelta: 0.0005,
         }}
       >
         <Marker
