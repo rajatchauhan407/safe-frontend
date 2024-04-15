@@ -32,6 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [siteLocation, setSiteLocation] = useState("");
   const [checkInTime, setCheckInTime] = useState(""); 
+  const [isCheckInClicked, setIsCheckInClicked] = useState(false);
   const [isInSiteZone, setIsInSiteZone] = useState(true);
   const [checkInErrorMessage, setCheckInErrorMessage] = useState("");
   const [currentAlertType, setCurrentAlertType] = useState<
@@ -228,6 +229,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
                     hour12: true,
                   });
                   setIsCheckedIn(true);
+                  setIsCheckInClicked(true);
                   setCheckInTime(formattedTime);
                 } else if (
                   data.data.message === "Please be on site while check-in"
@@ -272,6 +274,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     } else {
       // Check-out process
       setIsCheckedIn(false);
+      setIsCheckInClicked(false);
       const checkOutInfo = {
         siteId: siteId,
         workerId: userId,
@@ -353,6 +356,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     );
 
     const AlertSentMessage = () =>
+    isCheckedIn && (
       <Box>
         <AlertMessage
           backgroundColor="#00AE8C"
@@ -360,7 +364,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           iconColor="#1E1E1E"
           text="Your emergency has been reported"
         />
-      </Box>;
+      </Box>
+    );
 
   const TooltipSOS = () => {
     const [fadeAnim] = useState(new Animated.Value(0));
@@ -384,12 +389,12 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     };
 
     useEffect(() => {
-      if (isCheckedIn) {
+      if (isCheckedIn && isCheckInClicked) {
         fadeIn();
       } else {
         fadeOut();
       }
-    }, [isCheckedIn]);
+    }, [isCheckedIn, isCheckInClicked]);
 
     return (
       <Animated.View
@@ -461,7 +466,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 15,
     position: "absolute",
-    bottom: 10,
+    bottom: -80,
     alignSelf: "center",
     width: "80%",
     zIndex: 2,

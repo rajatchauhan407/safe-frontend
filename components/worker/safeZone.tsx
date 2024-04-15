@@ -42,11 +42,11 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
     level = 0, 
     workersInjured = 0,
     route,
-    imageUrl
+    imageUrl = 'https://techandtribe-safe.s3.us-east-2.amazonaws.com/safe_zone_image.webp'
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch<AppDispatch>();
-  const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Assembly Zone");
+  const [safeZoneLocation, setSafeZoneLocation] = useState("Safe Zone C - Containers Area");
   const { isAuthenticated, status, user,token} = useSelector(
     (state: RootState) => state.auth
   );
@@ -71,7 +71,7 @@ const WorkerSafeZone: React.FC<WorkerSafeZoneProps> = ({
   const selectedEmergency = emergencies.find(item => item.text === alertData.emergency);
 
   const LocationSafeZone = () => (
-    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'center' }}>
+    <Box mt={10} style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'flex-start' }}>
       <LocationIcon size={18} color={''} focussed={false} />
       <Typography size="xl" pl={5} bold>{safeZoneLocation}</Typography>
     </Box>
