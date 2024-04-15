@@ -182,7 +182,6 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   const handleCheckInToggle = async () => {
     if (!isCheckedIn) {
-      setIsCheckInClicked(true);
       getLocation()
         .then(async (location) => {
           if (location) {
@@ -230,6 +229,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
                     hour12: true,
                   });
                   setIsCheckedIn(true);
+                  setIsCheckInClicked(true);
                   setCheckInTime(formattedTime);
                 } else if (
                   data.data.message === "Please be on site while check-in"
@@ -356,6 +356,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     );
 
     const AlertSentMessage = () =>
+    isCheckedIn && (
       <Box>
         <AlertMessage
           backgroundColor="#00AE8C"
@@ -363,7 +364,8 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           iconColor="#1E1E1E"
           text="Your emergency has been reported"
         />
-      </Box>;
+      </Box>
+    );
 
   const TooltipSOS = () => {
     const [fadeAnim] = useState(new Animated.Value(0));
@@ -387,12 +389,12 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     };
 
     useEffect(() => {
-      if (isCheckInClicked) {
+      if (isCheckedIn && isCheckInClicked) {
         fadeIn();
       } else {
         fadeOut();
       }
-    }, [isCheckInClicked]);
+    }, [isCheckedIn, isCheckInClicked]);
 
     return (
       <Animated.View
