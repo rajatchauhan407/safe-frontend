@@ -31,7 +31,7 @@ const CancelAlertModal: React.FC<ModalProps> = ({
   setShowModal,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [alertSent, setAlertSent] = useState(false);
+  const [alertCanceled, setAlertCanceled] = useState(false);
 
   return (
     <Center>
@@ -76,8 +76,8 @@ const CancelAlertModal: React.FC<ModalProps> = ({
               onPress={() => {
                 setShowModal(false);
                 setTimeout(() => {
-                  setAlertSent(true);
-                  navigation.navigate("Dashboard", { alertSent: true });
+                  setAlertCanceled(true);
+                  navigation.navigate("Dashboard", { alertSent: null, alertCanceled: true });
                 }, 1000);
               }}
             >

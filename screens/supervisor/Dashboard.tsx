@@ -44,6 +44,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
     "none" | "accident" | "evacuation" | "sos"
   >("none");
   const [isAlert, setIsAlert] = useState(false);
+  const [onEvacuation, setOnEvacuation] = useState(false);
   const [fetchKey, setFetchKey] = useState(0);  
   const { isAuthenticated, status, user,dismissSupervisorAlert,token } = useSelector(
     (state: RootState) => state.auth
@@ -75,17 +76,6 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
   useEffect(() => {
     getAlert();
   }, []);
-
-
-
-  // useEffect(() => {
-  //   if(isFocused){
-  //     console.log('isfocused working');
-  //     (async () => {
-  //       await getAlert();
-  //     })();
-  //   }
-  // },[isFocused])
 
   useEffect(() => {
     const getSite = async () => {
@@ -158,8 +148,10 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   useEffect(() => {
     if (route.params) {
-      const { alertSent } = route.params;
-      setShowCancelAlert(alertSent);
+      const { alertSent, alertCanceled } = route.params;
+      setShowCancelAlert(alertCanceled);
+      setShowAlertSent(alertSent);
+      setOnEvacuation(true);
     }
   }, [route.params]);
 
@@ -194,9 +186,11 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
           <NumOfWorkers seeAll={true} />
 
           {/* IN SAFE ZONE */}
-          {/* <Box mt="$5">
-            <SafeZoneWorkers seeAll={true} />
-          </Box> */}
+          {onEvacuation && (
+            <Box mt="$5">
+              <SafeZoneWorkers seeAll={true} />
+            </Box>
+          )}
 
           {/* CARDS */}
           <HStack space="md" mt={"$5"}>

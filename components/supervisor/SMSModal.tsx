@@ -187,7 +187,7 @@ if (user) {
                     mt="$4"
                     onPress={() => {
                       setShowModal(false);
-                      navigation.navigate("Dashboard", { alertSent: true });
+                      navigation.navigate("Dashboard", { alertSent: true, alertCanceled: false });
                     }}
                   >
                   <Typography textDecorationLine="underline">
