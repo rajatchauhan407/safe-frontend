@@ -125,7 +125,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   /* Use this to change alert type */
   useEffect(() => {
-    // console.log("Alert data>> ", data);
+    console.log("Alert data>> ", data);
     if (data) {
       if (data.degreeOfEmergency === 1 || data.degreeOfEmergency === 2) {
         setCurrentAlertType("accident");
@@ -133,6 +133,7 @@ const Dashboard: React.FC<DashboardProps> = ({ route }) => {
         setCurrentAlertType("evacuation");
       } else {
         setCurrentAlertType("sos");
+        // console.log("SOS Alert");
       }
     }
   }, [data]);

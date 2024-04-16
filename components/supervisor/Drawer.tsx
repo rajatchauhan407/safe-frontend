@@ -106,9 +106,10 @@ const formattedTime = date.getHours().toString().padStart(2, '0') +
 
   const handleReceivedDetailsPress = () => {
     if (alertType === "sos") {
-      navigation.navigate("SOS Details",{alertData:alertData, reporterName, reportedDate, reportedTime, reporterRole} as never);
+      console.log(alertType)
+      navigation.navigate("SOS Details",{alertData:alertData, reporterName, reportedDate, reportedTime, reporterRole});
     } else {
-      navigation.navigate("Received Alert", { alertData: alertData, reporterName: reporterName } as never);
+      navigation.navigate("Received Alert", { alertData: alertData, reporterName: reporterName });
       console.log(alertType);
     }
   };
