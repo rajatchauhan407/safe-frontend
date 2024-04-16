@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "./config/gluestack-ui.config";
 import { NavigationContainer } from "@react-navigation/native";
 import MainNavigator from "./navigation/MainNavigator";
-import { StyledProvider } from "@gluestack-style/react";
+import { StyledProvider, set } from "@gluestack-style/react";
 import { useFonts } from "expo-font";
 import {
   NunitoSans_400Regular,
@@ -28,6 +28,9 @@ import * as Notifications from 'expo-notifications';
 
 
 export default function App() {
+  const [notification, setNotification] = useState<
+  Notifications.Notification | undefined
+>(undefined);
   useEffect(() => {
     // Ask for notification permissions on iOS.
     Notifications.requestPermissionsAsync();
@@ -51,21 +54,16 @@ export default function App() {
     //     channelId: 'alert-notification',
     //   },
     // });
-
     // This listener is fired whenever a notification is received while the app is foregrounded.
     const subscription = Notifications.addNotificationReceivedListener(notification => {
       console.log(notification);
+      setNotification(notification);
       // Set up the notification channel for Android devices.
-    Notifications.setNotificationChannelAsync('alert-notification', {
-      name: 'Alert Notifications',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      sound: 'notificationsound.wav', // Ensure this file is included in your app bundle
-    });
+      
     });
 
     Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+
     });
 
     // Clean up the listener when the component unmounts.

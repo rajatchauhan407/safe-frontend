@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "safe-frontend",
+    "name": "Safe",
     "slug": "safe-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -50,7 +50,9 @@
           "icon": "./assets/notificationicon.png",
           "color": "#ffffff",
           "sounds": [
-            "./assets/notificationsound.wav"
+            "./assets/notificationsound.wav",
+            "./assets/one_whistle_alert.wav",
+            "./assets/evacuation.wav"
           ]
         }
       ],
